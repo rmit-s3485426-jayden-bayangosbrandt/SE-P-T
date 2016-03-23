@@ -3,9 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Created by Jayden on 21/03/2016.
- */
+
 public class Window extends JFrame {
 
     public Window() throws HeadlessException {
