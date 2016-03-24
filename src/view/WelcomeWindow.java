@@ -1,6 +1,8 @@
 package view;
 
 
+import model.Model;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,6 +12,7 @@ public class WelcomeWindow extends JFrame {
     private JButton register = new JButton("Register");
     private String[] users = new String[]{"user1", "user2", "user3"};
     private JTextField searchUsers = new JTextField("Search your username here");
+
 
     public WelcomeWindow() throws HeadlessException {
 //        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -22,6 +25,9 @@ public class WelcomeWindow extends JFrame {
         contentPanel.add(getExistingUserPanel(), 3);
         setSize(new Dimension(500, 300));
         setVisible(true);
+
+
+
     }
 
     private JPanel getWelcomePanel(){
