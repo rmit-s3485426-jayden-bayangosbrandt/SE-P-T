@@ -1,5 +1,7 @@
 package view;
 
+import model.Model;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,6 +13,8 @@ public class MainWindow extends JFrame {
     private String[] areaDataset = new String[]{"1", "2", "3"};
     private String[] regionDataset = new String[]{"1", "2", "3"};
     private String[] stationDataset = new String[]{"1", "2", "3"};
+    private Model model = Model.getInstance();
+    private JComboBox area;
 
     public MainWindow() throws HeadlessException {
         this.setLayout(new BorderLayout());
@@ -23,6 +27,9 @@ public class MainWindow extends JFrame {
         this.setSize(new Dimension(500, 500));
         this.setResizable(false);
         this.setVisible(true);
+
+        model.setMainWindow(this);
+        model.changeDataset();
     }
 
     private JPanel getNorthPanel(){
@@ -66,9 +73,9 @@ public class MainWindow extends JFrame {
         center.setLayout(new BoxLayout(center, BoxLayout.X_AXIS));
         JPanel stationSelection = new JPanel();
         JPanel stationSearch = new JPanel();
-        JComboBox area = new JComboBox(areaDataset);
-        JComboBox region = new JComboBox(areaDataset);
-        JComboBox station = new JComboBox(areaDataset);
+        area = new JComboBox(areaDataset);
+        JComboBox region = new JComboBox(regionDataset);
+        JComboBox station = new JComboBox(stationDataset);
         stationSelection.setLayout(new BoxLayout(stationSelection, BoxLayout.Y_AXIS));
         stationSelection.add(new JLabel("Please select a weather station"), 0);
         stationSelection.add(area, 1);
@@ -103,6 +110,7 @@ public class MainWindow extends JFrame {
 
     public void setAreaDataset(String[] strings){
         this.areaDataset = strings;
+        area = new JComboBox(strings);
     }
 
     public void setRegionDataset(String[] strings){
