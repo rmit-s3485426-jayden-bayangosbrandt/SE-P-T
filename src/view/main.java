@@ -1,9 +1,16 @@
 package view;
 
-/**
- * Created by Jayden on 11/03/2016.
- */
-public class main {
+import model.Model;
+import sun.applet.Main;
 
+import javax.swing.*;
+
+
+public class main {
+    
+
+    public static void main(String[] args) {
+        new Window();
+    }
 
 }
