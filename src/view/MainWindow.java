@@ -30,8 +30,7 @@ public class MainWindow extends JFrame {
         this.setResizable(false);
         this.setVisible(true);
 
-        model.setMainWindow(this);
-        model.changeAreaDataset();
+
     }
 
     private JPanel getNorthPanel(){
