@@ -136,13 +136,13 @@ public class MainWindow extends JFrame {
     public void setRegionDataset(String[] strings){
         this.regionDataset = strings;
         DefaultComboBoxModel defaultComboBoxModel = new DefaultComboBoxModel(strings);
-        area.setModel(defaultComboBoxModel);
+        region.setModel(defaultComboBoxModel);
     }
 
     public void setStationDataset(String[] strings){
         this.stationDataset = strings;
         DefaultComboBoxModel defaultComboBoxModel = new DefaultComboBoxModel(strings);
-        area.setModel(defaultComboBoxModel);
+        station.setModel(defaultComboBoxModel);
     }
 
 
