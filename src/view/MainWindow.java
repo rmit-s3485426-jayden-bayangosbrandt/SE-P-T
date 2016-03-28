@@ -8,12 +8,11 @@ import java.awt.*;
 
 public class MainWindow extends JFrame {
 
-    private JLabel userName = new JLabel("Name");
+    private JLabel lblName = new JLabel("Name");
     private JTextField search = new JTextField("Search weather stations");
     private String[] areaDataset = new String[]{"1", "2", "3"};
     private String[] regionDataset = new String[]{"1", "2", "3"};
     private String[] stationDataset = new String[]{"1", "2", "3"};
-    private Model model = Model.getInstance();
     private JComboBox area;
     private JComboBox region;
     private JComboBox station;
@@ -35,27 +34,23 @@ public class MainWindow extends JFrame {
 
     private JPanel getNorthPanel(){
         JPanel north = new JPanel();
-//        north.setSize(new Dimension(50, 50));
         north.setLayout(new BoxLayout(north, BoxLayout.X_AXIS));
         JPanel namePanel = new JPanel();
         JPanel favePanel = new JPanel();
 
         namePanel.setLayout(new BoxLayout(namePanel, BoxLayout.X_AXIS));
         namePanel.add(Box.createHorizontalGlue());
-        namePanel.add(userName);
+        namePanel.add(lblName);
         namePanel.add(Box.createHorizontalGlue());
-//        namePanel.add(Box.createRigidArea(new Dimension(300,0)), 1);
 
         favePanel.setLayout(new BoxLayout(favePanel, BoxLayout.Y_AXIS));
-//        favePanel.setPreferredSize(new Dimension(50, 20));
         // Setup favourite list component
         JList list = new JList(areaDataset);
         list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         list.setLayoutOrientation(JList.VERTICAL);
-//        list.setPreferredSize(new Dimension(50, 20));
-        list.setVisibleRowCount(3);
+//        list.setVisibleRowCount(3);
         JScrollPane scrollPane = new JScrollPane(list);
-//        scrollPane.setPreferredSize(new Dimension(50, 20));
+        scrollPane.setPreferredSize(new Dimension(10, 10));
         // Add component to panel
         favePanel.add(new JLabel("Favourites"));
         favePanel.add(scrollPane, 1);
@@ -73,11 +68,17 @@ public class MainWindow extends JFrame {
         JPanel center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.X_AXIS));
         JPanel stationSelection = new JPanel();
-        JPanel stationSearch = new JPanel();
+
         area = new JComboBox(areaDataset);
         region = new JComboBox(regionDataset);
         station = new JComboBox(stationDataset);
         stationSelection.setLayout(new BoxLayout(stationSelection, BoxLayout.Y_AXIS));
+
+        JPanel panelStationLabel = new JPanel();
+        panelStationLabel.setLayout(new BoxLayout(panelStationLabel, BoxLayout.X_AXIS));
+        panelStationLabel.add(Box.createHorizontalGlue());
+        panelStationLabel.add(new JLabel("Please select a weather station"));
+        panelStationLabel.add(Box.createHorizontalGlue());
 
         JPanel panelArea = new JPanel();
         panelArea.setLayout(new BoxLayout(panelArea, BoxLayout.X_AXIS));
@@ -94,27 +95,28 @@ public class MainWindow extends JFrame {
         panelStation.add(new JLabel("Station: "));
         panelStation.add(station);
 
-        stationSelection.add(new JLabel("Please select a weather station"), 0);
-        stationSelection.add(panelArea, 1);
-        stationSelection.add(panelRegion, 2);
-        stationSelection.add(panelStation, 3);
-        stationSearch.setLayout(new BoxLayout(stationSearch, BoxLayout.Y_AXIS));
-        stationSearch.add(new JLabel("Or search for a specific station"), 0);
-        stationSearch.add(search, 1);
-        stationSearch.add(Box.createVerticalStrut(100));
-        center.add(stationSelection, 0);
-        center.add(Box.createHorizontalStrut(100), 1);
-        center.add(stationSearch, 2);
+//        stationSelection.add(new JLabel("Please select a weather station"));
+        stationSelection.add(panelStationLabel);
+        stationSelection.add(panelArea);
+        stationSelection.add(panelRegion);
+        stationSelection.add(panelStation);
+//        stationSearch.setLayout(new BoxLayout(stationSearch, BoxLayout.Y_AXIS));
+//        stationSearch.add(new JLabel("Or search for a specific station"), 0);
+//        stationSearch.add(search, 1);
+//        stationSearch.add(Box.createVerticalStrut(100));
+        center.add(stationSelection);
+//        center.add(Box.createHorizontalStrut(100), 1);
+//        center.add(stationSearch, 2);
 
         return center;
     }
 
-    public JLabel getUserName() {
-        return userName;
+    public JLabel getLblName() {
+        return lblName;
     }
 
-    public void setUserName(JLabel userName) {
-        this.userName = userName;
+    public void setLblName(JLabel lblName) {
+        this.lblName = lblName;
     }
 
     public JTextField getSearch() {
@@ -142,4 +144,6 @@ public class MainWindow extends JFrame {
         DefaultComboBoxModel defaultComboBoxModel = new DefaultComboBoxModel(strings);
         area.setModel(defaultComboBoxModel);
     }
+
+
 }
