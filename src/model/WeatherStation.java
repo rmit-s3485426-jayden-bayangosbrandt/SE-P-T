@@ -5,51 +5,47 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import view.Window;
+
 import java.util.*;
 import java.util.regex.Pattern;
 
+
+
 public class WeatherStation {
-    public WeatherStation(String Inputid)
-    {
-        int a=0;
-        try
-        {
+
+    private ArrayList stationArray = new ArrayList();
+    private ArrayList regionArray = new ArrayList();
+    private Model model = Model.getInstance();
+    public WeatherStation() {
+        int a = 0;
+        try {
             System.out.println("TEST");
             Document doc = Jsoup.connect("http://www.bom.gov.au/nsw/observations/nswall.shtml").get();
             Elements test = doc.getElementsByClass("box1");
             Elements classes = test.select("a");
             Elements stations = doc.select("tbody").select("th");
-            for(Element loop: classes)
-            {
+            for (Element loop : classes) {
                 String text = loop.text();
                 String id = loop.attr("href");
-                String idTrim = id.replace("#","");
+                String idTrim = id.replace("#", "");
                 System.out.println(text);
-                // model.changeRegionDataset(text);
-                // add the different regions into the dropdown
-                
-                
-                // This is my plan Alex:
-                // if(region dropdown menu is != NULL)
-                //{
-                      // get the ID of the region only
-                      // String regionID = selected region
-                      // then do your loop at the bottom
-                //}
-                
-                }
-                for(Element station: stations)
+                regionArray.add(text);
+
+                if(model.isRegionSelected() == true)
                 {
+
+                }
+
+                for (Element station : stations) {
                     String stationsid = station.attr("id");
 
                     String pattern = "t";
                     pattern = pattern.concat(idTrim);
                     pattern = pattern.concat("-.*");
 
-                    if(Pattern.matches(pattern, stationsid))
-                    {
-                        // model.changeStationDataset(station.text());
-                        // to change the drop-down menu probs, idk
+                    if (Pattern.matches(pattern, stationsid)) {
+                        stationArray.add(station.text());
                         System.out.println(station.text());
                         a++;
                     }
@@ -59,11 +55,25 @@ public class WeatherStation {
             }
             System.out.println(a);
 
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
 
         }
+        String[] stationStrings = new String[stationArray.size()+1];
+        stationArray.add(0, "Please Select");
+        stationArray.toArray(stationStrings);
+
+        String[] regionString = new String[regionArray.size()+1];
+        regionArray.add(0, "Please Select");
+        regionArray.toArray(regionString);
+
+        model.changeRegionDataset(regionString);
+        model.changeStationDataset(stationStrings);
+
     }
 
-}
+    public void searchArray(String query){
+
+    }
+    }
+
+
