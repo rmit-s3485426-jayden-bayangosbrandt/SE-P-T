@@ -71,7 +71,7 @@ public class WeatherStation {
 
     }
 
-    public void searchArray(String query){
+    public void searchRegionArray(String query){
 
     }
     }

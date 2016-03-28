@@ -1,6 +1,6 @@
 package view;
 
-import model.Model;
+import controller.RegionListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -84,11 +84,13 @@ public class MainWindow extends JFrame {
         panelArea.setLayout(new BoxLayout(panelArea, BoxLayout.X_AXIS));
         panelArea.add(new JLabel("Area: "));
         panelArea.add(area);
+//        area.addActionListener(new RegionListener(area));
 
         JPanel panelRegion = new JPanel();
         panelRegion.setLayout(new BoxLayout(panelRegion, BoxLayout.X_AXIS));
         panelRegion.add(new JLabel("Region: "));
         panelRegion.add(region);
+        region.addActionListener(new RegionListener(region));
 
         JPanel panelStation = new JPanel();
         panelStation.setLayout(new BoxLayout(panelStation, BoxLayout.X_AXIS));
@@ -160,6 +162,10 @@ public class MainWindow extends JFrame {
 
         return true;
     }
+
+
+
+
 
 
 }

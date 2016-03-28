@@ -8,6 +8,7 @@ public class Model {
     private static Model ourInstance = new Model();
 
     private MainWindow mainWindow;
+    private WeatherStation weatherStation;
 
     public static Model getInstance() {
         return ourInstance;
@@ -18,6 +19,9 @@ public class Model {
 
     public void setMainWindow(MainWindow window){
         this.mainWindow = window;
+    }
+    public void setWeatherStation(WeatherStation station){
+        this.weatherStation = weatherStation;
     }
 
     public void changeAreaDataset(String[] strings){
@@ -46,6 +50,10 @@ public class Model {
 
     public boolean isStationSelected(){
         return mainWindow.isStationSelected();
+    }
+
+    public void searchRegionWeatherStation(String query){
+        weatherStation.searchRegionArray(query);
     }
 
 }

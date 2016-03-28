@@ -1,6 +1,7 @@
 package view;
 
 import model.Model;
+import model.WeatherStation;
 
 import javax.swing.*;
 
@@ -14,5 +15,7 @@ public class Window {
     public Window(){
         MainWindow window = new MainWindow();
         model.setMainWindow(window);
+        WeatherStation weatherStation = new WeatherStation();
+        model.setWeatherStation(weatherStation);
     }
 }
