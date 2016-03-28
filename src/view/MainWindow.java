@@ -15,6 +15,8 @@ public class MainWindow extends JFrame {
     private String[] stationDataset = new String[]{"1", "2", "3"};
     private Model model = Model.getInstance();
     private JComboBox area;
+    private JComboBox region;
+    private JComboBox station;
 
     public MainWindow() throws HeadlessException {
         this.setLayout(new BorderLayout());
@@ -29,7 +31,7 @@ public class MainWindow extends JFrame {
         this.setVisible(true);
 
         model.setMainWindow(this);
-        model.changeDataset();
+        model.changeAreaDataset();
     }
 
     private JPanel getNorthPanel(){
@@ -74,13 +76,29 @@ public class MainWindow extends JFrame {
         JPanel stationSelection = new JPanel();
         JPanel stationSearch = new JPanel();
         area = new JComboBox(areaDataset);
-        JComboBox region = new JComboBox(regionDataset);
-        JComboBox station = new JComboBox(stationDataset);
+        region = new JComboBox(regionDataset);
+        station = new JComboBox(stationDataset);
         stationSelection.setLayout(new BoxLayout(stationSelection, BoxLayout.Y_AXIS));
+
+        JPanel panelArea = new JPanel();
+        panelArea.setLayout(new BoxLayout(panelArea, BoxLayout.X_AXIS));
+        panelArea.add(new JLabel("Area: "));
+        panelArea.add(area);
+
+        JPanel panelRegion = new JPanel();
+        panelRegion.setLayout(new BoxLayout(panelRegion, BoxLayout.X_AXIS));
+        panelRegion.add(new JLabel("Region: "));
+        panelRegion.add(region);
+
+        JPanel panelStation = new JPanel();
+        panelStation.setLayout(new BoxLayout(panelStation, BoxLayout.X_AXIS));
+        panelStation.add(new JLabel("Station: "));
+        panelStation.add(station);
+
         stationSelection.add(new JLabel("Please select a weather station"), 0);
-        stationSelection.add(area, 1);
-        stationSelection.add(region, 2);
-        stationSelection.add(station, 3);
+        stationSelection.add(panelArea, 1);
+        stationSelection.add(panelRegion, 2);
+        stationSelection.add(panelStation, 3);
         stationSearch.setLayout(new BoxLayout(stationSearch, BoxLayout.Y_AXIS));
         stationSearch.add(new JLabel("Or search for a specific station"), 0);
         stationSearch.add(search, 1);
@@ -110,14 +128,19 @@ public class MainWindow extends JFrame {
 
     public void setAreaDataset(String[] strings){
         this.areaDataset = strings;
-        area = new JComboBox(strings);
+        DefaultComboBoxModel defaultComboBoxModel = new DefaultComboBoxModel(strings);
+        area.setModel(defaultComboBoxModel);
     }
 
     public void setRegionDataset(String[] strings){
         this.regionDataset = strings;
+        DefaultComboBoxModel defaultComboBoxModel = new DefaultComboBoxModel(strings);
+        area.setModel(defaultComboBoxModel);
     }
 
     public void setStationDataset(String[] strings){
         this.stationDataset = strings;
+        DefaultComboBoxModel defaultComboBoxModel = new DefaultComboBoxModel(strings);
+        area.setModel(defaultComboBoxModel);
     }
 }
