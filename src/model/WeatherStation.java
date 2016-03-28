@@ -25,6 +25,19 @@ public class WeatherStation {
                 String id = loop.attr("href");
                 String idTrim = id.replace("#","");
                 System.out.println(text);
+                // model.changeRegionDataset(text);
+                // add the different regions into the dropdown
+                
+                
+                // This is my plan Alex:
+                // if(region dropdown menu is != NULL)
+                //{
+                      // get the ID of the region only
+                      // String regionID = selected region
+                      // then do your loop at the bottom
+                //}
+                
+                }
                 for(Element station: stations)
                 {
                     String stationsid = station.attr("id");
@@ -35,6 +48,8 @@ public class WeatherStation {
 
                     if(Pattern.matches(pattern, stationsid))
                     {
+                        // model.changeStationDataset(station.text());
+                        // to change the drop-down menu probs, idk
                         System.out.println(station.text());
                         a++;
                     }
