@@ -1,7 +1,7 @@
 package model;
 
 
-import com.sun.javafx.stage.WindowHelper;
+
 import view.MainWindow;
 
 public class Model {
@@ -20,8 +20,15 @@ public class Model {
         this.mainWindow = window;
     }
 
-    public void changeDataset(){
-        String[] strings = new String[]{"a", "b", "c"};
+    public void changeAreaDataset(String[] strings){
         mainWindow.setAreaDataset(strings);
+    }
+
+    public void changeRegionDataset(String[] strings){
+        mainWindow.setRegionDataset(strings);
+    }
+
+    public void changeStationDataset(String[] strings){
+        mainWindow.setStationDataset(strings);
     }
 }
