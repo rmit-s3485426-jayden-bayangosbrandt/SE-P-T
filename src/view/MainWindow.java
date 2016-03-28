@@ -114,19 +114,7 @@ public class MainWindow extends JFrame {
     public JLabel getLblName() {
         return lblName;
     }
-
-    public void setLblName(JLabel lblName) {
-        this.lblName = lblName;
-    }
-
-    public JTextField getSearch() {
-        return search;
-    }
-
-    public void setSearch(JTextField search) {
-        this.search = search;
-    }
-
+    
     public void setAreaDataset(String[] strings){
         this.areaDataset = strings;
         DefaultComboBoxModel defaultComboBoxModel = new DefaultComboBoxModel(strings);
@@ -143,6 +131,10 @@ public class MainWindow extends JFrame {
         this.stationDataset = strings;
         DefaultComboBoxModel defaultComboBoxModel = new DefaultComboBoxModel(strings);
         station.setModel(defaultComboBoxModel);
+    }
+
+    public void setLblName(String name){
+        lblName.setText("Hi, "+name);
     }
 
 

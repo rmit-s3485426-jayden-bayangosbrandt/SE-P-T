@@ -31,4 +31,9 @@ public class Model {
     public void changeStationDataset(String[] strings){
         mainWindow.setStationDataset(strings);
     }
+
+    public void setLblName(String name){
+        mainWindow.setLblName(name);
+    }
+
 }
