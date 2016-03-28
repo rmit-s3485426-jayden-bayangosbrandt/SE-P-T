@@ -36,4 +36,16 @@ public class Model {
         mainWindow.setLblName(name);
     }
 
+    public boolean isAreaSelected(){
+        return mainWindow.isAreaSelected();
+    }
+
+    public boolean isRegionSelected(){
+        return mainWindow.isRegionSelected();
+    }
+
+    public boolean isStationSelected(){
+        return mainWindow.isStationSelected();
+    }
+
 }

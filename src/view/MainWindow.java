@@ -137,5 +137,29 @@ public class MainWindow extends JFrame {
         lblName.setText("Hi, "+name);
     }
 
+    public boolean isAreaSelected(){
+        if(area.getSelectedIndex() == 0){
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean isRegionSelected(){
+        if(region.getSelectedIndex() == 0){
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean isStationSelected(){
+        if(station.getSelectedIndex() == 0){
+            return false;
+        }
+
+        return true;
+    }
+
 
 }
