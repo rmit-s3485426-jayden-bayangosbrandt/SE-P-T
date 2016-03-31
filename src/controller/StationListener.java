@@ -9,20 +9,20 @@ import java.awt.event.ActionListener;
 /**
  * Created by Jayden on 28/03/2016.
  */
-public class RegionListener implements ActionListener {
+public class StationListener implements ActionListener {
 
     private JComboBox comboBox;
     private Model model = Model.getInstance();
 
-    public RegionListener(JComboBox comboBox){
+    public StationListener(JComboBox comboBox){
         this.comboBox = comboBox;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         String value = (String) comboBox.getSelectedItem();
-        model.searchRegionWeatherStation(value);
-        System.out.println("Region selected");
+        model.searchStationWeatherStation(value);
+        System.out.println("Station selected");
     }
 
 
