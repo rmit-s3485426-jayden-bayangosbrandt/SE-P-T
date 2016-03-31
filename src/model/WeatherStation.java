@@ -16,6 +16,9 @@ public class WeatherStation {
 
     private ArrayList stationArray = new ArrayList();
     private ArrayList regionArray = new ArrayList();
+    private ArrayList regionID = new ArrayList();
+    String currentID;
+
     private Model model = Model.getInstance();
     public WeatherStation() {
         int a = 0;
@@ -29,13 +32,10 @@ public class WeatherStation {
                 String text = loop.text();
                 String id = loop.attr("href");
                 String idTrim = id.replace("#", "");
+                regionID.add(idTrim);
+
                 System.out.println(text);
                 regionArray.add(text);
-
-                if(model.isRegionSelected() == true)
-                {
-
-                }
 
                 for (Element station : stations) {
                     String stationsid = station.attr("id");
@@ -73,6 +73,13 @@ public class WeatherStation {
 
     public void searchRegionArray(String query){
 
+        for(int i = 0 ; i < regionArray.size() + 1 ; i++)
+        {
+            if( query == regionArray.get(i))
+            {
+                currentID = (String) regionID.get(i + 1);
+            }
+        }
     }
     }
 

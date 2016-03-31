@@ -90,12 +90,14 @@ public class MainWindow extends JFrame {
         panelRegion.setLayout(new BoxLayout(panelRegion, BoxLayout.X_AXIS));
         panelRegion.add(new JLabel("Region: "));
         panelRegion.add(region);
+        region.setEnabled(false);
         region.addActionListener(new RegionListener(region));
 
         JPanel panelStation = new JPanel();
         panelStation.setLayout(new BoxLayout(panelStation, BoxLayout.X_AXIS));
         panelStation.add(new JLabel("Station: "));
         panelStation.add(station);
+        station.setEnabled(false);
 
 //        stationSelection.add(new JLabel("Please select a weather station"));
         stationSelection.add(panelStationLabel);
