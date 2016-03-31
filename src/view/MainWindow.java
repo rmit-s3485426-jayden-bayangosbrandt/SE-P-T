@@ -1,6 +1,7 @@
 package view;
 
 import controller.RegionListener;
+import controller.StationListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -98,6 +99,7 @@ public class MainWindow extends JFrame {
         panelStation.add(new JLabel("Station: "));
         panelStation.add(station);
         station.setEnabled(false);
+        station.addActionListener(new StationListener(station));
 
 //        stationSelection.add(new JLabel("Please select a weather station"));
         stationSelection.add(panelStationLabel);
@@ -157,12 +159,28 @@ public class MainWindow extends JFrame {
         return true;
     }
 
+    public String getRegionSelected(){
+        return (String) region.getSelectedItem();
+    }
+
     public boolean isStationSelected(){
         if(station.getSelectedIndex() == 0){
             return false;
         }
 
         return true;
+    }
+
+    public String getStationSelected(){
+        return (String) station.getSelectedItem();
+    }
+
+    public void setStationEnabled(boolean enabled){
+        station.setEnabled(enabled);
+    }
+
+    public void setRegionEnabled(boolean enabled){
+        region.setEnabled(enabled);
     }
 
 

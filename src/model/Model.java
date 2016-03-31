@@ -56,4 +56,27 @@ public class Model {
         weatherStation.searchRegionArray(query);
     }
 
+    public void searchStationWeatherStation(String query){
+        // Uncomment when implemented
+//        weatherStation.searchStationArray(query);
+    }
+
+    public void setStationEnabled(boolean enabled){
+        // Set the state of station combobox
+        mainWindow.setStationEnabled(enabled);
+    }
+
+    public void setRegionEnabled(boolean enabled){
+        // Set the state of region combobox
+        mainWindow.setRegionEnabled(enabled);
+    }
+
+    public String getStationSelected(){
+        return mainWindow.getStationSelected();
+    }
+
+    public String getRegionSelected(){
+        return mainWindow.getRegionSelected();
+    }
+
 }
