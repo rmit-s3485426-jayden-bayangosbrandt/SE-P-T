@@ -1,6 +1,7 @@
 package view;
 
-import model.Model;
+import controller.RegionListener;
+import controller.StationListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -84,16 +85,21 @@ public class MainWindow extends JFrame {
         panelArea.setLayout(new BoxLayout(panelArea, BoxLayout.X_AXIS));
         panelArea.add(new JLabel("Area: "));
         panelArea.add(area);
+//        area.addActionListener(new RegionListener(area));
 
         JPanel panelRegion = new JPanel();
         panelRegion.setLayout(new BoxLayout(panelRegion, BoxLayout.X_AXIS));
         panelRegion.add(new JLabel("Region: "));
         panelRegion.add(region);
+        region.setEnabled(false);
+        region.addActionListener(new RegionListener(region));
 
         JPanel panelStation = new JPanel();
         panelStation.setLayout(new BoxLayout(panelStation, BoxLayout.X_AXIS));
         panelStation.add(new JLabel("Station: "));
         panelStation.add(station);
+        station.setEnabled(false);
+        station.addActionListener(new StationListener(station));
 
 //        stationSelection.add(new JLabel("Please select a weather station"));
         stationSelection.add(panelStationLabel);
@@ -136,6 +142,50 @@ public class MainWindow extends JFrame {
     public void setLblName(String name){
         lblName.setText("Hi, "+name);
     }
+
+    public boolean isAreaSelected(){
+        if(area.getSelectedIndex() == 0){
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean isRegionSelected(){
+        if(region.getSelectedIndex() == 0){
+            return false;
+        }
+
+        return true;
+    }
+
+    public String getRegionSelected(){
+        return (String) region.getSelectedItem();
+    }
+
+    public boolean isStationSelected(){
+        if(station.getSelectedIndex() == 0){
+            return false;
+        }
+
+        return true;
+    }
+
+    public String getStationSelected(){
+        return (String) station.getSelectedItem();
+    }
+
+    public void setStationEnabled(boolean enabled){
+        station.setEnabled(enabled);
+    }
+
+    public void setRegionEnabled(boolean enabled){
+        region.setEnabled(enabled);
+    }
+
+
+
+
 
 
 }
