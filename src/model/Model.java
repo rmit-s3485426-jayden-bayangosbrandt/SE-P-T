@@ -78,17 +78,17 @@ public class Model {
         mainWindow.setRegionEnabled(enabled);
     }
 
-    public String getStationSelected(){
-        return mainWindow.getStationSelected();
-    }
+//    public String getStationSelected(){
+//        return mainWindow.getStationSelected();
+//    }
 
-    public String getRegionSelected(){
-        return mainWindow.getRegionSelected();
-    }
+//    public String getRegionSelected(){
+//        return mainWindow.getRegionSelected();
+//    }
 
-    public String getAreaSelected(){
-        return mainWindow.getAreaSelected();
-    }
+//    public String getAreaSelected(){
+//        return mainWindow.getAreaSelected();
+//    }
 
     public void changeRegion(String area) {
         String id;
