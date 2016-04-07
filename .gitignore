@@ -33,5 +33,5 @@ The file generated for IntelliJ contains the following
  .idea/mongoSettings.xml
 
 ## File-based project format:
-.ipr
+#.ipr
 .iws
