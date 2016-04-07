@@ -1,10 +1,13 @@
 package view;
 
+import controller.AreaListener;
 import controller.RegionListener;
 import controller.StationListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 public class MainWindow extends JFrame {
@@ -17,6 +20,7 @@ public class MainWindow extends JFrame {
     private JComboBox area;
     private JComboBox region;
     private JComboBox station;
+    private JButton btnFavourite;
 
     public MainWindow() throws HeadlessException {
         this.setLayout(new BorderLayout());
@@ -66,13 +70,20 @@ public class MainWindow extends JFrame {
     }
 
     private JPanel getCenterPanel(){
-        JPanel center = new JPanel();
+        final JPanel center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.X_AXIS));
         JPanel stationSelection = new JPanel();
 
         area = new JComboBox(areaDataset);
         region = new JComboBox(regionDataset);
         station = new JComboBox(stationDataset);
+        btnFavourite = new JButton("Add to Favourites");
+        btnFavourite.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(MainWindow.this, "Fuck you");
+            }
+        });
         stationSelection.setLayout(new BoxLayout(stationSelection, BoxLayout.Y_AXIS));
 
         JPanel panelStationLabel = new JPanel();
@@ -85,7 +96,7 @@ public class MainWindow extends JFrame {
         panelArea.setLayout(new BoxLayout(panelArea, BoxLayout.X_AXIS));
         panelArea.add(new JLabel("Area: "));
         panelArea.add(area);
-//        area.addActionListener(new RegionListener(area));
+        area.addActionListener(new AreaListener(area));
 
         JPanel panelRegion = new JPanel();
         panelRegion.setLayout(new BoxLayout(panelRegion, BoxLayout.X_AXIS));
@@ -112,7 +123,11 @@ public class MainWindow extends JFrame {
 //        stationSearch.add(Box.createVerticalStrut(100));
         center.add(stationSelection);
         JPanel addFavourite = new JPanel();
-        addFavourite.setLayout(new BoxLayout(addFavourite), BoxLayout.X_AXIS);
+        addFavourite.setLayout(new BoxLayout(addFavourite, BoxLayout.X_AXIS));
+        addFavourite.add(Box.createHorizontalGlue());
+        addFavourite.add(btnFavourite);
+        addFavourite.add(Box.createHorizontalGlue());
+        stationSelection.add(addFavourite);
 //        center.add(Box.createHorizontalStrut(100), 1);
 //        center.add(stationSearch, 2);
 
