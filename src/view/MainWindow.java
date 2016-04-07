@@ -183,9 +183,4 @@ public class MainWindow extends JFrame {
         region.setEnabled(enabled);
     }
 
-
-
-
-
-
 }

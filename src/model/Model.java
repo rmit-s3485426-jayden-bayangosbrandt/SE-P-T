@@ -12,11 +12,13 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class Model {
-    private static Model ourInstance = new Model();
 
+    private static Model ourInstance = new Model();
     private MainWindow mainWindow;
     private WeatherStation weatherStation;
+    private ArrayList<User> users = new ArrayList<>();
     String regionUrl;
+
     public static Model getInstance() {
         return ourInstance;
     }
@@ -238,4 +240,36 @@ public class Model {
         return null;
     }
 
+    public void addUser(User user){
+        // Add user to Users Arraylist
+        users.add(user);
+    }
+
+    public ArrayList<User> getUserList(){
+        return users;
+    }
+
+    //Dummy data
+    public void setDummyData(){
+
+        User yung = new User();
+        yung.setUsername("Yung");
+
+        addUser(yung);
+
+        User aaron = new User();
+        aaron.setUsername("Aaron");
+
+        addUser(aaron);
+
+        User alex = new User();
+        alex.setUsername("Alex");
+
+        addUser(alex);
+
+        User jayden = new User();
+        jayden.setUsername("Jayden");
+
+        addUser(jayden);
+    }
 }

@@ -1,17 +1,19 @@
 package view;
 
 
-import model.Model;
+import model.User;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class WelcomeWindow extends JFrame {
 
     private JTextField newUser = new JTextField("Type your name here");
     private JButton register = new JButton("Register");
-    private String[] users = new String[]{"user1", "user2", "user3"};
+    private ArrayList<User> users = new ArrayList<>();
     private JTextField searchUsers = new JTextField("Search your username here");
+    private User currentUser;
 
 
     public WelcomeWindow() throws HeadlessException {
@@ -60,7 +62,7 @@ public class WelcomeWindow extends JFrame {
         existingPanel.setLayout(new BoxLayout(existingPanel, BoxLayout.Y_AXIS));
         scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.X_AXIS));
         searchUsersPanel.setLayout(new BoxLayout(searchUsersPanel, BoxLayout.X_AXIS));
-        JList existingUsers = new JList(users);
+        JList existingUsers = new JList(stringUsers(users));
         JScrollPane scrollUsers = new JScrollPane(existingUsers);
         scrollUsers.setPreferredSize(new Dimension(300, 100));
         scrollUsers.setMaximumSize(new Dimension(300, 100));
@@ -83,4 +85,37 @@ public class WelcomeWindow extends JFrame {
 //        scrollPanel.add(Box.createHorizontalGlue());
         return existingPanel;
     }
+
+    // return current user
+    public User getUser(){
+
+        return currentUser;
+    }
+
+    // Set current user
+    public void setUser(User user){
+        currentUser = user;
+    }
+
+    // Get Window User list
+    public ArrayList<User> getWindowUsers() {
+        return users;
+    }
+
+    public void importUserList( ArrayList<User> usersToImport) {
+
+        for (int i = 0; i < usersToImport.size(); i++) {
+            User user = usersToImport.get(i);
+            users.add(user);
+        }
+    }
+
+    public String[] stringUsers( ArrayList<User> users){
+
+        String[] localList = new String[users.size()];
+        users.toArray(localList);
+
+        return localList;
+    }
+
 }
