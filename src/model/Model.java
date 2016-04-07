@@ -241,6 +241,11 @@ public class Model {
         return null;
     }
 
+    public String getStationUrl() {
+        return stationUrl;
+    }
 
-
+    public void setStationUrl(String stationUrl) {
+        this.stationUrl = stationUrl;
+    }
 }

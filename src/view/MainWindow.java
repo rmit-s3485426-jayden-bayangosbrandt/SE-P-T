@@ -3,6 +3,7 @@ package view;
 import controller.AreaListener;
 import controller.RegionListener;
 import controller.StationListener;
+import model.Model;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +14,7 @@ import java.awt.event.ActionListener;
 public class MainWindow extends JFrame {
 
     private JLabel lblName = new JLabel("Name");
-    private JTextField search = new JTextField("Search weather stations");
+//    private JTextField search = new JTextField("Search weather stations");
     private String[] areaDataset = new String[]{"1", "2", "3"};
     private String[] regionDataset = new String[]{"1", "2", "3"};
     private String[] stationDataset = new String[]{"1", "2", "3"};
@@ -21,6 +22,7 @@ public class MainWindow extends JFrame {
     private JComboBox region;
     private JComboBox station;
     private JButton btnFavourite;
+    private Model model = Model.getInstance();
 
     public MainWindow() throws HeadlessException {
         this.setLayout(new BorderLayout());
@@ -82,6 +84,7 @@ public class MainWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(MainWindow.this, "Fuck you");
+                model.setStationUrl(getStationSelected());
             }
         });
         stationSelection.setLayout(new BoxLayout(stationSelection, BoxLayout.Y_AXIS));
@@ -199,8 +202,6 @@ public class MainWindow extends JFrame {
     public void setRegionEnabled(boolean enabled){
         region.setEnabled(enabled);
     }
-
-
 
 
 
