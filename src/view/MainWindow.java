@@ -83,7 +83,7 @@ public class MainWindow extends JFrame {
         btnFavourite.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(MainWindow.this, "Fuck you");
+                JOptionPane.showMessageDialog(MainWindow.this, "Fuck trees!!!");
                 model.setStationUrl(getStationSelected());
             }
         });
