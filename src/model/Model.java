@@ -47,21 +47,21 @@ public class Model {
         mainWindow.setLblName(name);
     }
 
-    public boolean isAreaSelected(){
-        return mainWindow.isAreaSelected();
-    }
+//    public boolean isAreaSelected(){
+//        return mainWindow.isAreaSelected();
+//    }
+//
+//    public boolean isRegionSelected(){
+//        return mainWindow.isRegionSelected();
+//    }
+//
+//    public boolean isStationSelected(){
+//        return mainWindow.isStationSelected();
+//    }
 
-    public boolean isRegionSelected(){
-        return mainWindow.isRegionSelected();
-    }
-
-    public boolean isStationSelected(){
-        return mainWindow.isStationSelected();
-    }
-
-    public void searchRegionWeatherStation(String query){
-
-    }
+//    public void searchRegionWeatherStation(String query){
+//
+//    }
 
     public void searchStationWeatherStation(String query){
         // Uncomment when implemented

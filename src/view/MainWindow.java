@@ -111,6 +111,8 @@ public class MainWindow extends JFrame {
 //        stationSearch.add(search, 1);
 //        stationSearch.add(Box.createVerticalStrut(100));
         center.add(stationSelection);
+        JPanel addFavourite = new JPanel();
+        addFavourite.setLayout(new BoxLayout(addFavourite), BoxLayout.X_AXIS);
 //        center.add(Box.createHorizontalStrut(100), 1);
 //        center.add(stationSearch, 2);
 
