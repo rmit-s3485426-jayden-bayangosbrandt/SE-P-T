@@ -16,7 +16,8 @@ public class Model {
 
     private MainWindow mainWindow;
     private WeatherStation weatherStation;
-    String regionUrl;
+    private String regionUrl;
+    private String stationUrl;
     public static Model getInstance() {
         return ourInstance;
     }
@@ -170,6 +171,8 @@ public class Model {
 
     }
 
+
+
     public String[] searchStationArray(String region, String url) {
         ArrayList<String> stationsStrings = new ArrayList<String>();
         String[] stationsArray;
@@ -237,5 +240,7 @@ public class Model {
         }
         return null;
     }
+
+
 
 }
