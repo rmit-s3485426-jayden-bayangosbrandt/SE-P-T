@@ -7,6 +7,7 @@ import org.jsoup.select.Elements;
 import view.MainWindow;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import view.WelcomeWindow;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -14,9 +15,12 @@ import java.util.regex.Pattern;
 public class Model {
 
     private static Model ourInstance = new Model();
+    private WelcomeWindow welcomeWindow;
     private MainWindow mainWindow;
     private WeatherStation weatherStation;
     private ArrayList<User> users = new ArrayList<>();
+    private User currentUser;
+
     String regionUrl;
 
     public static Model getInstance() {
@@ -25,10 +29,14 @@ public class Model {
 
     private Model() {
     }
+    public void setWelcomeWindow(WelcomeWindow window){
+        this.welcomeWindow = window;
+    }
 
     public void setMainWindow(MainWindow window){
         this.mainWindow = window;
     }
+
     public void setWeatherStation(WeatherStation station){
         this.weatherStation = station;
     }
@@ -240,9 +248,25 @@ public class Model {
         return null;
     }
 
-    public void addUser(User user){
+    public void addUser(String userName){
         // Add user to Users Arraylist
-        users.add(user);
+        User newUser = new User();
+        newUser.setUsername(userName);
+        users.add(newUser);
+    }
+
+    public void setCurrentUser(String current){
+
+        for(int i = 0; i< users.size(); i++){
+            if(users.get(i).getUsername() == current){
+                currentUser = users.get(i);
+            }
+        }
+
+    }
+
+    public User getCurrent(){
+        return currentUser;
     }
 
     public ArrayList<User> getUserList(){
@@ -252,24 +276,10 @@ public class Model {
     //Dummy data
     public void setDummyData(){
 
-        User yung = new User();
-        yung.setUsername("Yung");
+        addUser("Yung");
+        addUser("Jayden");
+        addUser("Alex");
+        addUser("Aaron");
 
-        addUser(yung);
-
-        User aaron = new User();
-        aaron.setUsername("Aaron");
-
-        addUser(aaron);
-
-        User alex = new User();
-        alex.setUsername("Alex");
-
-        addUser(alex);
-
-        User jayden = new User();
-        jayden.setUsername("Jayden");
-
-        addUser(jayden);
     }
 }

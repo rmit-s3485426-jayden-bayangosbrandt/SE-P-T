@@ -12,12 +12,11 @@ public class Window {
     public Window(){
 
         model.setDummyData();
+
         WelcomeWindow welcome = new WelcomeWindow();
-        welcome.importUserList(model.getUserList());
+        model.setWelcomeWindow(welcome);
 
-        System.out.println(welcome.getWindowUsers());
-
-        if ( welcome.getUser() != null) {
+        if (model.getCurrent() != null) {
             MainWindow window = new MainWindow();
             model.setMainWindow(window);
             model.setArea();

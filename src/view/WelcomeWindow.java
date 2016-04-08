@@ -1,7 +1,9 @@
 package view;
 
 
+import model.Model;
 import model.User;
+import controller.UserListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,11 +11,12 @@ import java.util.ArrayList;
 
 public class WelcomeWindow extends JFrame {
 
+    private Model model = Model.getInstance();
+
     private JTextField newUser = new JTextField("Type your name here");
     private JButton register = new JButton("Register");
-    private ArrayList<User> users = new ArrayList<>();
     private JTextField searchUsers = new JTextField("Search your username here");
-    private User currentUser;
+    private JList existingUsers = new JList(stringUsers(model.getUserList()));
 
 
     public WelcomeWindow() throws HeadlessException {
@@ -27,9 +30,6 @@ public class WelcomeWindow extends JFrame {
         contentPanel.add(getExistingUserPanel(), 3);
         setSize(new Dimension(500, 300));
         setVisible(true);
-
-
-
     }
 
     private JPanel getWelcomePanel(){
@@ -62,12 +62,13 @@ public class WelcomeWindow extends JFrame {
         existingPanel.setLayout(new BoxLayout(existingPanel, BoxLayout.Y_AXIS));
         scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.X_AXIS));
         searchUsersPanel.setLayout(new BoxLayout(searchUsersPanel, BoxLayout.X_AXIS));
-        JList existingUsers = new JList(stringUsers(users));
         JScrollPane scrollUsers = new JScrollPane(existingUsers);
         scrollUsers.setPreferredSize(new Dimension(300, 100));
         scrollUsers.setMaximumSize(new Dimension(300, 100));
         searchUsers.setMaximumSize(new Dimension(300, 30));
         searchUsers.setPreferredSize(new Dimension(300, 30));
+
+        existingUsers.addListSelectionListener(new UserListener(existingUsers));
 
         scrollPanel.add(Box.createHorizontalGlue());
         scrollPanel.add(scrollUsers);
@@ -86,36 +87,15 @@ public class WelcomeWindow extends JFrame {
         return existingPanel;
     }
 
-    // return current user
-    public User getUser(){
-
-        return currentUser;
-    }
-
-    // Set current user
-    public void setUser(User user){
-        currentUser = user;
-    }
-
-    // Get Window User list
-    public ArrayList<User> getWindowUsers() {
-        return users;
-    }
-
-    public void importUserList( ArrayList<User> usersToImport) {
-
-        for (int i = 0; i < usersToImport.size(); i++) {
-            User user = usersToImport.get(i);
-            users.add(user);
-        }
-    }
-
-    public String[] stringUsers( ArrayList<User> users){
+    // String user list
+    public String[] stringUsers( ArrayList<User> users) {
 
         String[] localList = new String[users.size()];
-        users.toArray(localList);
+
+        for (int i = 0; i < users.size(); i++) {
+            localList[i] = users.get(i).getUsername();
+        }
 
         return localList;
     }
-
 }
