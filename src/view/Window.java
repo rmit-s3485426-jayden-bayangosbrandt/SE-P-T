@@ -18,7 +18,7 @@ public class Window {
 
         // temporary means to an end = Continually prints out "Checking..." until user is set. lol. harsh
         while(model.getCurrent() == null){
-            System.out.println("Choose a user ASAP");
+            System.out.print("");
         }
 
         MainWindow window = new MainWindow();
