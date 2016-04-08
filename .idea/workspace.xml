@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fb21f8a4-2b20-4621-a0e1-5aa5c69273bd" name="Default" comment="Register">
+    <list default="true" id="fb21f8a4-2b20-4621-a0e1-5aa5c69273bd" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/model/User.java" afterPath="$PROJECT_DIR$/src/model/User.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/view/MainWindow.java" afterPath="$PROJECT_DIR$/src/view/MainWindow.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/view/WelcomeWindow.java" afterPath="$PROJECT_DIR$/src/view/WelcomeWindow.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/view/Window.java" afterPath="$PROJECT_DIR$/src/view/Window.java" />
     </list>
     <ignored path="Software Engineering Process and Tools.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -102,8 +98,8 @@
       <file leaf-file-name="RegisterListener.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/controller/RegisterListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="202">
-              <caret line="25" column="29" selection-start-line="25" selection-start-column="29" selection-end-line="25" selection-end-column="29" />
+            <state relative-caret-position="247">
+              <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -567,7 +563,14 @@
       <option name="project" value="LOCAL" />
       <updated>1460133912520</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Welcome Page Register Functionality and adding user">
+      <created>1460133969732</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1460133969732</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TodoView">
@@ -627,7 +630,8 @@
     <MESSAGE value="Test" />
     <MESSAGE value="Merge branch 'development' of https://github.com/rmit-s3485426-jayden-bayangosbrandt/SE-P-T&#10;&#10;# Conflicts:&#10;#&#9;src/model/Model.java&#10;#&#9;src/view/MainWindow.java&#10;" />
     <MESSAGE value="Register listener for Welcome Page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Register listener for Welcome Page" />
+    <MESSAGE value="Welcome Page Register Functionality and adding user" />
+    <option name="LAST_COMMIT_MESSAGE" value="Welcome Page Register Functionality and adding user" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1070,8 +1074,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/controller/RegisterListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="25" column="29" selection-start-line="25" selection-start-column="29" selection-end-line="25" selection-end-column="29" />
+        <state relative-caret-position="247">
+          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
