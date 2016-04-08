@@ -1,9 +1,8 @@
 package view;
 
-import controller.AreaListener;
-import controller.RegionListener;
-import controller.StationListener;
+import controller.*;
 import model.Model;
+import model.WeatherStation;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,9 +17,11 @@ public class MainWindow extends JFrame {
     private String[] areaDataset = new String[]{"1", "2", "3"};
     private String[] regionDataset = new String[]{"1", "2", "3"};
     private String[] stationDataset = new String[]{"1", "2", "3"};
+    private String[] faveDataset = new String[]{"1", "2", "3"};
     private JComboBox area;
     private JComboBox region;
     private JComboBox station;
+    private JList faveList;
     private JButton btnFavourite;
     private Model model = Model.getInstance();
 
@@ -52,11 +53,12 @@ public class MainWindow extends JFrame {
 
         favePanel.setLayout(new BoxLayout(favePanel, BoxLayout.Y_AXIS));
         // Setup favourite list component
-        JList list = new JList(areaDataset);
-        list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        list.setLayoutOrientation(JList.VERTICAL);
+        faveList = new JList(faveDataset);
+        faveList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        faveList.setLayoutOrientation(JList.VERTICAL);
+        faveList.addListSelectionListener(new FavouriteListener(faveList, this));
 //        list.setVisibleRowCount(3);
-        JScrollPane scrollPane = new JScrollPane(list);
+        JScrollPane scrollPane = new JScrollPane(faveList);
         scrollPane.setPreferredSize(new Dimension(10, 10));
         // Add component to panel
         favePanel.add(new JLabel("Favourites"));
@@ -80,13 +82,7 @@ public class MainWindow extends JFrame {
         region = new JComboBox(regionDataset);
         station = new JComboBox(stationDataset);
         btnFavourite = new JButton("Add to Favourites");
-        btnFavourite.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(MainWindow.this, "Fuck trees!!!");
-                model.setStationUrl(getStationSelected());
-            }
-        });
+        btnFavourite.addActionListener(new AddFavouriteListener(this));
         stationSelection.setLayout(new BoxLayout(stationSelection, BoxLayout.Y_AXIS));
 
         JPanel panelStationLabel = new JPanel();
@@ -157,6 +153,12 @@ public class MainWindow extends JFrame {
         this.stationDataset = strings;
         DefaultComboBoxModel defaultComboBoxModel = new DefaultComboBoxModel(strings);
         station.setModel(defaultComboBoxModel);
+    }
+
+    public void setFavouriteDataset(String[] strings){
+        this.faveDataset = strings;
+
+//        DefaultListSelectionModel defaultListSelectionModel = new DefaultListSelectionModel(strings);
     }
 
     public void setLblName(String name){

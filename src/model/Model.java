@@ -18,6 +18,9 @@ public class Model {
     private WeatherStation weatherStation;
     private String regionUrl;
     private String stationUrl;
+    private ArrayList<User> users = new ArrayList<>();
+    // Remove later
+    private User currentUser = new User("User");
     public static Model getInstance() {
         return ourInstance;
     }
@@ -245,7 +248,27 @@ public class Model {
         return stationUrl;
     }
 
+    public String getStationSelected(){
+        return mainWindow.getStationSelected();
+    }
+
     public void setStationUrl(String stationUrl) {
         this.stationUrl = stationUrl;
+    }
+
+    public void addUser(User user){
+        users.add(user);
+    }
+
+    public ArrayList<User> getUsers(){
+        return users;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 }

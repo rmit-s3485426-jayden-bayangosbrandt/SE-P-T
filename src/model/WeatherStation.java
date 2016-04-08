@@ -18,58 +18,65 @@ public class WeatherStation {
     private ArrayList regionArray = new ArrayList();
     private ArrayList regionID = new ArrayList();
     String currentID;
+    private String name;
+    private ArrayList<String> history = new ArrayList<>();
 
     private Model model = Model.getInstance();
-    public WeatherStation() {
-        int a = 0;
-        try {
-            System.out.println("TEST");
-            Document doc = Jsoup.connect("http://www.bom.gov.au/nsw/observations/nswall.shtml").get();
-            Elements test = doc.getElementsByClass("box1");
-            Elements classes = test.select("a");
-            Elements stations = doc.select("tbody").select("th");
-            for (Element loop : classes) {
-                String text = loop.text();
-                String id = loop.attr("href");
-                String idTrim = id.replace("#", "");
-                regionID.add(idTrim);
 
-                System.out.println(text);
-                regionArray.add(text);
-
-                for (Element station : stations) {
-                    String stationsid = station.attr("id");
-
-                    String pattern = "t";
-                    pattern = pattern.concat(idTrim);
-                    pattern = pattern.concat("-.*");
-
-                    if (Pattern.matches(pattern, stationsid)) {
-                        stationArray.add(station.text());
-                        System.out.println(station.text());
-                        a++;
-                    }
-                }
-                System.out.println();
-
-            }
-            System.out.println(a);
-
-        } catch (Exception e) {
-
-        }
-        String[] stationStrings = new String[stationArray.size()+1];
-        stationArray.add(0, "Please Select");
-        stationArray.toArray(stationStrings);
-
-        String[] regionString = new String[regionArray.size()+1];
-        regionArray.add(0, "Please Select");
-        regionArray.toArray(regionString);
-
-        model.changeRegionDataset(regionString);
-        model.changeStationDataset(stationStrings);
-
+    public WeatherStation(String name) {
+        this.name = name;
     }
+
+    //    public WeatherStation() {
+//        int a = 0;
+//        try {
+//            System.out.println("TEST");
+//            Document doc = Jsoup.connect("http://www.bom.gov.au/nsw/observations/nswall.shtml").get();
+//            Elements test = doc.getElementsByClass("box1");
+//            Elements classes = test.select("a");
+//            Elements stations = doc.select("tbody").select("th");
+//            for (Element loop : classes) {
+//                String text = loop.text();
+//                String id = loop.attr("href");
+//                String idTrim = id.replace("#", "");
+//                regionID.add(idTrim);
+//
+//                System.out.println(text);
+//                regionArray.add(text);
+//
+//                for (Element station : stations) {
+//                    String stationsid = station.attr("id");
+//
+//                    String pattern = "t";
+//                    pattern = pattern.concat(idTrim);
+//                    pattern = pattern.concat("-.*");
+//
+//                    if (Pattern.matches(pattern, stationsid)) {
+//                        stationArray.add(station.text());
+//                        System.out.println(station.text());
+//                        a++;
+//                    }
+//                }
+//                System.out.println();
+//
+//            }
+//            System.out.println(a);
+//
+//        } catch (Exception e) {
+//
+//        }
+//        String[] stationStrings = new String[stationArray.size()+1];
+//        stationArray.add(0, "Please Select");
+//        stationArray.toArray(stationStrings);
+//
+//        String[] regionString = new String[regionArray.size()+1];
+//        regionArray.add(0, "Please Select");
+//        regionArray.toArray(regionString);
+//
+//        model.changeRegionDataset(regionString);
+//        model.changeStationDataset(stationStrings);
+//
+//    }
 
     public void searchRegionArray(String query){
 
@@ -81,6 +88,22 @@ public class WeatherStation {
             }
         }
     }
+
+    public ArrayList<String> getHistory() {
+        return history;
     }
+
+    public void setHistory(ArrayList<String> history) {
+        this.history = history;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
 
 
