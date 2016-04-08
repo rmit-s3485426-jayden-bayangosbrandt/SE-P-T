@@ -16,11 +16,14 @@ public class Window {
         WelcomeWindow welcome = new WelcomeWindow();
         model.setWelcomeWindow(welcome);
 
-        if (model.getCurrent() != null) {
-            MainWindow window = new MainWindow();
-            model.setMainWindow(window);
-            model.setArea();
-            //model.setWeatherStation(weatherStation);
+        // temporary means to an end = Continually prints out "Checking..." until user is set. lol. harsh
+        while(model.getCurrent() == null){
+            System.out.println("Choose a user ASAP");
         }
+
+        MainWindow window = new MainWindow();
+        model.setMainWindow(window);
+        model.setArea();
+        //model.setWeatherStation(weatherStation);
     }
 }

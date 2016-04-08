@@ -98,4 +98,8 @@ public class WelcomeWindow extends JFrame {
 
         return localList;
     }
+
+    public void closeWindow(){
+        this.dispose();
+    }
 }

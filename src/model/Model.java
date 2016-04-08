@@ -73,6 +73,10 @@ public class Model {
 
     }
 
+    public void closeWelcome(){
+        welcomeWindow.closeWindow();
+    }
+
     public void searchStationWeatherStation(String query){
         // Uncomment when implemented
 //        weatherStation.searchStationArray(query);
@@ -257,16 +261,22 @@ public class Model {
 
     public void setCurrentUser(String current){
 
-        for(int i = 0; i< users.size(); i++){
+        for(int i = 0; i< getUserList().size(); i++){
             if(users.get(i).getUsername() == current){
-                currentUser = users.get(i);
+                setCurrentUser(users.get(i));
             }
         }
+
+        System.out.println("CurrentUser is: " + currentUser.getUsername());
 
     }
 
     public User getCurrent(){
         return currentUser;
+    }
+
+    public void setCurrentUser(User newUser){
+        currentUser = newUser;
     }
 
     public ArrayList<User> getUserList(){

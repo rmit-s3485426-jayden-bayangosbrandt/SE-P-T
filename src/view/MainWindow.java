@@ -2,6 +2,7 @@ package view;
 
 import controller.RegionListener;
 import controller.StationListener;
+import model.Model;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +10,9 @@ import java.awt.*;
 
 public class MainWindow extends JFrame {
 
-    private JLabel lblName = new JLabel("Name");
+    private Model model = Model.getInstance();
+
+    private JLabel lblName = new JLabel(model.getCurrent().getUsername());
     private JTextField search = new JTextField("Search weather stations");
     private String[] areaDataset = new String[]{"1", "2", "3"};
     private String[] regionDataset = new String[]{"1", "2", "3"};
