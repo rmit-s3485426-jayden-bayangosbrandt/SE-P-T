@@ -29,7 +29,7 @@ public class FavouriteListener implements ListSelectionListener {
 
             JOptionPane.showMessageDialog(frame, "Fuck trees!!!");
             // Feed to chart object
-            model.getCurrentUser().getFavourite(e.getFirstIndex());
+            model.getCurrent().getFavourite(e.getFirstIndex());
 
         }
     }
