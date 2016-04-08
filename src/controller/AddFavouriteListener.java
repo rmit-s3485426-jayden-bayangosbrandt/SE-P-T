@@ -1,0 +1,32 @@
+package controller;
+
+import com.sun.org.apache.xpath.internal.operations.Mod;
+import model.Model;
+import model.WeatherStation;
+import view.MainWindow;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+/**
+ * Created by Jayden on 8/04/2016.
+ */
+public class AddFavouriteListener implements ActionListener {
+
+    private JFrame frame;
+    private Model model = Model.getInstance();
+
+    public AddFavouriteListener(JFrame frame) {
+        this.frame = frame;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JOptionPane.showMessageDialog(frame, "Added to Favourites!");
+        final String selected = model.getStationUrl();
+        model.setStationUrl(selected);
+        model.getCurrent().addFavorite(new WeatherStation(selected));
+
+    }
+}

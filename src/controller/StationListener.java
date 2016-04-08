@@ -22,6 +22,7 @@ public class StationListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String value = (String) comboBox.getSelectedItem();
         model.searchStationWeatherStation(value);
+        model.setStationUrl(value);
        // System.out.println("Station selected");
     }
 

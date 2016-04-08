@@ -11,6 +11,9 @@ import view.WelcomeWindow;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
+import java.util.*;
+import java.text.SimpleDateFormat;
+
 
 public class Model {
 
@@ -18,10 +21,10 @@ public class Model {
     private WelcomeWindow welcomeWindow;
     private MainWindow mainWindow;
     private WeatherStation weatherStation;
+    private String regionUrl;
+    private String stationUrl;
     private ArrayList<User> users = new ArrayList<>();
     private User currentUser;
-
-    String regionUrl;
 
     public static Model getInstance() {
         return ourInstance;
@@ -57,21 +60,21 @@ public class Model {
         mainWindow.setLblName(name);
     }
 
-    public boolean isAreaSelected(){
-        return mainWindow.isAreaSelected();
-    }
+//    public boolean isAreaSelected(){
+//        return mainWindow.isAreaSelected();
+//    }
+//
+//    public boolean isRegionSelected(){
+//        return mainWindow.isRegionSelected();
+//    }
+//
+//    public boolean isStationSelected(){
+//        return mainWindow.isStationSelected();
+//    }
 
-    public boolean isRegionSelected(){
-        return mainWindow.isRegionSelected();
-    }
-
-    public boolean isStationSelected(){
-        return mainWindow.isStationSelected();
-    }
-
-    public void searchRegionWeatherStation(String query){
-
-    }
+//    public void searchRegionWeatherStation(String query){
+//
+//    }
 
     public void closeWelcome(){
         welcomeWindow.closeWindow();
@@ -291,5 +294,53 @@ public class Model {
         addUser("Alex");
         addUser("Aaron");
 
+    }
+    public String getStationUrl() {
+        return stationUrl;
+    }
+
+    public String getStationSelected(){
+        return mainWindow.getStationSelected();
+    }
+
+    public void setStationUrl(String stationUrl) {
+        this.stationUrl = stationUrl;
+    }
+
+    public void getTable(String url){
+        String todaydate;
+        Date today = new Date();
+        String temp;
+        ArrayList<String> daterows = new ArrayList<String>();
+        SimpleDateFormat dateformat = new SimpleDateFormat("dd");
+        System.out.println(dateformat.format(today));
+        todaydate = dateformat.format(today);
+        String regex = todaydate.concat(".*");
+        try
+        {
+            Document doc = Jsoup.connect(url).get();
+            Elements dates = doc.getElementsByClass("rowleftcolumn");
+            for(Element date: dates)
+            {
+                Elements rows = date.select("td");
+                for(Element row: rows)
+                {
+                    System.out.println(row.text());
+                }
+
+//                temp = date.getElementsByAttributeValue("headers","t1-datetime").text();
+//                if(temp.matches(regex))
+//                {
+//                    daterows.add(temp);
+//                    System.out.println(temp);
+//                }
+
+            }
+
+        }
+        catch(Exception e)
+        {
+
+        }
     }
 }

@@ -1,11 +1,13 @@
 package view;
 
-import controller.RegionListener;
-import controller.StationListener;
+import controller.*;
 import model.Model;
+import model.WeatherStation;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 public class MainWindow extends JFrame {
@@ -13,13 +15,16 @@ public class MainWindow extends JFrame {
     private Model model = Model.getInstance();
 
     private JLabel lblName = new JLabel(model.getCurrent().getUsername());
-    private JTextField search = new JTextField("Search weather stations");
+//    private JTextField search = new JTextField("Search weather stations");
     private String[] areaDataset = new String[]{"1", "2", "3"};
     private String[] regionDataset = new String[]{"1", "2", "3"};
     private String[] stationDataset = new String[]{"1", "2", "3"};
+    private String[] faveDataset = new String[]{"1", "2", "3"};
     private JComboBox area;
     private JComboBox region;
     private JComboBox station;
+    private JList faveList;
+    private JButton btnFavourite;
 
     public MainWindow() throws HeadlessException {
         this.setLayout(new BorderLayout());
@@ -49,11 +54,12 @@ public class MainWindow extends JFrame {
 
         favePanel.setLayout(new BoxLayout(favePanel, BoxLayout.Y_AXIS));
         // Setup favourite list component
-        JList list = new JList(areaDataset);
-        list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        list.setLayoutOrientation(JList.VERTICAL);
+        faveList = new JList(faveDataset);
+        faveList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        faveList.setLayoutOrientation(JList.VERTICAL);
+        faveList.addListSelectionListener(new FavouriteListener(faveList, this));
 //        list.setVisibleRowCount(3);
-        JScrollPane scrollPane = new JScrollPane(list);
+        JScrollPane scrollPane = new JScrollPane(faveList);
         scrollPane.setPreferredSize(new Dimension(10, 10));
         // Add component to panel
         favePanel.add(new JLabel("Favourites"));
@@ -69,13 +75,15 @@ public class MainWindow extends JFrame {
     }
 
     private JPanel getCenterPanel(){
-        JPanel center = new JPanel();
+        final JPanel center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.X_AXIS));
         JPanel stationSelection = new JPanel();
 
         area = new JComboBox(areaDataset);
         region = new JComboBox(regionDataset);
         station = new JComboBox(stationDataset);
+        btnFavourite = new JButton("Add to Favourites");
+        btnFavourite.addActionListener(new AddFavouriteListener(this));
         stationSelection.setLayout(new BoxLayout(stationSelection, BoxLayout.Y_AXIS));
 
         JPanel panelStationLabel = new JPanel();
@@ -88,7 +96,7 @@ public class MainWindow extends JFrame {
         panelArea.setLayout(new BoxLayout(panelArea, BoxLayout.X_AXIS));
         panelArea.add(new JLabel("Area: "));
         panelArea.add(area);
-//        area.addActionListener(new RegionListener(area));
+        area.addActionListener(new AreaListener(area));
 
         JPanel panelRegion = new JPanel();
         panelRegion.setLayout(new BoxLayout(panelRegion, BoxLayout.X_AXIS));
@@ -114,6 +122,12 @@ public class MainWindow extends JFrame {
 //        stationSearch.add(search, 1);
 //        stationSearch.add(Box.createVerticalStrut(100));
         center.add(stationSelection);
+        JPanel addFavourite = new JPanel();
+        addFavourite.setLayout(new BoxLayout(addFavourite, BoxLayout.X_AXIS));
+        addFavourite.add(Box.createHorizontalGlue());
+        addFavourite.add(btnFavourite);
+        addFavourite.add(Box.createHorizontalGlue());
+        stationSelection.add(addFavourite);
 //        center.add(Box.createHorizontalStrut(100), 1);
 //        center.add(stationSearch, 2);
 
@@ -140,6 +154,12 @@ public class MainWindow extends JFrame {
         this.stationDataset = strings;
         DefaultComboBoxModel defaultComboBoxModel = new DefaultComboBoxModel(strings);
         station.setModel(defaultComboBoxModel);
+    }
+
+    public void setFavouriteDataset(String[] strings){
+        this.faveDataset = strings;
+
+//        DefaultListSelectionModel defaultListSelectionModel = new DefaultListSelectionModel(strings);
     }
 
     public void setLblName(String name){
@@ -185,5 +205,8 @@ public class MainWindow extends JFrame {
     public void setRegionEnabled(boolean enabled){
         region.setEnabled(enabled);
     }
+
+
+
 
 }
