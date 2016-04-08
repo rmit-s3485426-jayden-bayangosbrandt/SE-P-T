@@ -15,7 +15,7 @@ public class RegisterListener implements ActionListener {
     private JTextField field;
     private Model model = Model.getInstance();
 
-    public RegisterListener(JTextField textField){ this.field = textField;};
+    public RegisterListener(JTextField textField){ this.field = textField;}
 
     @Override
     public void actionPerformed(ActionEvent e) {
