@@ -23,7 +23,7 @@ public class MainWindow extends JFrame {
     private JComboBox area;
     private JComboBox region;
     private JComboBox station;
-    private JList faveList;
+    private JList faveList = new JList(model.getCurrent().getFavouriteList());
     private JButton btnFavourite;
 
     public MainWindow() throws HeadlessException {

@@ -20,7 +20,22 @@ public class User extends Observable {
         return favorites.get(index);
     }
 
+    public ArrayList<WeatherStation> getFavorites(){
+        return favorites;
+    }
+
     public String getUsername(){
         return username;
+    }
+
+    public String[] getFavouriteList(){
+
+        String[] localList = new String[getFavorites().size()];
+
+        for(int i = 0; i < getFavorites().size(); i++){
+            localList[i] = getFavorites().get(i).getName();
+        }
+
+        return localList;
     }
 }

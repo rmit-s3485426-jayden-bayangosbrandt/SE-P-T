@@ -1,6 +1,7 @@
 package view;
 
 
+import controller.RegisterListener;
 import model.Model;
 import model.User;
 import controller.UserListener;
@@ -51,6 +52,8 @@ public class WelcomeWindow extends JFrame {
         registerPanel.add(Box.createHorizontalStrut(5), 2);
         registerPanel.add(newUser, 3);
         registerPanel.add(register, 4);
+        newUser.addActionListener(new RegisterListener(newUser));
+        register.addActionListener(new RegisterListener(newUser));
         registerPanel.add(Box.createHorizontalGlue(), 5);
         return registerPanel;
     }

@@ -16,7 +16,7 @@ public class Window {
         WelcomeWindow welcome = new WelcomeWindow();
         model.setWelcomeWindow(welcome);
 
-        // temporary means to an end = Continually prints out "Checking..." until user is set. lol. harsh
+        // temporary means to an end
         while(model.getCurrent() == null){
             System.out.print("");
         }
