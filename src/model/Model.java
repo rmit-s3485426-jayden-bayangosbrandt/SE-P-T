@@ -10,6 +10,9 @@ import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
+import java.util.*;
+import java.text.SimpleDateFormat;
+
 
 public class Model {
     private static Model ourInstance = new Model();
@@ -270,5 +273,42 @@ public class Model {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+    }
+    
+    public void getTable(String url){
+        String todaydate;
+        Date today = new Date();
+        String temp;
+        ArrayList<String> daterows = new ArrayList<String>();
+        SimpleDateFormat dateformat = new SimpleDateFormat("dd");
+        System.out.println(dateformat.format(today));
+        todaydate = dateformat.format(today);
+        String regex = todaydate.concat(".*");
+        try
+        {
+            Document doc = Jsoup.connect(url).get();
+            Elements dates = doc.getElementsByClass("rowleftcolumn");
+            for(Element date: dates)
+            {
+                Elements rows = date.select("td");
+                for(Element row: rows)
+                {
+                    System.out.println(row.text());
+                }
+
+//                temp = date.getElementsByAttributeValue("headers","t1-datetime").text();
+//                if(temp.matches(regex))
+//                {
+//                    daterows.add(temp);
+//                    System.out.println(temp);
+//                }
+
+            }
+
+        }
+        catch(Exception e)
+        {
+
+        }
     }
 }
