@@ -26,7 +26,9 @@ public class AddFavouriteListener implements ActionListener {
         JOptionPane.showMessageDialog(frame, "Added to Favourites!");
         final String selected = model.getStationUrl();
         model.setStationUrl(selected);
+        // Get current user and add favourite to list
         model.getCurrent().addFavorite(new WeatherStation(selected));
+        System.out.println("Fave count: "+ model.getCurrent().getFavorites().size());
 
     }
 }

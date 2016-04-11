@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observer;
 
 
 public class MainWindow extends JFrame {
@@ -19,11 +20,12 @@ public class MainWindow extends JFrame {
     private String[] areaDataset = new String[]{"1", "2", "3"};
     private String[] regionDataset = new String[]{"1", "2", "3"};
     private String[] stationDataset = new String[]{"1", "2", "3"};
-    private String[] faveDataset = new String[]{"1", "2", "3"};
+//    private String[] faveDataset = new String[]{"1", "2", "3"};
+    private FavouritePanel favePanel = new FavouritePanel(this);
     private JComboBox area;
     private JComboBox region;
     private JComboBox station;
-    private JList faveList = new JList(model.getCurrent().getFavouriteList());
+//    private JList faveList = new JList(model.getCurrent().getFavouriteList());
     private JButton btnFavourite;
 
     public MainWindow() throws HeadlessException {
@@ -38,6 +40,9 @@ public class MainWindow extends JFrame {
         this.setResizable(false);
         this.setVisible(true);
 
+        // Allow favourite panel to observe user changes
+        model.getCurrent().addObserver(favePanel);
+
 
     }
 
@@ -45,25 +50,25 @@ public class MainWindow extends JFrame {
         JPanel north = new JPanel();
         north.setLayout(new BoxLayout(north, BoxLayout.X_AXIS));
         JPanel namePanel = new JPanel();
-        JPanel favePanel = new JPanel();
+//        JPanel favePanel = new JPanel();
 
         namePanel.setLayout(new BoxLayout(namePanel, BoxLayout.X_AXIS));
         namePanel.add(Box.createHorizontalGlue());
         namePanel.add(lblName);
         namePanel.add(Box.createHorizontalGlue());
 
-        favePanel.setLayout(new BoxLayout(favePanel, BoxLayout.Y_AXIS));
+//        favePanel.setLayout(new BoxLayout(favePanel, BoxLayout.Y_AXIS));
         // Setup favourite list component
-        faveList = new JList(faveDataset);
-        faveList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        faveList.setLayoutOrientation(JList.VERTICAL);
-        faveList.addListSelectionListener(new FavouriteListener(faveList, this));
+//        faveList = new JList(faveDataset);
+//        faveList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+//        faveList.setLayoutOrientation(JList.VERTICAL);
+//        faveList.addListSelectionListener(new FavouriteListener(faveList, this));
 //        list.setVisibleRowCount(3);
-        JScrollPane scrollPane = new JScrollPane(faveList);
-        scrollPane.setPreferredSize(new Dimension(10, 10));
+//        JScrollPane scrollPane = new JScrollPane(faveList);
+//        scrollPane.setPreferredSize(new Dimension(10, 10));
         // Add component to panel
-        favePanel.add(new JLabel("Favourites"));
-        favePanel.add(scrollPane, 1);
+//        favePanel.add(new JLabel("Favourites"));
+//        favePanel.add(scrollPane, 1);
 
         north.add(namePanel, 0);
         north.add(Box.createHorizontalGlue(), 1);
@@ -156,11 +161,11 @@ public class MainWindow extends JFrame {
         station.setModel(defaultComboBoxModel);
     }
 
-    public void setFavouriteDataset(String[] strings){
-        this.faveDataset = strings;
-
-//        DefaultListSelectionModel defaultListSelectionModel = new DefaultListSelectionModel(strings);
-    }
+//    public void setFavouriteDataset(String[] strings){
+//        this.faveDataset = strings;
+//
+////        DefaultListSelectionModel defaultListSelectionModel = new DefaultListSelectionModel(strings);
+//    }
 
     public void setLblName(String name){
         lblName.setText("Hi, "+name);
@@ -204,6 +209,10 @@ public class MainWindow extends JFrame {
 
     public void setRegionEnabled(boolean enabled){
         region.setEnabled(enabled);
+    }
+
+    public Observer getFavouriteOberver(){
+        return favePanel;
     }
 
 

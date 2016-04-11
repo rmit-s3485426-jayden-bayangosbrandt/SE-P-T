@@ -13,8 +13,11 @@ public class User extends Observable {
     public void addFavorite(WeatherStation newFavorite)
     {
         favorites.add(newFavorite);
+        setChanged();
         notifyObservers();
+        clearChanged();
     }
+
 
     public WeatherStation getFavourite(int index){
         return favorites.get(index);
