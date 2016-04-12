@@ -20,6 +20,27 @@ public class WeatherObject {
     private String pressure2;
     private String rainSince9am;
 
+    public WeatherObject(String dayTime, String temp, String apparentTemp,
+                         String viewPoint, String relativeHumidity, String dealta_T,
+                         String windDirection, String windSpeedKmh, String windSpeedKnts,
+                         String windGustKmh, String windGustKnts, String pressure1,
+                         String pressure2, String rainSince9am) {
+        this.dayTime = dayTime;
+        this.temp = temp;
+        this.apparentTemp = apparentTemp;
+        this.viewPoint = viewPoint;
+        this.relativeHumidity = relativeHumidity;
+        this.dealta_T = dealta_T;
+        this.windDirection = windDirection;
+        this.windSpeedKmh = windSpeedKmh;
+        this.windSpeedKnts = windSpeedKnts;
+        this.windGustKmh = windGustKmh;
+        this.windGustKnts = windGustKnts;
+        this.pressure1 = pressure1;
+        this.pressure2 = pressure2;
+        this.rainSince9am = rainSince9am;
+    }
+
     public String getDayTime() {
         return dayTime;
     }
