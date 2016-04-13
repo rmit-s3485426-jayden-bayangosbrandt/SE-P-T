@@ -1,8 +1,5 @@
 package controller;
 
-import model.Model;
-import view.WelcomeWindow;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -14,19 +11,25 @@ import javax.swing.event.ListSelectionListener;
 public class UserListener implements ListSelectionListener{
 
     private JList userList;
-    private Model model = Model.getInstance();
+    private JTextField searchField;
 
-    public UserListener(JList userList){
+    public UserListener(JList userList, JTextField search){
         this.userList = userList;
+        this.searchField = search;
     }
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
         if(!e.getValueIsAdjusting()) {
-            System.out.println("SELECTED");
+
+            // ** CHANGES SEARCH TEXT WHEN USER IS CHOSEN FROM LIST **
+            // Really want to implement this but keeps getting "Attempting to mute notification" error
+            // searchField.setText((String) userList.getSelectedValue());
+            /**
             String value = (String) userList.getSelectedValue();
             model.setCurrentUser(value);
             model.closeWelcome();
+             **/
         }
     }
 }

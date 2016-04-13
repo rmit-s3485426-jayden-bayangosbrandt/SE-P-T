@@ -1,10 +1,12 @@
 package view;
 
 
+import controller.GoListener;
 import controller.RegisterListener;
 import model.Model;
 import model.User;
 import controller.UserListener;
+import controller.SearchListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +20,7 @@ public class WelcomeWindow extends JFrame {
     private JButton register = new JButton("Register");
     private JTextField searchUsers = new JTextField("Search your username here");
     private JList existingUsers = new JList(stringUsers(model.getUserList()));
+    private JButton enter = new JButton("Go!");
 
 
     public WelcomeWindow() throws HeadlessException {
@@ -71,7 +74,7 @@ public class WelcomeWindow extends JFrame {
         searchUsers.setMaximumSize(new Dimension(300, 30));
         searchUsers.setPreferredSize(new Dimension(300, 30));
 
-        existingUsers.addListSelectionListener(new UserListener(existingUsers));
+        existingUsers.addListSelectionListener(new UserListener(existingUsers, searchUsers));
 
         scrollPanel.add(Box.createHorizontalGlue());
         scrollPanel.add(scrollUsers);
@@ -80,9 +83,14 @@ public class WelcomeWindow extends JFrame {
         searchUsersPanel.add(Box.createHorizontalGlue());
         searchUsersPanel.add(searchUsers);
         searchUsersPanel.add(Box.createHorizontalGlue());
+        searchUsers.getDocument().addDocumentListener(new SearchListener(searchUsers, existingUsers));
 
         existingPanel.add(scrollPanel);
         existingPanel.add(searchUsersPanel);
+
+
+        existingPanel.add(enter);
+        enter.addActionListener(new GoListener(searchUsers, existingUsers));
 
 //        scrollPanel.add(Box.createHorizontalGlue());
 //        scrollPanel.add(existingPanel);

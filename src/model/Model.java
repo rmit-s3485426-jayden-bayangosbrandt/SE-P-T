@@ -294,6 +294,18 @@ public class Model {
         addUser("Alex");
         addUser("Aaron");
 
+        // Extra Users (To test Search User Scroll)
+        addUser("Bill");
+        addUser("Gary");
+        addUser("Lenny");
+        addUser("Jade");
+        addUser("Katy");
+        addUser("Jack");
+        addUser("Robert");
+        addUser("Elisha");
+        addUser("Tony");
+        addUser("Rex");
+
     }
     public String getStationUrl() {
         return stationUrl;
