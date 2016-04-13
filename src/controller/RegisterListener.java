@@ -23,6 +23,7 @@ public class RegisterListener implements ActionListener {
         String user = field.getText();
         model.addUser(user);
         model.setCurrentUser(user);
+        model.setEnter(true);
         model.closeWelcome();
     }
 }

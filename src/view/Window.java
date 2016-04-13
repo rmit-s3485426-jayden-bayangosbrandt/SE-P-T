@@ -17,7 +17,7 @@ public class Window {
         model.setWelcomeWindow(welcome);
 
         // temporary means to an end
-        while(model.getCurrent() == null){
+        while(model.getEnter() == false){
             System.out.print("");
         }
 

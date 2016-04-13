@@ -22,9 +22,13 @@ public class GoListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String user = (String) usersField.getSelectedValue();
-        model.addUser(user);
-        model.setCurrentUser(user);
-        model.closeWelcome();
+
+        if(model.getCurrent() != null) {
+            String user = (String) usersField.getSelectedValue();
+            model.addUser(user);
+            model.setCurrentUser(user);
+            model.setEnter(true);
+            model.closeWelcome();
+        }
     }
 }

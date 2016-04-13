@@ -1,5 +1,7 @@
 package controller;
 
+import model.Model;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -11,12 +13,15 @@ public class SearchListener implements DocumentListener {
 
     private JTextField field;
     private JList list;
+    private Model model = Model.getInstance();
 
     public SearchListener(JTextField textField, JList localList){ this.field = textField; this.list = localList;}
 
     @Override
     public void insertUpdate(DocumentEvent e) {
         list.setSelectedValue(field.getText(),true);
+        String user = field.getText();
+        model.setCurrentUser(user);
     }
 
     @Override

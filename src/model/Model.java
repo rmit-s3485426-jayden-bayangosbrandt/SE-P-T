@@ -25,6 +25,7 @@ public class Model {
     private String stationUrl;
     private ArrayList<User> users = new ArrayList<>();
     private User currentUser;
+    private boolean enter = false;
 
     public static Model getInstance() {
         return ourInstance;
@@ -79,6 +80,10 @@ public class Model {
     public void closeWelcome(){
         welcomeWindow.closeWindow();
     }
+
+    public boolean getEnter(){ return enter;}
+
+    public void setEnter(boolean ready){ enter = ready;}
 
     public void searchStationWeatherStation(String query){
         // Uncomment when implemented
