@@ -43,7 +43,7 @@ public class RegisterListener implements ActionListener {
             JOptionPane.showMessageDialog(field, "Registered!");
             model.addUser(user);
             model.setCurrentUser(user);
-            model.setEnter(true);
+//            model.setEnter(true);
             model.closeWelcome();
         }
     }
