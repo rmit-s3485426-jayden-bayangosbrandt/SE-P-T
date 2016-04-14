@@ -25,7 +25,6 @@ public class Model {
     private String stationUrl;
     private ArrayList<User> users = new ArrayList<>();
     private User currentUser;
-    private boolean enter = false;
 
     public static Model getInstance() {
         return ourInstance;
@@ -57,6 +56,15 @@ public class Model {
         mainWindow.setStationDataset(strings);
     }
 
+    public String getStationUrlFromWeb(String station)
+    {
+        String url;
+        Element stationTableData = findElement(regionUrl, station);
+        url = stationTableData.attr("href");
+        url = "http://www.bom.gov.au".concat(url);
+        return url;
+    }
+
     public void setLblName(String name){
         mainWindow.setLblName(name);
     }
@@ -80,10 +88,6 @@ public class Model {
     public void closeWelcome(){
         welcomeWindow.closeWindow();
     }
-
-    public boolean getEnter(){ return enter;}
-
-    public void setEnter(boolean ready){ enter = ready;}
 
     public void searchStationWeatherStation(String query){
         // Uncomment when implemented
@@ -195,6 +199,7 @@ public class Model {
     public String[] searchStationArray(String region, String url) {
         ArrayList<String> stationsStrings = new ArrayList<String>();
         String[] stationsArray;
+        regionUrl = url;
         try {
             Document doc = Jsoup.connect(url).get();
             Elements stations = doc.select("tbody").select("th");
@@ -299,18 +304,6 @@ public class Model {
         addUser("Alex");
         addUser("Aaron");
 
-        // Extra Users (To test Search User Scroll)
-        addUser("Bill");
-        addUser("Gary");
-        addUser("Lenny");
-        addUser("Jade");
-        addUser("Katy");
-        addUser("Jack");
-        addUser("Robert");
-        addUser("Elisha");
-        addUser("Tony");
-        addUser("Rex");
-
     }
     public String getStationUrl() {
         return stationUrl;
@@ -324,10 +317,14 @@ public class Model {
         this.stationUrl = stationUrl;
     }
 
-    public void getTable(String url){
+    public ArrayList<WeatherObject> getTable(){
+        ArrayList<WeatherObject> weatherObjects = new ArrayList<WeatherObject>();
         String todaydate;
+        String url = getStationUrlFromWeb(stationUrl);
+        String dayTime="", temp="", apparentTemp="", viewPoint="", relativeHumidity="", dealta_T="", windDirection="",
+                windSpeedKmh="", windSpeedKnts="", windGustKmh="", windGustKnts="", pressure1="", pressure2="", rainSince9am="";
+        int indicator = 0;
         Date today = new Date();
-        String temp;
         ArrayList<String> daterows = new ArrayList<String>();
         SimpleDateFormat dateformat = new SimpleDateFormat("dd");
         System.out.println(dateformat.format(today));
@@ -339,11 +336,65 @@ public class Model {
             Elements dates = doc.getElementsByClass("rowleftcolumn");
             for(Element date: dates)
             {
+                indicator = 0;
                 Elements rows = date.select("td");
                 for(Element row: rows)
                 {
                     System.out.println(row.text());
+                    switch (indicator){
+                        case 0:
+                            dayTime = row.text();
+                            break;
+                        case 1:
+                            temp = row.text();
+                            break;
+                        case 2:
+                            apparentTemp = row.text();
+                            break;
+                        case 3:
+                            viewPoint = row.text();
+                            break;
+                        case 4:
+                            relativeHumidity = row.text();
+                            break;
+                        case 5:
+                            dealta_T = row.text();
+                            break;
+                        case 6:
+                            windDirection = row.text();
+                            break;
+                        case 7:
+                            windSpeedKmh = row.text();
+                            break;
+                        case 8:
+                            windSpeedKnts = row.text();
+                            break;
+                        case 9:
+                            windGustKmh = row.text();
+                            break;
+                        case 10:
+                            windGustKnts = row.text();
+                            break;
+                        case 11:
+                            pressure1 = row.text();
+                            break;
+                        case 12:
+                            pressure2 = row.text();
+                            break;
+                        case 13:
+                            rainSince9am = row.text();
+                            break;
+                    }
+                    indicator++;
                 }
+                weatherObjects.add(new WeatherObject(dayTime, temp, apparentTemp, viewPoint, relativeHumidity,
+                        dealta_T, windDirection, windSpeedKmh, windSpeedKnts, windGustKmh, windGustKnts, pressure1,
+                        pressure2, rainSince9am));
+//                public WeatherObject(String dayTime, String temp, String apparentTemp,
+//                    String viewPoint, String relativeHumidity, String dealta_T,
+//                    String windDirection, String windSpeedKmh, String windSpeedKnts,
+//                    String windGustKmh, String windGustKnts, String pressure1,
+//                    String pressure2, String rainSince9am) {
 
 //                temp = date.getElementsByAttributeValue("headers","t1-datetime").text();
 //                if(temp.matches(regex))
@@ -359,5 +410,7 @@ public class Model {
         {
 
         }
+        return weatherObjects;
     }
+
 }
