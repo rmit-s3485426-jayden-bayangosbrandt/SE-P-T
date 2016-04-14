@@ -22,5 +22,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" exported="" name="org.jfree:jfreechart:1.0.19" level="project" />
   </component>
 </module>
