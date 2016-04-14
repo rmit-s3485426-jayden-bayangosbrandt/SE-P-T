@@ -2,6 +2,7 @@ package controller;
 
 import model.Model;
 import model.WeatherStation;
+import view.MainWindow;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -45,6 +46,10 @@ public class RegisterListener implements ActionListener {
             model.setCurrentUser(user);
 //            model.setEnter(true);
             model.closeWelcome();
+
+            MainWindow window = new MainWindow();
+            model.setMainWindow(window);
+            model.setArea();
         }
     }
 }
