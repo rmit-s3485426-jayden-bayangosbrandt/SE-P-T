@@ -89,12 +89,15 @@ public class WelcomeWindow extends JFrame {
         existingPanel.add(searchUsersPanel);
 
 
-        existingPanel.add(enter);
+        JPanel enterPanel = new JPanel();
+        enterPanel.setLayout(new BoxLayout(enterPanel, BoxLayout.X_AXIS));
+        enterPanel.add(Box.createHorizontalGlue());
+        enterPanel.add(enter);
+        enterPanel.add(Box.createHorizontalGlue());
+        existingPanel.add(enterPanel);
         enter.addActionListener(new GoListener(searchUsers, existingUsers));
 
-//        scrollPanel.add(Box.createHorizontalGlue());
-//        scrollPanel.add(existingPanel);
-//        scrollPanel.add(Box.createHorizontalGlue());
+
         return existingPanel;
     }
 
