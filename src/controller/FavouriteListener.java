@@ -33,7 +33,7 @@ public class FavouriteListener implements ListSelectionListener {
 
             // Feed to chart object
 //            model.getCurrent().getFavourite(list.getSelectedIndex());
-            new ChartWindow(sampleData());
+            new ChartWindow(model.getTable());
             // Ensure event isn't fired for clearing selection
             clearSelection = true;
             list.clearSelection();
