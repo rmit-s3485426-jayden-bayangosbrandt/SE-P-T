@@ -16,6 +16,7 @@ public class MainWindow extends JFrame {
     private Model model = Model.getInstance();
 
     private JLabel lblName = new JLabel(model.getCurrent().getUsername());
+    private WindowActionListener actionListener;
 //    private JTextField search = new JTextField("Search weather stations");
     private String[] areaDataset = new String[]{"1", "2", "3"};
     private String[] regionDataset = new String[]{"1", "2", "3"};
@@ -42,6 +43,10 @@ public class MainWindow extends JFrame {
 
         // Allow favourite panel to observe user changes
         model.getCurrent().addObserver(favePanel);
+
+        // Set Window listener
+        actionListener = new WindowActionListener();
+        this.addWindowListener(actionListener);
 
 
     }
