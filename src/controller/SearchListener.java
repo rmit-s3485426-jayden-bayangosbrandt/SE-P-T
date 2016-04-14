@@ -21,7 +21,13 @@ public class SearchListener implements DocumentListener {
     public void insertUpdate(DocumentEvent e) {
         list.setSelectedValue(field.getText(),true);
         String user = field.getText();
-        model.setCurrentUser(user);
+
+        for(int i = 0; i< model.getUserList().size(); i++) {
+
+            if(user == model.getUserList().get(i).getUsername()){
+                model.setCurrentUser(user);
+            }
+        }
     }
 
     @Override
