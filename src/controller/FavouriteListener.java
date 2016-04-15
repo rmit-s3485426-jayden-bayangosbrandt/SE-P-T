@@ -36,6 +36,8 @@ public class FavouriteListener implements ListSelectionListener {
 //            model.getCurrent().getFavourite(list.getSelectedIndex());
             new ChartWindow(model.getTable());
             new GraphWindow();
+            model.getMainWindow().reposition();
+
             // Ensure event isn't fired for clearing selection
             clearSelection = true;
             list.clearSelection();

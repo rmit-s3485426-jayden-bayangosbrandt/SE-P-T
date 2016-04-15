@@ -8,7 +8,6 @@ import java.awt.*;
  */
 public class GraphWindow extends JFrame {
 
-
     public GraphWindow(){
 
         JPanel graphWindow = new JPanel();

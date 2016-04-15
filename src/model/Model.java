@@ -40,6 +40,8 @@ public class Model {
         this.mainWindow = window;
     }
 
+    public MainWindow getMainWindow() { return mainWindow;}
+
     public void setWeatherStation(WeatherStation station){
         this.weatherStation = station;
     }

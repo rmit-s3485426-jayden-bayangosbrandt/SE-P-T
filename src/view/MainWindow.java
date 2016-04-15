@@ -38,7 +38,7 @@ public class MainWindow extends JFrame {
         mainPanel.add(getNorthPanel(), BorderLayout.NORTH);
         mainPanel.add(getCenterPanel(), BorderLayout.CENTER);
         this.setSize(new Dimension(500, 500));
-        this.setResizable(false);
+        this.setResizable(true);
         this.setVisible(true);
 
         // Allow favourite panel to observe user changes
@@ -147,6 +147,10 @@ public class MainWindow extends JFrame {
 
     public JLabel getLblName() {
         return lblName;
+    }
+
+    public void reposition(){
+        this.setLocation(0, getY());
     }
     
     public void setAreaDataset(String[] strings){
