@@ -4,6 +4,7 @@ import model.Model;
 import model.WeatherObject;
 import model.WeatherStation;
 import view.ChartWindow;
+import view.GraphWindow;
 import view.MainWindow;
 
 import javax.swing.*;
@@ -34,6 +35,7 @@ public class FavouriteListener implements ListSelectionListener {
             // Feed to chart object
 //            model.getCurrent().getFavourite(list.getSelectedIndex());
             new ChartWindow(model.getTable());
+            new GraphWindow();
             // Ensure event isn't fired for clearing selection
             clearSelection = true;
             list.clearSelection();
