@@ -32,7 +32,7 @@ public class ChartWindow extends JFrame {
         setTitle("Weather Table");
         setVisible(true);
         setLocationRelativeTo(null);
-        setLocation(getX() + 200, 100);
+        setLocation(getX() + 200, 50);
 
     }
 
