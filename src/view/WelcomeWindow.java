@@ -34,6 +34,7 @@ public class WelcomeWindow extends JFrame {
         contentPanel.add(getExistingUserPanel(), 3);
         setSize(new Dimension(500, 300));
         setVisible(true);
+        setLocationRelativeTo(null);
     }
 
     private JPanel getWelcomePanel(){

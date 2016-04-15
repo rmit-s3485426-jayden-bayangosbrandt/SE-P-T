@@ -31,6 +31,8 @@ public class ChartWindow extends JFrame {
         setSize(table.getPreferredSize().width, 300);
         setTitle("Weather Table");
         setVisible(true);
+        setLocationRelativeTo(null);
+        setLocation(getX() + 200, 100);
 
     }
 

@@ -47,6 +47,7 @@ public class MainWindow extends JFrame {
         // Set Window listener
         actionListener = new WindowActionListener();
         this.addWindowListener(actionListener);
+        this.setLocationRelativeTo(null);
 
 
     }
