@@ -28,6 +28,7 @@ public class MainWindow extends JFrame {
     private JComboBox station;
 //    private JList faveList = new JList(model.getCurrent().getFavouriteList());
     private JButton btnFavourite;
+    private JButton btnRefresh;
 
     public MainWindow() throws HeadlessException {
         this.setLayout(new BorderLayout());
@@ -137,6 +138,9 @@ public class MainWindow extends JFrame {
         addFavourite.setLayout(new BoxLayout(addFavourite, BoxLayout.X_AXIS));
         addFavourite.add(Box.createHorizontalGlue());
         addFavourite.add(btnFavourite);
+        btnRefresh = new JButton("Refresh");
+        btnRefresh.addActionListener(new RefreshListener());
+        addFavourite.add(btnRefresh);
         addFavourite.add(Box.createHorizontalGlue());
         stationSelection.add(addFavourite);
 //        center.add(Box.createHorizontalStrut(100), 1);
