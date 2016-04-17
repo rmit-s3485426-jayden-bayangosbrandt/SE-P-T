@@ -34,46 +34,48 @@ public class Model {
 
     private Model() {
     }
-    public void setWelcomeWindow(WelcomeWindow window){
+
+    public void setWelcomeWindow(WelcomeWindow window) {
         this.welcomeWindow = window;
     }
 
-    public void setMainWindow(MainWindow window){
+    public void setMainWindow(MainWindow window) {
         this.mainWindow = window;
     }
 
-    public MainWindow getMainWindow() { return mainWindow;}
+    public MainWindow getMainWindow() {
+        return mainWindow;
+    }
 
 //    public void saveWindow(){
 //        currentUser.setOpenWindows(windows);
 //    }
 
-    public void addOpenWindow(JFrame frame){
+    public void addOpenWindow(JFrame frame) {
         currentUser.getOpenWindows().add(frame);
     }
 
-    public void removeOpenWindow(JFrame frame){
+    public void removeOpenWindow(JFrame frame) {
         currentUser.getOpenWindows().remove(frame);
     }
 
-    public void setWeatherStation(WeatherStation station){
+    public void setWeatherStation(WeatherStation station) {
         this.weatherStation = station;
     }
 
-    public void changeAreaDataset(String[] strings){
+    public void changeAreaDataset(String[] strings) {
         mainWindow.setAreaDataset(strings);
     }
 
-    public void changeRegionDataset(String[] strings){
+    public void changeRegionDataset(String[] strings) {
         mainWindow.setRegionDataset(strings);
     }
 
-    public void changeStationDataset(String[] strings){
+    public void changeStationDataset(String[] strings) {
         mainWindow.setStationDataset(strings);
     }
 
-    public String getStationUrlFromWeb(String station)
-    {
+    public String getStationUrlFromWeb(String station) {
         String url;
         Element stationTableData = findElement(regionUrl, station);
         url = stationTableData.attr("href");
@@ -81,7 +83,7 @@ public class Model {
         return url;
     }
 
-    public void setLblName(String name){
+    public void setLblName(String name) {
         mainWindow.setLblName(name);
     }
 
@@ -101,21 +103,21 @@ public class Model {
 //
 //    }
 
-    public void closeWelcome(){
+    public void closeWelcome() {
         welcomeWindow.closeWindow();
     }
 
-    public void searchStationWeatherStation(String query){
+    public void searchStationWeatherStation(String query) {
         // Uncomment when implemented
 //        weatherStation.searchStationArray(query);
     }
 
-    public void setStationEnabled(boolean enabled){
+    public void setStationEnabled(boolean enabled) {
         // Set the state of station combobox
         mainWindow.setStationEnabled(enabled);
     }
 
-    public void setRegionEnabled(boolean enabled){
+    public void setRegionEnabled(boolean enabled) {
         // Set the state of region combobox
         mainWindow.setRegionEnabled(enabled);
     }
@@ -136,17 +138,16 @@ public class Model {
         String id;
         Element foundArea = findElement("http://www.bom.gov.au/catalogue/data-feeds.shtml", area);
         regionUrl = foundArea.attr("href");
-        changeRegionDataset(searchRegionArray(foundArea.text(),regionUrl));
+        changeRegionDataset(searchRegionArray(foundArea.text(), regionUrl));
         regionUrl = "http://www.bom.gov.au".concat(regionUrl);
     }
 
     public void changeStation(String region) {
         String id;
-        changeStationDataset(searchStationArray(region,regionUrl));
+        changeStationDataset(searchStationArray(region, regionUrl));
     }
 
-    public void setArea()
-    {
+    public void setArea() {
         try {
             String[] areas;
             ArrayList<String> ArrayListAreas = new ArrayList<String>();
@@ -154,9 +155,9 @@ public class Model {
             Elements table = docArea.getElementsByAttributeValue("width", "712");
             Elements tableData = table.select("tbody").select("a");
             String regex = "http.*";
-            for(Element area : tableData) {
+            for (Element area : tableData) {
                 String areaText = area.text();
-                if(Pattern.matches(regex, areaText))
+                if (Pattern.matches(regex, areaText))
                     continue;
                 ArrayListAreas.add(areaText);
             }
@@ -164,15 +165,14 @@ public class Model {
             ArrayListAreas.toArray(areas);
 
             changeAreaDataset(areas);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
 
         }
 
 
     }
-    public String[] searchRegionArray(String area, String url){
+
+    public String[] searchRegionArray(String area, String url) {
         ArrayList<String> regions = new ArrayList<String>();
         String[] regionsArray;
 
@@ -185,8 +185,7 @@ public class Model {
         pattern = pattern.concat(".*");
         try {
             Document doc = Jsoup.connect(fullUrl).get();
-            if(Pattern.matches(".*all.*",url))
-            {
+            if (Pattern.matches(".*all.*", url)) {
                 regionsTable = doc.getElementsByClass("box1");
                 Elements classes = regionsTable.select("a");
                 for (Element loop : classes) {
@@ -194,16 +193,13 @@ public class Model {
                     regions.add(text);
                 }
 
-            }
-            else
-            {
-                area = area.replace(" area","");
+            } else {
+                area = area.replace(" area", "");
                 area = area.toUpperCase();
                 regions.add(doc.getElementById(area).text());
             }
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
         }
         regionsArray = new String[regions.size()];
@@ -219,8 +215,7 @@ public class Model {
         try {
             Document doc = Jsoup.connect(url).get();
             Elements stations = doc.select("tbody").select("th");
-            if(Pattern.matches(".*all.*",url))
-            {
+            if (Pattern.matches(".*all.*", url)) {
                 Elements test = doc.getElementsByClass("box1");
                 Elements classes = test.select("a");
                 for (Element loop : classes) {
@@ -241,21 +236,16 @@ public class Model {
                         }
                     }
                 }
-            }
-            else
-            {
-                for(Element station: stations){
-                    if(Pattern.matches("obs-station-.*",station.attr("id")))
-                    {
+            } else {
+                for (Element station : stations) {
+                    if (Pattern.matches("obs-station-.*", station.attr("id"))) {
                         stationsStrings.add(station.text());
                     }
                 }
             }
 
 
-
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
 
         }
         stationsArray = new String[stationsStrings.size()];
@@ -263,35 +253,34 @@ public class Model {
         return stationsArray;
     }
 
-    public Element findElement(String link, String item){
-        try{
+    public Element findElement(String link, String item) {
+        try {
             Document docArea = Jsoup.connect(link).get();
             Elements tableData = docArea.select("tbody").select("a");
-            for(Element data: tableData) {
+            for (Element data : tableData) {
                 String text = data.text();
                 System.out.println(text);
-                if(text.equals(item))
+                if (text.equals(item))
                     return data;
             }
 
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
 
         }
         return null;
     }
 
-    public void addUser(String userName){
+    public void addUser(String userName) {
         // Add user to Users Arraylist
         User newUser = new User();
         newUser.setUsername(userName);
         users.add(newUser);
     }
 
-    public void setCurrentUser(String current){
+    public void setCurrentUser(String current) {
 
-        for(int i = 0; i< getUserList().size(); i++){
-            if(users.get(i).getUsername().equals(current)){
+        for (int i = 0; i < getUserList().size(); i++) {
+            if (users.get(i).getUsername().equals(current)) {
                 setCurrentUser(users.get(i));
             }
         }
@@ -300,20 +289,20 @@ public class Model {
 
     }
 
-    public User getCurrent(){
+    public User getCurrent() {
         return currentUser;
     }
 
-    public void setCurrentUser(User newUser){
+    public void setCurrentUser(User newUser) {
         currentUser = newUser;
     }
 
-    public ArrayList<User> getUserList(){
+    public ArrayList<User> getUserList() {
         return users;
     }
 
     //Dummy data
-    public void setData(){
+    public void setData() {
 
         JSONFileWrite readFile = new JSONFileWrite();
         users = readFile.loadFile();
@@ -323,11 +312,12 @@ public class Model {
 //        addUser("Aaron");
 
     }
+
     public String getStationUrl() {
         return stationUrl;
     }
 
-    public String getStationSelected(){
+    public String getStationSelected() {
         return mainWindow.getStationSelected();
     }
 
@@ -341,13 +331,14 @@ public class Model {
         currentUser.addFavorite(new WeatherStation(stationName, url));
     }
 
-    public ArrayList<WeatherObject> getTable(String stationName){
+    public ArrayList<WeatherObject> getTable(String stationName) {
         ArrayList<WeatherObject> weatherObjects = new ArrayList<WeatherObject>();
         String todaydate;
 //        String url = getStationUrlFromWeb(stationUrl);
         String url = currentUser.findWeatherStation(stationName).getStationUrl();
-        String dayTime="", temp="", apparentTemp="", viewPoint="", relativeHumidity="", dealta_T="", windDirection="",
-                windSpeedKmh="", windSpeedKnts="", windGustKmh="", windGustKnts="", pressure1="", pressure2="", rainSince9am="";
+        stationUrl = currentUser.findWeatherStation(stationName).getStationUrl();
+        String dayTime = "", temp = "", apparentTemp = "", viewPoint = "", relativeHumidity = "", dealta_T = "", windDirection = "",
+                windSpeedKmh = "", windSpeedKnts = "", windGustKmh = "", windGustKnts = "", pressure1 = "", pressure2 = "", rainSince9am = "";
         int indicator = 0;
         Date today = new Date();
         ArrayList<String> daterows = new ArrayList<String>();
@@ -355,17 +346,14 @@ public class Model {
         System.out.println(dateformat.format(today));
         todaydate = dateformat.format(today);
         String regex = todaydate.concat(".*");
-        try
-        {
+        try {
             Document doc = Jsoup.connect(url).get();
             Elements dates = doc.getElementsByClass("rowleftcolumn");
-            for(Element date: dates)
-            {
+            for (Element date : dates) {
                 indicator = 0;
                 Elements rows = date.select("td");
-                for(Element row: rows)
-                {
-                    switch (indicator){
+                for (Element row : rows) {
+                    switch (indicator) {
                         case 0:
                             dayTime = row.text();
                             break;
@@ -417,12 +405,50 @@ public class Model {
 
             }
 
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
 
         }
         return weatherObjects;
     }
 
+    public HashMap<String,String> getTemp() {
+        int indicator = 0;
+        Date today = new Date();
+        String dayTime;
+        HashMap<String,String> temps = new HashMap<String,String>();
+        String regex9 = ".*09:00am";
+        String regex3 = ".*03.00pm";
+        String keyDate="skip";
+        try {
+            Document doc = Jsoup.connect(stationUrl).get();
+            Elements dates = doc.getElementsByClass("rowleftcolumn");
+            for (Element date : dates) {
+                indicator = 0;
+                keyDate = "skip";
+                Elements rows = date.select("td");
+                for (Element row : rows) {
+                    switch (indicator) {
+                        case 0:
+                            if(row.text().matches(regex3)||row.text().matches(regex9))
+                                keyDate = row.text();
+                            else
+                                keyDate ="skip";
+                            break;
+                        case 1:
+                            if(!keyDate.equals("skip"))
+                                temps.put(keyDate,row.text());
+                            break;
+                        default:
+                            break;
+                    }
+                    indicator++;
+                }
+            }
+
+        } catch (Exception e) {
+
+        }
+        return temps;
+
+    }
 }

@@ -52,7 +52,7 @@ public class JSONFileWrite {
             }
             userJSON.put("favorites",weatherStations);
             userJSON.put("username",u.getUsername());
-            userJSON.put("windows", u.getOpenWindows());
+//            userJSON.put("windows", u.getOpenWindows());
             userGroup.add(userJSON);
         }
 
