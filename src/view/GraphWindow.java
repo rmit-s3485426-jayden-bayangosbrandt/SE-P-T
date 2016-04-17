@@ -2,16 +2,21 @@ package view;
 
 import controller.DataWindowListener;
 import model.Model;
+import model.WeatherObject;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created by YungYung on 16/04/2016.
@@ -22,23 +27,7 @@ public class GraphWindow extends JFrame implements Relaunch {
 
     public GraphWindow(){
 
-        // TEST DATA
-        XYSeries morning = new XYSeries("9am temp");
-        morning.add(1, 13);
-        morning.add(2, 12);
-        morning.add(3, 15);
-        morning.add(4, 16);
-        morning.add(5, 14);
-
-        XYSeries evening = new XYSeries("3pm temp");
-        evening.add(1, 17);
-        evening.add(2, 20);
-        evening.add(3, 19);
-        evening.add(4, 18);
-        evening.add(5, 17);
-
-
-        XYDataset dataSet = new XYSeriesCollection(morning);
+        XYDataset dataSet = createDataset(model.getTable());
 
         JFreeChart chart = ChartFactory.createXYLineChart(
                 "Temperature History", "Date", "Temperature",
@@ -59,6 +48,23 @@ public class GraphWindow extends JFrame implements Relaunch {
         setContentPane(graphWindow);
         launch();
 
+    }
+
+    private static XYDataset createDataset(ArrayList<WeatherObject> objects){
+
+        XYSeriesCollection dates = new XYSeriesCollection();
+
+        WeatherObject starting = objects.get(0);
+
+        for (int i = 0; i < objects.size(); i++) {
+
+            if(objects.get(i).getDayTime() == starting.getDayTime()) {
+                XYSeries temp = new XYSeries("9am Temp");
+                temp.add(i,2+1);
+                dates.addSeries(temp);
+            }
+        }
+        return dates;
     }
 
     private void launch(){
