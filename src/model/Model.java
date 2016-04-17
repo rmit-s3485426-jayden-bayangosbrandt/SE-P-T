@@ -10,6 +10,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import view.WelcomeWindow;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.*;
@@ -42,6 +43,18 @@ public class Model {
     }
 
     public MainWindow getMainWindow() { return mainWindow;}
+
+//    public void saveWindow(){
+//        currentUser.setOpenWindows(windows);
+//    }
+
+    public void addOpenWindow(JFrame frame){
+        currentUser.getOpenWindows().add(frame);
+    }
+
+    public void removeOpenWindow(JFrame frame){
+        currentUser.getOpenWindows().remove(frame);
+    }
 
     public void setWeatherStation(WeatherStation station){
         this.weatherStation = station;

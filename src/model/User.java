@@ -1,10 +1,12 @@
 package model;
 
+import javax.swing.*;
 import java.util.*;
 
 public class User extends Observable {
     String username;
     ArrayList<WeatherStation> favorites = new ArrayList<>();
+    ArrayList<JFrame> openWindows = new ArrayList<>();
 
     public void setUsername(String newUsername) {
         username = newUsername;
@@ -50,6 +52,14 @@ public class User extends Observable {
         }
 
         return localList;
+    }
+
+    public ArrayList<JFrame> getOpenWindows() {
+        return openWindows;
+    }
+
+    public void setOpenWindows(ArrayList<JFrame> openWindows) {
+        this.openWindows = openWindows;
     }
 
     public WeatherStation findWeatherStation(String stationName){

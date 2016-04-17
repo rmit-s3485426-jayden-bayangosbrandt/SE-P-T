@@ -1,11 +1,23 @@
 package controller;
 
+import model.Model;
+import view.Relaunch;
+
+import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+
 /**
- * Created by Jayden on 14/04/2016.
+ * Created by Jayden on 17/04/2016.
  */
-public class WindowActionListener implements WindowListener {
+public class DataWindowListener implements WindowListener {
+
+    private JFrame frame;
+    private Model model = Model.getInstance();
+
+    public DataWindowListener(JFrame frame) {
+        this.frame = frame;
+    }
 
     @Override
     public void windowOpened(WindowEvent e) {
@@ -14,12 +26,9 @@ public class WindowActionListener implements WindowListener {
 
     @Override
     public void windowClosing(WindowEvent e) {
-        //Save to disk
-        JSONFileWrite file = new JSONFileWrite();
-        if(file.writeFile()){
-            System.out.println("Success!");
+        if(!model.getCurrent().getOpenWindows().contains(frame)) {
+            model.addOpenWindow(frame);
         }
-
     }
 
     @Override
