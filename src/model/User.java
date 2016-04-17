@@ -18,10 +18,15 @@ public class User extends Observable {
         clearChanged();
     }
 
-    public void setFavorite(ArrayList<String> setFavorites){
-        for(String f: setFavorites){
-            favorites.add(new WeatherStation(f));
+    public void setFavorite(HashMap<String,String> setFavorites){
+        Set set = setFavorites.entrySet();
+        Iterator iterate = set.iterator();
+        while(iterate.hasNext()){
+            Map.Entry station = (Map.Entry)iterate.next();
+            favorites.add(new WeatherStation(station.getKey().toString()
+                    ,station.getValue().toString()));
         }
+
     }
 
     public WeatherStation getFavourite(int index){
@@ -45,5 +50,14 @@ public class User extends Observable {
         }
 
         return localList;
+    }
+
+    public WeatherStation findWeatherStation(String stationName){
+        for(WeatherStation w: favorites){
+            if(w.getName().equals(stationName))
+                return w;
+        }
+
+        return null;
     }
 }

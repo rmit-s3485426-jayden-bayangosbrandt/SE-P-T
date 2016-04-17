@@ -20,11 +20,13 @@ public class WeatherStation {
     String currentID;
     private String name;
     private ArrayList<String> history = new ArrayList<>();
+    private String stationUrl;
 
     private Model model = Model.getInstance();
 
-    public WeatherStation(String name) {
+    public WeatherStation(String name, String stationUrl) {
         this.name = name;
+        this.stationUrl = stationUrl;
     }
 
     //    public WeatherStation() {
@@ -104,6 +106,8 @@ public class WeatherStation {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getStationUrl(){return stationUrl;}
 }
 
 

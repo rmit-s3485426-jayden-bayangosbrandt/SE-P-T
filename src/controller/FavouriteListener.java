@@ -34,7 +34,7 @@ public class FavouriteListener implements ListSelectionListener {
 
             // Feed to chart object
 //            model.getCurrent().getFavourite(list.getSelectedIndex());
-            new ChartWindow(model.getTable());
+            new ChartWindow(model.getTable(list.getSelectedValue().toString()));
             new GraphWindow();
             model.getMainWindow().reposition();
 

@@ -11,7 +11,7 @@ public class Window {
 
     public Window(){
 
-        model.setDummyData();
+        model.setData();
 
         WelcomeWindow welcome = new WelcomeWindow();
         model.setWelcomeWindow(welcome);

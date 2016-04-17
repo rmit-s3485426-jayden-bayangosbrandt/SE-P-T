@@ -300,7 +300,7 @@ public class Model {
     }
 
     //Dummy data
-    public void setDummyData(){
+    public void setData(){
 
         JSONFileWrite readFile = new JSONFileWrite();
         users = readFile.loadFile();
@@ -322,14 +322,17 @@ public class Model {
         this.stationUrl = stationUrl;
     }
 
-//    public void addCurrentFavorite(String stationName) {
-//        currentUser.addFavorite(new WeatherStation(stationName, stationUrl));
-//    }
+    public void addCurrentFavorite(String stationName) {
+        String url = findElement(regionUrl, stationName).attr("href");
+        url = "http://www.bom.gov.au".concat(url);
+        currentUser.addFavorite(new WeatherStation(stationName, url));
+    }
 
-    public ArrayList<WeatherObject> getTable(){
+    public ArrayList<WeatherObject> getTable(String stationName){
         ArrayList<WeatherObject> weatherObjects = new ArrayList<WeatherObject>();
         String todaydate;
-        String url = getStationUrlFromWeb(stationUrl);
+//        String url = getStationUrlFromWeb(stationUrl);
+        String url = currentUser.findWeatherStation(stationName).getStationUrl();
         String dayTime="", temp="", apparentTemp="", viewPoint="", relativeHumidity="", dealta_T="", windDirection="",
                 windSpeedKmh="", windSpeedKnts="", windGustKmh="", windGustKnts="", pressure1="", pressure2="", rainSince9am="";
         int indicator = 0;

@@ -45,7 +45,10 @@ public class JSONFileWrite {
             JSONObject userJSON = new JSONObject();
             JSONArray weatherStations = new JSONArray();
             for(String wo: u.getFavouriteList()){
-                weatherStations.add(wo);
+                JSONObject station = new JSONObject();
+                station.put("name", wo);
+                station.put("stationUrl", u.findWeatherStation(wo).getStationUrl());
+                weatherStations.add(station);
             }
             userJSON.put("favorites",weatherStations);
             userJSON.put("username",u.getUsername());
@@ -54,7 +57,7 @@ public class JSONFileWrite {
 
         System.out.println(userGroup);
 
-        try (FileWriter file = new FileWriter("file\file1.txt")) {
+        try (FileWriter file = new FileWriter("file1.txt")) {
 //            System.out.println(gson.toJson(users));
             file.write(userGroup.toString());
             System.out.println("Successfully Copied JSON Object to File...");
@@ -85,15 +88,21 @@ public class JSONFileWrite {
             JSONArray userJArray = (JSONArray) userObject;
             for(int i=0; i<userJArray.size(); i++){
                 User user = new User();
-                user.setUsername(getAttribute("username",userJArray.get(i).toString()).get(0));
-                user.setFavorite(getAttribute("favorites",userJArray.get(i).toString()));
+                user.setUsername(getUsername(userJArray.get(i).toString()));
+                user.setFavorite(getFavorites(userJArray.get(i).toString()));
 //                System.out.println(userJArray.get(i).getString("username"));
 //                user.setUsername(userJArray.get(i).("username"));
                 users.add(user);
             }
         }
         catch(Exception e){
-            e.printStackTrace();
+            try{
+                PrintWriter writer = new PrintWriter("file1.txt","UTF-8");
+            }
+            catch(Exception f){
+                f.printStackTrace();
+            }
+
         }
 
 //        gson = new Gson();
@@ -113,28 +122,35 @@ public class JSONFileWrite {
         return users;
     }
 
-    public ArrayList<String> getAttribute(String id, String line){
+    public String getUsername(String line){
         String separator = "{}[:],\"";
-        ArrayList<String> returnValue = new ArrayList<String>();
         StringTokenizer token = new StringTokenizer(line, separator);
         String tokens;
         tokens = token.nextToken();
-        while(token.hasMoreTokens() && !tokens.equals(id)){
+        while(token.hasMoreTokens() && !tokens.equals("username")){
             tokens = token.nextToken();
         }
-        if(id.equals("favorites")) {
-            tokens = token.nextToken();
-            while(token.hasMoreTokens() && !tokens.equals("username")) {
-                returnValue.add(tokens);
-                tokens = token.nextToken();
-            }
-        }
-        else{
-            tokens = token.nextToken();
-            returnValue.add(tokens);
-        }
+        return token.nextToken();
+    }
 
-        return returnValue;
+    public HashMap<String, String> getFavorites(String line){
+        String separator = "{}[:],\"";
+        StringTokenizer token = new StringTokenizer(line, separator);
+        String tokens, name, url;
+        HashMap<String, String> favorites = new HashMap<String, String>();
+        tokens = token.nextToken(); //favorites
+        tokens = token.nextToken(); //either data or username
+        while(token.hasMoreTokens() && !tokens.equals("username")) {
+            name = token.nextToken();
+            token.nextToken(); //"stationUrl"
+            url = token.nextToken(); //http
+            url = url.concat(":");
+            url = url.concat(token.nextToken());
+            url = url.replace("\\","" );
+            favorites.put(name, url);
+            tokens = token.nextToken();
+        }
+        return favorites;
     }
 
 }
