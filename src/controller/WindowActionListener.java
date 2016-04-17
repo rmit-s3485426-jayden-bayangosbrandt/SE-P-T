@@ -2,7 +2,6 @@ package controller;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-
 /**
  * Created by Jayden on 14/04/2016.
  */
@@ -20,6 +19,7 @@ public class WindowActionListener implements WindowListener {
         if(file.writeFile()){
             System.out.println("Success!");
         }
+
     }
 
     @Override

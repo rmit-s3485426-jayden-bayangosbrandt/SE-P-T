@@ -18,6 +18,11 @@ public class User extends Observable {
         clearChanged();
     }
 
+    public void setFavorite(ArrayList<String> setFavorites){
+        for(String f: setFavorites){
+            favorites.add(new WeatherStation(f));
+        }
+    }
 
     public WeatherStation getFavourite(int index){
         return favorites.get(index);

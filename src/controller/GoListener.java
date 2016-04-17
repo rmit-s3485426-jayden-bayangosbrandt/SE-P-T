@@ -26,7 +26,7 @@ public class GoListener implements ActionListener {
 
         if(model.getCurrent() != null) {
             String user = (String) usersField.getSelectedValue();
-            model.addUser(user);
+            //model.addUser(user);
             model.setCurrentUser(user);
 //            model.setEnter(true);
             model.closeWelcome();

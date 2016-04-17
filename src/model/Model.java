@@ -2,6 +2,7 @@ package model;
 
 
 
+import controller.JSONFileWrite;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import view.MainWindow;
@@ -277,7 +278,7 @@ public class Model {
     public void setCurrentUser(String current){
 
         for(int i = 0; i< getUserList().size(); i++){
-            if(users.get(i).getUsername() == current){
+            if(users.get(i).getUsername().equals(current)){
                 setCurrentUser(users.get(i));
             }
         }
@@ -301,10 +302,12 @@ public class Model {
     //Dummy data
     public void setDummyData(){
 
-        addUser("Yung");
-        addUser("Jayden");
-        addUser("Alex");
-        addUser("Aaron");
+        JSONFileWrite readFile = new JSONFileWrite();
+        users = readFile.loadFile();
+//        addUser("Yung");
+//        addUser("Jayden");
+//        addUser("Alex");
+//        addUser("Aaron");
 
     }
     public String getStationUrl() {
@@ -318,6 +321,10 @@ public class Model {
     public void setStationUrl(String stationUrl) {
         this.stationUrl = stationUrl;
     }
+
+//    public void addCurrentFavorite(String stationName) {
+//        currentUser.addFavorite(new WeatherStation(stationName, stationUrl));
+//    }
 
     public ArrayList<WeatherObject> getTable(){
         ArrayList<WeatherObject> weatherObjects = new ArrayList<WeatherObject>();
@@ -342,7 +349,6 @@ public class Model {
                 Elements rows = date.select("td");
                 for(Element row: rows)
                 {
-                    System.out.println(row.text());
                     switch (indicator){
                         case 0:
                             dayTime = row.text();
@@ -392,18 +398,6 @@ public class Model {
                 weatherObjects.add(new WeatherObject(dayTime, temp, apparentTemp, viewPoint, relativeHumidity,
                         dealta_T, windDirection, windSpeedKmh, windSpeedKnts, windGustKmh, windGustKnts, pressure1,
                         pressure2, rainSince9am));
-//                public WeatherObject(String dayTime, String temp, String apparentTemp,
-//                    String viewPoint, String relativeHumidity, String dealta_T,
-//                    String windDirection, String windSpeedKmh, String windSpeedKnts,
-//                    String windGustKmh, String windGustKnts, String pressure1,
-//                    String pressure2, String rainSince9am) {
-
-//                temp = date.getElementsByAttributeValue("headers","t1-datetime").text();
-//                if(temp.matches(regex))
-//                {
-//                    daterows.add(temp);
-//                    System.out.println(temp);
-//                }
 
             }
 
