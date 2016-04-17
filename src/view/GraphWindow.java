@@ -1,5 +1,7 @@
 package view;
 
+import controller.DataWindowListener;
+import model.Model;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -14,7 +16,9 @@ import java.awt.*;
 /**
  * Created by YungYung on 16/04/2016.
  */
-public class GraphWindow extends JFrame {
+public class GraphWindow extends JFrame implements Relaunch {
+
+    private Model model = Model.getInstance();
 
     public GraphWindow(){
 
@@ -51,11 +55,23 @@ public class GraphWindow extends JFrame {
 
         graphWindow.add(cp);
         setTitle("Temperature Graph");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setContentPane(graphWindow);
+        launch();
+
+    }
+
+    private void launch(){
+        addWindowListener(new DataWindowListener(this));
+        model.addOpenWindow(this);
         setSize(new Dimension(900, 350));
         setVisible(true);
         setLocationRelativeTo(null);
         setLocation(getX()+200, 350);
+    }
 
+    @Override
+    public void relaunch() {
+        launch();
     }
 }

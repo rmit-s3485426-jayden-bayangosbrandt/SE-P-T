@@ -2,12 +2,10 @@ package view;
 
 import controller.*;
 import model.Model;
-import model.WeatherStation;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Observer;
 
 
@@ -16,7 +14,7 @@ public class MainWindow extends JFrame {
     private Model model = Model.getInstance();
 
     private JLabel lblName = new JLabel(model.getCurrent().getUsername());
-    private WindowActionListener actionListener;
+    private MainWindowListener actionListener;
 //    private JTextField search = new JTextField("Search weather stations");
     private String[] areaDataset = new String[]{"1", "2", "3"};
     private String[] regionDataset = new String[]{"1", "2", "3"};
@@ -46,11 +44,24 @@ public class MainWindow extends JFrame {
         model.getCurrent().addObserver(favePanel);
 
         // Set Window listener
-        actionListener = new WindowActionListener();
+        actionListener = new MainWindowListener();
         this.addWindowListener(actionListener);
         this.setLocationRelativeTo(null);
 
+        // Check if open windows present in user
+        if(model.getCurrent().getOpenWindows().size() > 0){
+            relaunch();
+        }
 
+
+    }
+
+    private void relaunch(){
+        ArrayList<JFrame> windows = model.getCurrent().getOpenWindows();
+        for(JFrame window : windows){
+            Relaunch frame = (Relaunch) window;
+            frame.relaunch();
+        }
     }
 
     private JPanel getNorthPanel(){

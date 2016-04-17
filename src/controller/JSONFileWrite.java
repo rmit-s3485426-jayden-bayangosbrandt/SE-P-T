@@ -49,12 +49,13 @@ public class JSONFileWrite {
             }
             userJSON.put("favorites",weatherStations);
             userJSON.put("username",u.getUsername());
+            userJSON.put("windows", u.getOpenWindows());
             userGroup.add(userJSON);
         }
 
         System.out.println(userGroup);
 
-        try (FileWriter file = new FileWriter("file\file1.txt")) {
+        try (FileWriter file = new FileWriter("file1.txt")) {
 //            System.out.println(gson.toJson(users));
             file.write(userGroup.toString());
             System.out.println("Successfully Copied JSON Object to File...");
@@ -87,6 +88,8 @@ public class JSONFileWrite {
                 User user = new User();
                 user.setUsername(getAttribute("username",userJArray.get(i).toString()).get(0));
                 user.setFavorite(getAttribute("favorites",userJArray.get(i).toString()));
+                // Need to figure out how to translate windows from json
+//                user.setOpenWindows(getAttribute("windows", userJArray.get(i).toString()));
 //                System.out.println(userJArray.get(i).getString("username"));
 //                user.setUsername(userJArray.get(i).("username"));
                 users.add(user);
