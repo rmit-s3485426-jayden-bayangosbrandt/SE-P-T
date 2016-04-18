@@ -306,10 +306,10 @@ public class Model {
 
         JSONFileWrite readFile = new JSONFileWrite();
         users = readFile.loadFile();
-//        addUser("Yung");
-//        addUser("Jayden");
-//        addUser("Alex");
-//        addUser("Aaron");
+        addUser("Yung");
+        addUser("Jayden");
+        addUser("Alex");
+        addUser("Aaron");
 
     }
 

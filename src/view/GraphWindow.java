@@ -3,12 +3,16 @@ package view;
 import controller.DataWindowListener;
 import model.Model;
 import model.WeatherStation;
+import model.WeatherObject;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberAxis.*;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -23,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.*;
+import java.util.ArrayList;
 
 /**
  * Created by YungYung on 16/04/2016.
@@ -33,6 +38,7 @@ public class GraphWindow extends JFrame implements Relaunch {
 
     public GraphWindow(){
 
+        XYDataset dataSet = createDataset(model.getTable());
         // TEST DATA
         HashMap<String,String> temps = model.getTemp();
         XYSeries morning = new XYSeries("9am temp");
@@ -90,6 +96,23 @@ public class GraphWindow extends JFrame implements Relaunch {
         setContentPane(graphWindow);
         launch();
 
+    }
+
+    private static XYDataset createDataset(ArrayList<WeatherObject> objects){
+
+        XYSeriesCollection dates = new XYSeriesCollection();
+
+        WeatherObject starting = objects.get(0);
+
+        for (int i = 0; i < objects.size(); i++) {
+
+            if(objects.get(i).getDayTime() == starting.getDayTime()) {
+                XYSeries temp = new XYSeries("9am Temp");
+                temp.add(i,2+1);
+                dates.addSeries(temp);
+            }
+        }
+        return dates;
     }
 
     private void launch(){
