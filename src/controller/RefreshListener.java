@@ -1,5 +1,7 @@
 package controller;
 
+import model.Model;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,8 +10,11 @@ import java.awt.event.ActionListener;
  */
 public class RefreshListener implements ActionListener {
 
+    private Model model = Model.getInstance();
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Refresh!
+        System.out.println("TEST");
+        model.refresh();
     }
 }

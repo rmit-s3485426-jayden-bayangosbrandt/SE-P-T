@@ -75,6 +75,14 @@ public class Model {
         mainWindow.setStationDataset(strings);
     }
 
+    public void refresh(){
+        setArea();
+        String[] empty = {""};
+        changeRegionDataset(empty);
+        changeStationDataset(empty);
+
+    }
+
     public String getStationUrlFromWeb(String station) {
         String url;
         Element stationTableData = findElement(regionUrl, station);
@@ -306,10 +314,10 @@ public class Model {
 
         JSONFileWrite readFile = new JSONFileWrite();
         users = readFile.loadFile();
-        addUser("Yung");
-        addUser("Jayden");
-        addUser("Alex");
-        addUser("Aaron");
+//        addUser("Yung");
+//        addUser("Jayden");
+//        addUser("Alex");
+//        addUser("Aaron");
 
     }
 

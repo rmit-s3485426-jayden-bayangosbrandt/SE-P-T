@@ -38,7 +38,7 @@ public class GraphWindow extends JFrame implements Relaunch {
 
     public GraphWindow(){
 
-        XYDataset dataSet = createDataset(model.getTable());
+//        XYDataset dataSet = createDataset(model.getTable());
         // TEST DATA
         HashMap<String,String> temps = model.getTemp();
         XYSeries morning = new XYSeries("9am temp");
@@ -56,21 +56,6 @@ public class GraphWindow extends JFrame implements Relaunch {
                 evening.add(Double.parseDouble(temp.getKey().toString().replace("/03:00pm","")),
                         Double.parseDouble(temp.getValue().toString()));
         }
-//
-//        morning.add(1, 13);
-//        morning.add(2, 12);
-//        morning.add(3, 15);
-//        morning.add(4, 16);
-//        morning.add(5, 14);
-//
-//
-//        evening.add(1, 17);
-//        evening.add(2, 20);
-//        evening.add(3, 19);
-//        evening.add(4, 18);
-//        evening.add(5, 17);
-
-
         XYDataset dataSet = new XYSeriesCollection(morning);
 
         final JFreeChart chart = ChartFactory.createXYLineChart(
@@ -98,22 +83,22 @@ public class GraphWindow extends JFrame implements Relaunch {
 
     }
 
-    private static XYDataset createDataset(ArrayList<WeatherObject> objects){
-
-        XYSeriesCollection dates = new XYSeriesCollection();
-
-        WeatherObject starting = objects.get(0);
-
-        for (int i = 0; i < objects.size(); i++) {
-
-            if(objects.get(i).getDayTime() == starting.getDayTime()) {
-                XYSeries temp = new XYSeries("9am Temp");
-                temp.add(i,2+1);
-                dates.addSeries(temp);
-            }
-        }
-        return dates;
-    }
+//    private static XYDataset createDataset(ArrayList<WeatherObject> objects){
+//
+//        XYSeriesCollection dates = new XYSeriesCollection();
+//
+//        WeatherObject starting = objects.get(0);
+//
+//        for (int i = 0; i < objects.size(); i++) {
+//
+//            if(objects.get(i).getDayTime() == starting.getDayTime()) {
+//                XYSeries temp = new XYSeries("9am Temp");
+//                temp.add(i,2+1);
+//                dates.addSeries(temp);
+//            }
+//        }
+//        return dates;
+//    }
 
     private void launch(){
         addWindowListener(new DataWindowListener(this));
