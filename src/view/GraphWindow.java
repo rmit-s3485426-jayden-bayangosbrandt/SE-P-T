@@ -35,18 +35,23 @@ import java.util.ArrayList;
 public class GraphWindow extends JFrame implements Relaunch {
 
     private Model model = Model.getInstance();
+    XYSeries morning = new XYSeries("9am temp");
+    XYSeries evening = new XYSeries("3pm temp");
+    private String station;
+    JFreeChart chart;
+    JPanel graphWindow = new JPanel();
 
-    public GraphWindow(){
+    public GraphWindow(String station){
 
 //        XYDataset dataSet = createDataset(model.getTable());
         // TEST DATA
-        HashMap<String,String> temps = model.getTemp();
-        XYSeries morning = new XYSeries("9am temp");
-        XYSeries evening = new XYSeries("3pm temp");
+        this.station = station;
+        this.setTitle(station);
+        HashMap<String,String> temps = model.getTemp(station);
         Set set = temps.entrySet();
         Iterator iterate = set.iterator();
         String regex9 = ".*09:00am";
-        String regex3 = ".*03.00pm";
+        String regex3 = ".*03:00pm";
         while(iterate.hasNext()){
             Map.Entry temp = (Map.Entry)iterate.next();
             if(temp.getKey().toString().matches(regex9))
@@ -58,7 +63,7 @@ public class GraphWindow extends JFrame implements Relaunch {
         }
         XYDataset dataSet = new XYSeriesCollection(morning);
 
-        final JFreeChart chart = ChartFactory.createXYLineChart(
+        chart = ChartFactory.createXYLineChart(
                 "Temperature History", "Date", "Temperature",
                 dataSet, PlotOrientation.VERTICAL, true, true, false);
                 ChartPanel cp = new ChartPanel(chart) {
@@ -73,12 +78,12 @@ public class GraphWindow extends JFrame implements Relaunch {
                 }
         };
 
-        JPanel graphWindow = new JPanel();
 
         graphWindow.add(cp);
-        setTitle("Temperature Graph");
+        setTitle(station + " Temperature Graph");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setContentPane(graphWindow);
+        model.addGraphWindow(this);
         launch();
 
     }
@@ -107,6 +112,42 @@ public class GraphWindow extends JFrame implements Relaunch {
         setVisible(true);
         setLocationRelativeTo(null);
         setLocation(getX()+200, 350);
+    }
+
+    public void updateGraph(){
+        HashMap<String,String> temps = model.getTemp(station);
+        Set set = temps.entrySet();
+        Iterator iterate = set.iterator();
+        String regex9 = ".*09:00am";
+        String regex3 = ".*03:00pm";
+        while(iterate.hasNext()){
+            Map.Entry temp = (Map.Entry)iterate.next();
+            if(temp.getKey().toString().matches(regex9))
+                morning.add(Double.parseDouble(temp.getKey().toString().replace("/09:00am","")),
+                        Double.parseDouble(temp.getValue().toString()));
+            if(temp.getKey().toString().matches(regex3))
+                evening.add(Double.parseDouble(temp.getKey().toString().replace("/03:00pm","")),
+                        Double.parseDouble(temp.getValue().toString()));
+        }
+        XYDataset dataSet = new XYSeriesCollection(morning);
+
+        chart = ChartFactory.createXYLineChart(
+                "Temperature History", "Date", "Temperature",
+                dataSet, PlotOrientation.VERTICAL, true, true, false);
+        ChartPanel cp = new ChartPanel(chart) {
+//        final NumberAxis domainAxis = (NumberAxis)chart.getXYPlot().getDomainAxis();
+//        final DecimalFormat format = new DecimalFormat("####");
+//        domainAxis.setNumberFormatOverride(format);
+
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(700,300);
+            }
+        };
+
+        graphWindow.remove(0);
+        graphWindow.add(cp);
+
     }
 
     @Override

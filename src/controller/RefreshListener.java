@@ -14,7 +14,6 @@ public class RefreshListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("TEST");
         model.refresh();
     }
 }

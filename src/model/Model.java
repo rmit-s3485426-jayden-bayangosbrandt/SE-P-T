@@ -5,12 +5,15 @@ package model;
 import controller.JSONFileWrite;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
+import view.ChartWindow;
+import view.GraphWindow;
 import view.MainWindow;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import view.WelcomeWindow;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.*;
@@ -27,6 +30,8 @@ public class Model {
     private String stationUrl;
     private ArrayList<User> users = new ArrayList<>();
     private User currentUser;
+    private ArrayList<ChartWindow> chartWindows= new ArrayList<ChartWindow>();
+    private ArrayList<GraphWindow> graphWindows= new ArrayList<GraphWindow>();
 
     public static Model getInstance() {
         return ourInstance;
@@ -55,6 +60,12 @@ public class Model {
         currentUser.getOpenWindows().add(frame);
     }
 
+    //function to keep track opened chartwindows
+    public void addChartWindow(ChartWindow chartWindow) {chartWindows.add(chartWindow);}
+
+    //function to keep track opened graphwindows
+    public void addGraphWindow(GraphWindow graphWindow) {graphWindows.add(graphWindow);}
+
     public void removeOpenWindow(JFrame frame) {
         currentUser.getOpenWindows().remove(frame);
     }
@@ -76,20 +87,27 @@ public class Model {
     }
 
     public void refresh(){
+        //resetting area combobox
         setArea();
         String[] empty = {""};
+        //resetting region and station combobox to empty
         changeRegionDataset(empty);
         changeStationDataset(empty);
+        //updating data in all chartWindow of user
+        for(ChartWindow chart: chartWindows)
+        {
+            chart.updateTable();
+            chart.relaunch();
+        }
+        //updating data in all graphWindow of user
+        for(GraphWindow graph: graphWindows)
+        {
+            graph.updateGraph();
+            graph.relaunch();
+        }
 
     }
 
-    public String getStationUrlFromWeb(String station) {
-        String url;
-        Element stationTableData = findElement(regionUrl, station);
-        url = stationTableData.attr("href");
-        url = "http://www.bom.gov.au".concat(url);
-        return url;
-    }
 
     public void setLblName(String name) {
         mainWindow.setLblName(name);
@@ -142,7 +160,8 @@ public class Model {
 //        return mainWindow.getAreaSelected();
 //    }
 
-    public void changeRegion(String area) {
+    //function to change the value of regionUrl
+    public void changeRegionUrl(String area) {
         String id;
         Element foundArea = findElement("http://www.bom.gov.au/catalogue/data-feeds.shtml", area);
         regionUrl = foundArea.attr("href");
@@ -150,94 +169,116 @@ public class Model {
         regionUrl = "http://www.bom.gov.au".concat(regionUrl);
     }
 
+    //function to change station combobox value according to the region
     public void changeStation(String region) {
         String id;
         changeStationDataset(searchStationArray(region, regionUrl));
     }
 
+    //function to get all areas available
     public void setArea() {
         try {
             String[] areas;
             ArrayList<String> ArrayListAreas = new ArrayList<String>();
+            //connecting to the website and getting html using jsoup
             Document docArea = Jsoup.connect("http://www.bom.gov.au/catalogue/data-feeds.shtml").get();
+            //getting each table data that contains a link, which will be the areas name
             Elements table = docArea.getElementsByAttributeValue("width", "712");
             Elements tableData = table.select("tbody").select("a");
             String regex = "http.*";
+            //for each link, if it has a valid url, add it to the arraylist
             for (Element area : tableData) {
                 String areaText = area.text();
                 if (Pattern.matches(regex, areaText))
                     continue;
                 ArrayListAreas.add(areaText);
             }
+            //converting arraylist to array of strings
             areas = new String[ArrayListAreas.size()];
             ArrayListAreas.toArray(areas);
-
+            //calling functions to change value of area combobox
             changeAreaDataset(areas);
-        } catch (Exception e) {
-
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
         }
 
 
     }
 
+    //function to get all regions of one area
     public String[] searchRegionArray(String area, String url) {
         ArrayList<String> regions = new ArrayList<String>();
         String[] regionsArray;
-
+        //setting up the url for retrieving html page according to area
         String fullUrl = "http://www.bom.gov.au";
         fullUrl = fullUrl.concat(url);
         Elements regionsTable;
         Element regionTable;
-        String pattern = ".*";
-        pattern = pattern.concat(area);
-        pattern = pattern.concat(".*");
         try {
+            //connecting to the website and getting html using jsoup
             Document doc = Jsoup.connect(fullUrl).get();
+            //if url matches pattern ".*all.*", the area is included in state - all observations
+            //therefore we take the value differently
             if (Pattern.matches(".*all.*", url)) {
+                //the div with box1 class includes all regions name
                 regionsTable = doc.getElementsByClass("box1");
                 Elements classes = regionsTable.select("a");
+                //for every region name, add it to the arraylist
                 for (Element loop : classes) {
                     String text = loop.text();
                     regions.add(text);
                 }
 
             } else {
+                //area is included in state capital city area, which means there is only 1 area
+                //that has the same name as the area itself
                 area = area.replace(" area", "");
                 area = area.toUpperCase();
                 regions.add(doc.getElementById(area).text());
             }
 
-        } catch (Exception e) {
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
 
         }
+        //converting arraylist to array of string and returning the value
         regionsArray = new String[regions.size()];
         regions.toArray(regionsArray);
         return regionsArray;
 
     }
 
+    //function to get all stations of one region
     public String[] searchStationArray(String region, String url) {
         ArrayList<String> stationsStrings = new ArrayList<String>();
         String[] stationsArray;
         regionUrl = url;
         try {
+            //connecting to the website and getting html using jsoup
             Document doc = Jsoup.connect(url).get();
+            //getting all station names from the page
             Elements stations = doc.select("tbody").select("th");
+
+            //if url matches pattern ".*all.*", the area is included in state - all observations
+            //therefore we take the value differently
             if (Pattern.matches(".*all.*", url)) {
+                //the div with box1 class includes all regions name & url
                 Elements test = doc.getElementsByClass("box1");
                 Elements classes = test.select("a");
+                //for each of the region, get the name & url to find the correct station
                 for (Element loop : classes) {
                     String text = loop.text();
                     String id = loop.attr("href");
                     String idTrim = id.replace("#", "");
+                    //if the name is the same as the requested region, store all station name
                     if (text.equals(region)) {
                         for (Element station : stations) {
                             String stationsid = station.attr("id");
-
                             String pattern = "t";
                             pattern = pattern.concat(idTrim);
                             pattern = pattern.concat("-.*");
-
+                            //for all station names, if the id matches the pattern made from the region url got beforehand
+                            //add to arraylist
                             if (Pattern.matches(pattern, stationsid)) {
                                 stationsStrings.add(station.text());
                             }
@@ -245,6 +286,9 @@ public class Model {
                     }
                 }
             } else {
+                //area is included in state capital city area, which means there is only 1 area
+                //that has the same name as the area itself
+                //store all station names in arraylist
                 for (Element station : stations) {
                     if (Pattern.matches("obs-station-.*", station.attr("id"))) {
                         stationsStrings.add(station.text());
@@ -253,17 +297,23 @@ public class Model {
             }
 
 
-        } catch (Exception e) {
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
 
         }
+        //convert arraylist into an arrya of strings and return it
         stationsArray = new String[stationsStrings.size()];
         stationsStrings.toArray(stationsArray);
         return stationsArray;
     }
 
+    //function to find a specific station
     public Element findElement(String link, String item) {
         try {
+            //connecting to the website and getting html using jsoup
             Document docArea = Jsoup.connect(link).get();
+
+            //getting all station elements and returning the element if it has the same name
             Elements tableData = docArea.select("tbody").select("a");
             for (Element data : tableData) {
                 String text = data.text();
@@ -272,8 +322,8 @@ public class Model {
                     return data;
             }
 
-        } catch (Exception e) {
-
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
         }
         return null;
     }
@@ -285,6 +335,7 @@ public class Model {
         users.add(newUser);
     }
 
+    //function to set the current user
     public void setCurrentUser(String current) {
 
         for (int i = 0; i < getUserList().size(); i++) {
@@ -293,7 +344,7 @@ public class Model {
             }
         }
 
-        System.out.println("CurrentUser is: " + currentUser.getUsername());
+//        System.out.println("CurrentUser is: " + currentUser.getUsername());
 
     }
 
@@ -339,25 +390,26 @@ public class Model {
         currentUser.addFavorite(new WeatherStation(stationName, url));
     }
 
+    //function to get all datas from a station page
     public ArrayList<WeatherObject> getTable(String stationName) {
         ArrayList<WeatherObject> weatherObjects = new ArrayList<WeatherObject>();
         String todaydate;
-//        String url = getStationUrlFromWeb(stationUrl);
+        //getting the url of requested station
         String url = currentUser.findWeatherStation(stationName).getStationUrl();
-        stationUrl = currentUser.findWeatherStation(stationName).getStationUrl();
+        stationUrl = url;
         String dayTime = "", temp = "", apparentTemp = "", viewPoint = "", relativeHumidity = "", dealta_T = "", windDirection = "",
                 windSpeedKmh = "", windSpeedKnts = "", windGustKmh = "", windGustKnts = "", pressure1 = "", pressure2 = "", rainSince9am = "";
         int indicator = 0;
-        Date today = new Date();
         ArrayList<String> daterows = new ArrayList<String>();
-        SimpleDateFormat dateformat = new SimpleDateFormat("dd");
-        System.out.println(dateformat.format(today));
-        todaydate = dateformat.format(today);
-        String regex = todaydate.concat(".*");
+
         try {
+            //connecting to the website and getting html using jsoup
             Document doc = Jsoup.connect(url).get();
+
+            //get all datas and assign it to its respective variable
             Elements dates = doc.getElementsByClass("rowleftcolumn");
             for (Element date : dates) {
+                //indicator is to indicate what kind of data each column is
                 indicator = 0;
                 Elements rows = date.select("td");
                 for (Element row : rows) {
@@ -407,28 +459,41 @@ public class Model {
                     }
                     indicator++;
                 }
+                //creating a weatherObject object for each row of data
                 weatherObjects.add(new WeatherObject(dayTime, temp, apparentTemp, viewPoint, relativeHumidity,
                         dealta_T, windDirection, windSpeedKmh, windSpeedKnts, windGustKmh, windGustKnts, pressure1,
                         pressure2, rainSince9am));
 
             }
 
-        } catch (Exception e) {
-
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
         }
         return weatherObjects;
     }
 
-    public HashMap<String,String> getTemp() {
+    //function to get only the temperature datas from stationpage
+    //return value HashMap<String,String> where the key is date, and value is the temperature
+    public HashMap<String,String> getTemp(String station) {
+        //getting the url of requested station
+        String url = currentUser.findWeatherStation(station).getStationUrl();
         int indicator = 0;
         Date today = new Date();
         String dayTime;
         HashMap<String,String> temps = new HashMap<String,String>();
+
+        //setting up regex for 9am and 3pm temperature
         String regex9 = ".*09:00am";
         String regex3 = ".*03.00pm";
+
+        //the value skip for
         String keyDate="skip";
+
         try {
-            Document doc = Jsoup.connect(stationUrl).get();
+            //connecting to the website and getting html using jsoup
+            Document doc = Jsoup.connect(url).get();
+
+            //getting all datas from the page
             Elements dates = doc.getElementsByClass("rowleftcolumn");
             for (Element date : dates) {
                 indicator = 0;
@@ -437,12 +502,16 @@ public class Model {
                 for (Element row : rows) {
                     switch (indicator) {
                         case 0:
+                            //for each row, if the column value matches the pattern, change value oy keyDate to temp
                             if(row.text().matches(regex3)||row.text().matches(regex9))
                                 keyDate = row.text();
                             else
+                            //if not, change it into "skip"
                                 keyDate ="skip";
                             break;
                         case 1:
+                            //if keyDate is not skip, that means we're at the correct row, either 9am or 3pm temp
+                            //store date as key, and temp as value
                             if(!keyDate.equals("skip"))
                                 temps.put(keyDate,row.text());
                             break;

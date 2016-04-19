@@ -22,7 +22,7 @@ public class AreaListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
     String value = (String) comboBox.getSelectedItem();
         System.out.println(value);
-        model.changeRegion(value);
+        model.changeRegionUrl(value);
         model.setRegionEnabled(true);
 //    model.searchRegionWeatherStation(value);
 //    System.out.println(value);
