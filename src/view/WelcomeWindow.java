@@ -10,6 +10,8 @@ import controller.SearchListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class WelcomeWindow extends JFrame {
@@ -50,6 +52,14 @@ public class WelcomeWindow extends JFrame {
         JPanel registerPanel = new JPanel();
         newUser.setMaximumSize(new Dimension(300, 30));
         newUser.setPreferredSize(new Dimension(300, 30));
+
+        newUser.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                newUser.setText("");
+            }
+        });
+
         registerPanel.setLayout(new BoxLayout(registerPanel, BoxLayout.X_AXIS));
         registerPanel.add(Box.createHorizontalGlue(), 0);
         registerPanel.add(new JLabel("New user?"), 1);
@@ -74,6 +84,13 @@ public class WelcomeWindow extends JFrame {
         scrollUsers.setMaximumSize(new Dimension(300, 100));
         searchUsers.setMaximumSize(new Dimension(300, 30));
         searchUsers.setPreferredSize(new Dimension(300, 30));
+
+        searchUsers.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                searchUsers.setText("");
+            }
+        });
 
         existingUsers.addListSelectionListener(new UserListener(existingUsers, searchUsers));
 
