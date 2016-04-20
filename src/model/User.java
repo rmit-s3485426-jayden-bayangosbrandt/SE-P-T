@@ -20,7 +20,9 @@ public class User extends Observable {
         clearChanged();
     }
 
+    //function to set up favorites of a user, used when loading data from a file
     public void setFavorite(HashMap<String,String> setFavorites){
+        //Hashmap<String,String> where stationName is the key and url is the value
         Set set = setFavorites.entrySet();
         Iterator iterate = set.iterator();
         while(iterate.hasNext()){
@@ -43,6 +45,7 @@ public class User extends Observable {
         return username;
     }
 
+    //function that returns an array of strings containing all favorites of a user
     public String[] getFavouriteList(){
 
         String[] localList = new String[getFavorites().size()];
@@ -62,6 +65,7 @@ public class User extends Observable {
         this.openWindows = openWindows;
     }
 
+    //function to find a specific weatherStation object within the arraylist of a user
     public WeatherStation findWeatherStation(String stationName){
         for(WeatherStation w: favorites){
             if(w.getName().equals(stationName))
