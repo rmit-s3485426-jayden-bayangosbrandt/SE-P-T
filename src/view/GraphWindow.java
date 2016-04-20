@@ -47,41 +47,66 @@ public class GraphWindow extends JFrame implements Relaunch {
 
     public GraphWindow(String station){
 
-//        XYDataset dataSet = createDataset(model.getTable());
-        // TEST DATA
         this.station = station;
         this.setTitle(station);
-        HashMap<String,String> temps = model.getTemp(station);
-        Set set = temps.entrySet();
-        Iterator iterate = set.iterator();
+
         String regex9 = ".*09:00am";
         String regex3 = ".*03:00pm";
+
+        //getting data from the website & from temperature history
+        HashMap<String,String> temps = model.getTemp(station);
+        HashMap<String,String> historyTemps = model.checkHistory(station);
+
+        //adding data from temperature history before getting data from website
+        Set historySet = historyTemps.entrySet();
+        Iterator iterateHistory = historySet.iterator();
+        while(iterateHistory.hasNext()) {
+            Map.Entry temp = (Map.Entry)iterateHistory.next();
+
+            //when the data is a 9am temperature data, it's added to morning plot
+            if(temp.getKey().toString().matches(regex9)){
+                //changing the date format so it can be added into the plot
+                Integer day = Integer.parseInt(temp.getKey().toString().replace("/09:00am", ""));
+                Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
+                        Calendar.getInstance().get(Calendar.YEAR) );
+                morning.add(now,Double.parseDouble(temp.getValue().toString()));
+            }
+            //when the data is a 3pm temperature data, it's added to evening plot
+            if(temp.getKey().toString().matches(regex3)){
+                Integer day = Integer.parseInt(temp.getKey().toString().replace("/03:00pm", ""));
+                Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
+                        Calendar.getInstance().get(Calendar.YEAR) );
+                evening.add(now,Double.parseDouble(temp.getValue().toString()));
+            }
+        }
+
+        //handling data got from website
+        Set set = temps.entrySet();
+        Iterator iterate = set.iterator();
         while(iterate.hasNext()){
             Map.Entry temp = (Map.Entry)iterate.next();
+            //when the data is a 9am temperature data, it's either added or updated to morning plot
             if(temp.getKey().toString().matches(regex9)) {
-
                 Integer day = Integer.parseInt(temp.getKey().toString().replace("/09:00am", ""));
                 Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
                         Calendar.getInstance().get(Calendar.YEAR) );
 
-                System.out.println(now.toString());
-
-                System.out.println(day);
-
-                morning.add(now,
+                morning.addOrUpdate(now,
                         Double.parseDouble(temp.getValue().toString()));
+                //adding possibly new temperature data to history
+                model.addHistory(day.toString(), "9", temp.getValue().toString(), station);
 
             }
+            //when the data is a 3pm temperature data, it's either added or updated to evening plot
             if(temp.getKey().toString().matches(regex3)) {
-
                 Integer day = Integer.parseInt(temp.getKey().toString().replace("/03:00pm", ""));
                 Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH)  + 1,
                         Calendar.getInstance().get(Calendar.YEAR) );
 
-                System.out.println(day);
-
-                evening.add(now,
+                evening.addOrUpdate(now,
                         Double.parseDouble(temp.getValue().toString()));
+                //adding possibly new temperature data to history
+                model.addHistory(day.toString(), "3", temp.getValue().toString(), station);
 
             }
         }
@@ -91,11 +116,6 @@ public class GraphWindow extends JFrame implements Relaunch {
                 "Date", "Temperature", dataSet, true, true, false);
 
                 ChartPanel cp = new ChartPanel(chart) {
-//        final NumberAxis domainAxis = (NumberAxis)chart.getXYPlot().getDomainAxis();
-//        final DecimalFormat format = new DecimalFormat("####");
-//        domainAxis.setNumberFormatOverride(format);
-
-
                     @Override
                 public Dimension getPreferredSize() {
                     return new Dimension(700,300);
@@ -132,35 +152,62 @@ public class GraphWindow extends JFrame implements Relaunch {
     }
 
     public void updateGraph(){
-        HashMap<String,String> temps = model.getTemp(station);
-        Set set = temps.entrySet();
-        Iterator iterate = set.iterator();
         String regex9 = ".*09:00am";
         String regex3 = ".*03:00pm";
+
+        //getting data from the website & from temperature history
+        HashMap<String,String> temps = model.getTemp(station);
+        HashMap<String,String> historyTemps = model.checkHistory(station);
+
+        //adding data from temperature history before getting data from website
+        Set historySet = historyTemps.entrySet();
+        Iterator iterateHistory = historySet.iterator();
+        while(iterateHistory.hasNext()) {
+            Map.Entry temp = (Map.Entry)iterateHistory.next();
+            //when the data is a 9am temperature data, it's either added or updated to morning plot
+            if(temp.getKey().toString().matches(regex9)){
+                //changing the date format so it can be added into the plot
+                Integer day = Integer.parseInt(temp.getKey().toString().replace("/09:00am", ""));
+                Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
+                        Calendar.getInstance().get(Calendar.YEAR) );
+                morning.addOrUpdate(now,Double.parseDouble(temp.getValue().toString()));
+            }
+            //when the data is a 3pm temperature data, it's either added or updated to evening plot
+            if(temp.getKey().toString().matches(regex3)){
+                Integer day = Integer.parseInt(temp.getKey().toString().replace("/03:00pm", ""));
+                Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
+                        Calendar.getInstance().get(Calendar.YEAR) );
+                evening.addOrUpdate(now,Double.parseDouble(temp.getValue().toString()));
+            }
+        }
+
+        //handling data got from website
+        Set set = temps.entrySet();
+        Iterator iterate = set.iterator();
         while(iterate.hasNext()){
             Map.Entry temp = (Map.Entry)iterate.next();
+            //when the data is a 9am temperature data, it's either added or updated to morning plot
             if(temp.getKey().toString().matches(regex9)) {
-
                 Integer day = Integer.parseInt(temp.getKey().toString().replace("/09:00am", ""));
                 Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH)  + 1,
                         Calendar.getInstance().get(Calendar.YEAR) );
-
-                System.out.println(day);
-
-                morning.add(now,
+                morning.addOrUpdate(now,
                         Double.parseDouble(temp.getValue().toString()));
+                //adding possibly new temperature data to history
+                model.addHistory(day.toString(), "9", temp.getValue().toString(), station);
 
             }
+            //when the data is a 3pm temperature data, it's either added or updated to evening plot
             if(temp.getKey().toString().matches(regex3)) {
 
                 Integer day = Integer.parseInt(temp.getKey().toString().replace("/03:00pm", ""));
                 Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
                         Calendar.getInstance().get(Calendar.YEAR) );
 
-                System.out.println(day);
-
-                evening.add(now,
+                evening.addOrUpdate(now,
                         Double.parseDouble(temp.getValue().toString()));
+                //adding possibly new temperature data to history
+                model.addHistory(day.toString(), "3", temp.getValue().toString(), station);
 
             }
         }
@@ -169,9 +216,6 @@ public class GraphWindow extends JFrame implements Relaunch {
         chart = ChartFactory.createTimeSeriesChart("Temperature History",
                                                         "Date", "Temperature", dataSet, true, true, false);
         ChartPanel cp = new ChartPanel(chart) {
-//        final NumberAxis domainAxis = (NumberAxis)chart.getXYPlot().getDomainAxis();
-//        final DecimalFormat format = new DecimalFormat("####");
-//        domainAxis.setNumberFormatOverride(format);
 
             @Override
             public Dimension getPreferredSize() {

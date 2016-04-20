@@ -6,16 +6,21 @@ import com.google.gson.stream.JsonReader;
 import model.Model;
 import model.User;
 import model.WeatherObject;
+import model.WeatherStation;
+import org.jfree.data.time.Day;
 import org.json.simple.JSONArray;
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.*;
 import org.json.simple.parser.ParseException;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Created by Jayden on 14/04/2016.
@@ -50,8 +55,21 @@ public class JSONFileWrite {
             //adding weatherstations of each user to a JSONArray and adding it to userJSON
             for(String wo: u.getFavouriteList()){
                 JSONObject station = new JSONObject();
+                JSONArray historyArray = new JSONArray();
+                HashMap<String,String> histories = u.findWeatherStation(wo).getHistory();
                 station.put("name", wo);
                 station.put("stationUrl", u.findWeatherStation(wo).getStationUrl());
+
+                //writes the temperature history of a station
+                Set historySet = histories.entrySet();
+                Iterator iterateHistory = historySet.iterator();
+                while(iterateHistory.hasNext()){
+                    Map.Entry temp = (Map.Entry)iterateHistory.next();
+                    JSONObject history = new JSONObject();
+                    history.put(temp.getKey().toString(), temp.getValue().toString());
+                    historyArray.add(history);
+                }
+                station.put("history", historyArray);
                 weatherStations.add(station);
             }
             //adding username and favorites attributes to userJSON
@@ -153,8 +171,18 @@ public class JSONFileWrite {
 
     //function to get stations from a json format string
     //return value HashMap<String, String> with stationname as key and the url as value
-    public HashMap<String, String> getFavorites(String line){
+    public ArrayList<WeatherStation> getFavorites(String line){
+        ArrayList<WeatherStation> stations = new ArrayList<WeatherStation>();
+
+        //getting today's date to be compared with history, to determine how old a data is
+        Date today = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        int todayDate = Integer.parseInt(sdf.format(today));
+        int date;
+
         String separator = "{}[:],\"";
+        String pattern9am = ".*-9";
+        String pattern3pm = ".*-3";
         StringTokenizer token = new StringTokenizer(line, separator);
         String tokens, name, url;
         HashMap<String, String> favorites = new HashMap<String, String>();
@@ -170,10 +198,45 @@ public class JSONFileWrite {
             url = url.concat(":");
             url = url.concat(token.nextToken());
             url = url.replace("\\","" );
-            favorites.put(name, url);
+            WeatherStation station = new WeatherStation(name,url);
+
             tokens = token.nextToken();
+            //if the station has a history, reads every single one
+            if(tokens.equals("history")) {
+                HashMap<String,String> histories = new HashMap<String,String>(); //key is date-time (e.g. 20-9), value is temperature
+                String day;
+                tokens = token.nextToken();
+                //loop until all temperature data has been read, the indicator is either it goes to the next station or username
+                while(token.hasMoreTokens() && (!tokens.equals("name") || !tokens.equals("username"))){
+                    //checking whether the data is more than a week old, if yes, then it is not read / deleted
+                    if(Pattern.matches(pattern9am,tokens))
+                    {
+                        date = Integer.parseInt(tokens.replace("-9",""));
+                        if(todayDate - date > 7){
+                            token.nextToken();
+                            tokens = token.nextToken();
+                            continue;
+                        }
+                    }
+                    if(Pattern.matches(pattern3pm,tokens)) {
+                        date = Integer.parseInt(tokens.replace("-3",""));
+                        if(todayDate - date > 7){
+                            token.nextToken();
+                            tokens = token.nextToken();
+                            continue;
+                        }
+                    }
+                    day = tokens;
+                    tokens = token.nextToken();
+                    histories.put(day,tokens);
+                    tokens = token.nextToken();
+                }
+                station.setHistory(histories);
+            }
+            stations.add(station);
         }
-        return favorites;
+        return stations;
     }
+
 
 }

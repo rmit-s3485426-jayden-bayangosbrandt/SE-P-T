@@ -19,7 +19,7 @@ public class WeatherStation {
     private ArrayList regionID = new ArrayList();
     String currentID;
     private String name;
-    private ArrayList<String> history = new ArrayList<>();
+    private HashMap<String,String> history = new HashMap<String,String>();
     private String stationUrl;
 
     private Model model = Model.getInstance();
@@ -91,13 +91,15 @@ public class WeatherStation {
         }
     }
 
-    public ArrayList<String> getHistory() {
+    public HashMap<String,String> getHistory() {
         return history;
     }
 
-    public void setHistory(ArrayList<String> history) {
+    public void setHistory(HashMap<String,String> history) {
         this.history = history;
     }
+
+    public void addHistory(String key, String value){history.put(key,value);}
 
     public String getName() {
         return name;

@@ -21,16 +21,8 @@ public class User extends Observable {
     }
 
     //function to set up favorites of a user, used when loading data from a file
-    public void setFavorite(HashMap<String,String> setFavorites){
-        //Hashmap<String,String> where stationName is the key and url is the value
-        Set set = setFavorites.entrySet();
-        Iterator iterate = set.iterator();
-        while(iterate.hasNext()){
-            Map.Entry station = (Map.Entry)iterate.next();
-            favorites.add(new WeatherStation(station.getKey().toString()
-                    ,station.getValue().toString()));
-        }
-
+    public void setFavorite(ArrayList<WeatherStation> stations){
+        this.favorites = stations;
     }
 
     public WeatherStation getFavourite(int index){

@@ -528,4 +528,57 @@ public class Model {
         return temps;
 
     }
+
+    //function to be called in GraphWindow in order to include the temperature history in the graph
+    public HashMap<String,String> checkHistory(String stationName)
+    {
+        WeatherStation station = currentUser.findWeatherStation(stationName);
+        HashMap<String,String> returnValue = new HashMap<String,String>(); //key is date, value is temperature
+        HashMap<String,String> histories = station.getHistory();
+        String day;
+
+        //iterate through all temperature history and putting it inside the hashmap
+        Set set = histories.entrySet();
+        Iterator iterate = set.iterator();
+        while(iterate.hasNext()){
+            Map.Entry history = (Map.Entry)iterate.next();
+            if(Pattern.matches(".*-9",history.getKey().toString()))
+            {
+                day = history.getKey().toString();
+                //before putting the date inside the hashmap, the format is changed so GraphWindow can recognize it
+                day = day.replace("-9","");
+                day = day.concat("/09:00am");
+                returnValue.put(day,history.getValue().toString());
+            }
+            if(Pattern.matches(".*-3",history.getKey().toString())) {
+                day = history.getKey().toString();
+                day = day.replace("-3", "");
+                day = day.concat("/03:00pm");
+                returnValue.put(day, history.getValue().toString());
+            }
+        }
+
+        return returnValue;
+
+    }
+
+    //function to add a temperature history into a specific weather station
+    public void addHistory(String day, String time, String temp, String stationName)
+    {
+        WeatherStation station = currentUser.findWeatherStation(stationName);
+        //changing the format of the date so it can be differentiated between 9am or 3pm temperature
+        day = day.concat("-" + time);
+
+        //iterating the history to see whether there is already a same value inside history
+        Set set = station.getHistory().entrySet();
+        Iterator iterate = set.iterator();
+        while(iterate.hasNext()){
+            Map.Entry history = (Map.Entry)iterate.next();
+            if(history.getKey().toString().equals(day))
+                return;
+        }
+        station.addHistory(day, temp);
+
+    }
+
 }
