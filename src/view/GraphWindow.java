@@ -18,9 +18,13 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.chart.*;
 import org.jfree.data.*;
+import sun.java2d.pipe.SpanShapeRenderer;
+
 import javax.swing.*;
 import java.awt.*;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -35,8 +39,8 @@ import java.util.ArrayList;
 public class GraphWindow extends JFrame implements Relaunch {
 
     private Model model = Model.getInstance();
-    XYSeries morning = new XYSeries("9am temp");
-    XYSeries evening = new XYSeries("3pm temp");
+    TimeSeries morning = new TimeSeries("9am temp");
+    TimeSeries evening = new TimeSeries("3pm temp");
     private String station;
     JFreeChart chart;
     JPanel graphWindow = new JPanel();
@@ -54,18 +58,38 @@ public class GraphWindow extends JFrame implements Relaunch {
         String regex3 = ".*03:00pm";
         while(iterate.hasNext()){
             Map.Entry temp = (Map.Entry)iterate.next();
-            if(temp.getKey().toString().matches(regex9))
-                morning.add(Double.parseDouble(temp.getKey().toString().replace("/09:00am","")),
-                        Double.parseDouble(temp.getValue().toString()));
-            if(temp.getKey().toString().matches(regex3))
-                evening.add(Double.parseDouble(temp.getKey().toString().replace("/03:00pm","")),
-                        Double.parseDouble(temp.getValue().toString()));
-        }
-        XYDataset dataSet = new XYSeriesCollection(morning);
+            if(temp.getKey().toString().matches(regex9)) {
 
-        chart = ChartFactory.createXYLineChart(
-                "Temperature History", "Date", "Temperature",
-                dataSet, PlotOrientation.VERTICAL, true, true, false);
+                Integer day = Integer.parseInt(temp.getKey().toString().replace("/09:00am", ""));
+                Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
+                        Calendar.getInstance().get(Calendar.YEAR) );
+
+                System.out.println(now.toString());
+
+                System.out.println(day);
+
+                morning.add(now,
+                        Double.parseDouble(temp.getValue().toString()));
+
+            }
+            if(temp.getKey().toString().matches(regex3)) {
+
+                Integer day = Integer.parseInt(temp.getKey().toString().replace("/03:00pm", ""));
+                Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH)  + 1,
+                        Calendar.getInstance().get(Calendar.YEAR) );
+
+                System.out.println(day);
+
+                evening.add(now,
+                        Double.parseDouble(temp.getValue().toString()));
+
+            }
+        }
+        XYDataset dataSet = createDataset();
+
+        chart = ChartFactory.createTimeSeriesChart("Temperature History",
+                "Date", "Temperature", dataSet, true, true, false);
+
                 ChartPanel cp = new ChartPanel(chart) {
 //        final NumberAxis domainAxis = (NumberAxis)chart.getXYPlot().getDomainAxis();
 //        final DecimalFormat format = new DecimalFormat("####");
@@ -88,22 +112,15 @@ public class GraphWindow extends JFrame implements Relaunch {
 
     }
 
-//    private static XYDataset createDataset(ArrayList<WeatherObject> objects){
-//
-//        XYSeriesCollection dates = new XYSeriesCollection();
-//
-//        WeatherObject starting = objects.get(0);
-//
-//        for (int i = 0; i < objects.size(); i++) {
-//
-//            if(objects.get(i).getDayTime() == starting.getDayTime()) {
-//                XYSeries temp = new XYSeries("9am Temp");
-//                temp.add(i,2+1);
-//                dates.addSeries(temp);
-//            }
-//        }
-//        return dates;
-//    }
+    public XYDataset createDataset(){
+
+        TimeSeriesCollection tempMornEve = new TimeSeriesCollection();
+
+        tempMornEve.addSeries(morning);
+        tempMornEve.addSeries(evening);
+
+        return tempMornEve;
+    }
 
     private void launch(){
         addWindowListener(new DataWindowListener(this));
@@ -122,18 +139,35 @@ public class GraphWindow extends JFrame implements Relaunch {
         String regex3 = ".*03:00pm";
         while(iterate.hasNext()){
             Map.Entry temp = (Map.Entry)iterate.next();
-            if(temp.getKey().toString().matches(regex9))
-                morning.add(Double.parseDouble(temp.getKey().toString().replace("/09:00am","")),
-                        Double.parseDouble(temp.getValue().toString()));
-            if(temp.getKey().toString().matches(regex3))
-                evening.add(Double.parseDouble(temp.getKey().toString().replace("/03:00pm","")),
-                        Double.parseDouble(temp.getValue().toString()));
-        }
-        XYDataset dataSet = new XYSeriesCollection(morning);
+            if(temp.getKey().toString().matches(regex9)) {
 
-        chart = ChartFactory.createXYLineChart(
-                "Temperature History", "Date", "Temperature",
-                dataSet, PlotOrientation.VERTICAL, true, true, false);
+                Integer day = Integer.parseInt(temp.getKey().toString().replace("/09:00am", ""));
+                Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH)  + 1,
+                        Calendar.getInstance().get(Calendar.YEAR) );
+
+                System.out.println(day);
+
+                morning.add(now,
+                        Double.parseDouble(temp.getValue().toString()));
+
+            }
+            if(temp.getKey().toString().matches(regex3)) {
+
+                Integer day = Integer.parseInt(temp.getKey().toString().replace("/03:00pm", ""));
+                Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
+                        Calendar.getInstance().get(Calendar.YEAR) );
+
+                System.out.println(day);
+
+                evening.add(now,
+                        Double.parseDouble(temp.getValue().toString()));
+
+            }
+        }
+        XYDataset dataSet = createDataset();
+
+        chart = ChartFactory.createTimeSeriesChart("Temperature History",
+                                                        "Date", "Temperature", dataSet, true, true, false);
         ChartPanel cp = new ChartPanel(chart) {
 //        final NumberAxis domainAxis = (NumberAxis)chart.getXYPlot().getDomainAxis();
 //        final DecimalFormat format = new DecimalFormat("####");
