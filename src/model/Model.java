@@ -1,7 +1,5 @@
 package model;
 
-
-
 import controller.JSONFileWrite;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
@@ -17,8 +15,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.*;
-import java.text.SimpleDateFormat;
-
 
 public class Model {
 
@@ -53,9 +49,7 @@ public class Model {
         return mainWindow;
     }
 
-//    public void saveWindow(){
-//        currentUser.setOpenWindows(windows);
-//    }
+
 
     public boolean checkWindow(String station){
         ArrayList<JFrame> windows = currentUser.getOpenWindows();
@@ -147,29 +141,8 @@ public class Model {
         mainWindow.setLblName(name);
     }
 
-//    public boolean isAreaSelected(){
-//        return mainWindow.isAreaSelected();
-//    }
-//
-//    public boolean isRegionSelected(){
-//        return mainWindow.isRegionSelected();
-//    }
-//
-//    public boolean isStationSelected(){
-//        return mainWindow.isStationSelected();
-//    }
-
-//    public void searchRegionWeatherStation(String query){
-//
-//    }
-
     public void closeWelcome() {
         welcomeWindow.closeWindow();
-    }
-
-    public void searchStationWeatherStation(String query) {
-        // Uncomment when implemented
-//        weatherStation.searchStationArray(query);
     }
 
     public void setStationEnabled(boolean enabled) {
@@ -181,18 +154,6 @@ public class Model {
         // Set the state of region combobox
         mainWindow.setRegionEnabled(enabled);
     }
-
-//    public String getStationSelected(){
-//        return mainWindow.getStationSelected();
-//    }
-
-//    public String getRegionSelected(){
-//        return mainWindow.getRegionSelected();
-//    }
-
-//    public String getAreaSelected(){
-//        return mainWindow.getAreaSelected();
-//    }
 
     //function to change the value of regionUrl
     public void changeRegionUrl(String area) {
@@ -399,11 +360,6 @@ public class Model {
 
         JSONFileWrite readFile = new JSONFileWrite();
         users = readFile.loadFile();
-//        addUser("Yung");
-//        addUser("Jayden");
-//        addUser("Alex");
-//        addUser("Aaron");
-
     }
 
     public String getStationUrl() {

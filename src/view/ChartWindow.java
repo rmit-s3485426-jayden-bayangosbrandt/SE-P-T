@@ -3,10 +3,8 @@ package view;
 import controller.ChartGraphListener;
 import controller.DataWindowListener;
 import model.Model;
-import model.WeatherObject;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.regex.Pattern;

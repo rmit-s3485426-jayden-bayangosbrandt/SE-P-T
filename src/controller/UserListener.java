@@ -25,9 +25,6 @@ public class UserListener implements ListSelectionListener{
     public void valueChanged(ListSelectionEvent e) {
         if(!e.getValueIsAdjusting()) {
 
-            // ** CHANGES SEARCH TEXT WHEN USER IS CHOSEN FROM LIST **
-            // Really want to implement this but keeps getting "Attempting to mute notification" error
-            // searchField.setText((String) userList.getSelectedValue());
             String value = (String) userList.getSelectedValue();
             model.setCurrentUser(value);
         }

@@ -2,10 +2,8 @@ package controller;
 
 import model.Model;
 import model.WeatherObject;
-import model.WeatherStation;
 import view.ChartWindow;
 import view.GraphWindow;
-import view.MainWindow;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;

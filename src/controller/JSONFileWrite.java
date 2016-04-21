@@ -1,19 +1,16 @@
 package controller;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import javafx.scene.chart.Chart;
 import model.Model;
 import model.User;
-import model.WeatherObject;
 import model.WeatherStation;
 import org.jfree.data.category.IntervalCategoryDataset;
 import org.jfree.data.time.Day;
 import org.json.simple.JSONArray;
-import org.json.simple.*;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.*;
 import org.json.simple.parser.ParseException;
 import sun.java2d.pipe.SpanShapeRenderer;
 import view.ChartWindow;
@@ -21,7 +18,6 @@ import view.GraphWindow;
 
 import javax.swing.*;
 import java.io.*;
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -39,18 +35,6 @@ public class JSONFileWrite {
 
     public boolean writeFile(){
         ArrayList<User> users = model.getUserList();
-//        JSONObject object = model.getStorage();
-//        object.put("users", users);
-//        gson = new Gson();
-//        Type type = new TypeToken<List<User>>(){}.getType();
-//        String json = gson.toJson(users, type);
-//
-//        for(User u: users){
-//            System.out.println(gson.toJson(u,type));
-//        }
-//        String json = gson.toJson(users, type);
-//        String json = gson.toJson(users);
-//        System.out.println(json);
 
         JSONArray userGroup = new JSONArray();
 
@@ -124,13 +108,10 @@ public class JSONFileWrite {
         try{
             //opening up the file to read data
             ClassLoader classLoader = getClass().getClassLoader();
-//            File file = new File(classLoader.getResource("file/file1.txt").getFile());
-//            Scanner scanner = new Scanner(file);
 
             //reading the line from file
             BufferedReader reader = new BufferedReader(new FileReader("file1.txt"));
             String usersJSON = reader.readLine();
-//            String usersJSON = scanner.nextLine();
 
             //parsing line into a JSON object
             JSONParser parser = new JSONParser();
@@ -162,20 +143,6 @@ public class JSONFileWrite {
         catch (ParseException e){
             JOptionPane.showMessageDialog(new JTextField(), "ERROR FILE CONTENT IN WRONG FORMAT");
         }
-
-//        gson = new Gson();
-//        try {
-//            reader = new JsonReader(new FileReader("file1.txt"));
-//            ArrayList<User> users = gson.fromJson(reader, ArrayList.class);
-//
-////            JSONObject jsonObject = (JSONObject) obj;
-////            ArrayList<User> users = (ArrayList<User>) jsonObject.get("users");
-//            System.out.println(users.size());
-//            return users;
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
         return users;
     }

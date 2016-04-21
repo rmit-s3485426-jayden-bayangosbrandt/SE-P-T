@@ -15,15 +15,5 @@ public class Window {
 
         WelcomeWindow welcome = new WelcomeWindow();
         model.setWelcomeWindow(welcome);
-
-        // temporary means to an end
-//        while(model.getEnter() == false){
-//            System.out.print("");
-//        }
-
-//        MainWindow window = new MainWindow();
-//        model.setMainWindow(window);
-//        model.setArea();
-        //model.setWeatherStation(weatherStation);
     }
 }

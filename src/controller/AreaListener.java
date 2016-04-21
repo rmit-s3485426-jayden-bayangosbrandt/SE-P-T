@@ -20,11 +20,14 @@ public class AreaListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-    String value = (String) comboBox.getSelectedItem();
-        System.out.println(value);
-        model.changeRegionUrl(value);
-        model.setRegionEnabled(true);
-//    model.searchRegionWeatherStation(value);
-//    System.out.println(value);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String value = (String) comboBox.getSelectedItem();
+                System.out.println(value);
+                model.changeRegionUrl(value);
+                model.setRegionEnabled(true);
+            }
+        }).start();
     }
 }

@@ -1,9 +1,6 @@
 package controller;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import model.Model;
-import model.WeatherStation;
-import view.MainWindow;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
