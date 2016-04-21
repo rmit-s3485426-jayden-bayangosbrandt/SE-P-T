@@ -17,11 +17,14 @@ public class SearchListener implements DocumentListener {
 
     public SearchListener(JTextField textField, JList localList){ this.field = textField; this.list = localList;}
 
+    // As the search text value changes, the selected user changes accordingly
     @Override
     public void insertUpdate(DocumentEvent e) {
+
         list.setSelectedValue(field.getText(),true);
         String user = field.getText();
 
+        // Search through if the user exists; if it does, set Current user
         for(int i = 0; i< model.getUserList().size(); i++) {
 
             if(user == model.getUserList().get(i).getUsername()){
