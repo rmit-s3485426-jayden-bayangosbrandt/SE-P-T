@@ -78,6 +78,10 @@ public class Model {
         mainWindow.setStationDataset(strings);
     }
 
+    /**
+   * Allows the user to refresh the window to add a station
+   * to favourites.
+   */
     public void refresh(){
         //resetting area combobox
         setArea();
@@ -134,7 +138,11 @@ public class Model {
         changeStationDataset(searchStationArray(region, regionUrl));
     }
 
-    //function to get all areas available
+    /**
+   * This method sets the area that the user picks, done so by
+   * going through the areas in Australia until there is an area
+   * that matches the selected area.
+   */
     public void setArea() {
         try {
             String[] areas;
@@ -164,7 +172,18 @@ public class Model {
 
     }
 
-    //function to get all regions of one area
+    /**
+   * This method is used to search the regions in a certain area
+   * and hence adding each region into an array depending on the area.
+   * <p>
+   * JSON is used to retreive said data, through the url given and a loop
+   * in order to check whether or not there are more regions inside the area.
+   * <p>
+   * An exception is catched when the website cannot be found.
+   * @param area is used to determine which area the regions are from
+   * @param url is where JSON is used to retreive each data
+   * @return regionsArray returns an array with all the regions inside
+   */
     public String[] searchRegionArray(String area, String url) {
         ArrayList<String> regions = new ArrayList<String>();
         String[] regionsArray;
@@ -207,7 +226,16 @@ public class Model {
 
     }
 
-    //function to get all stations of one region
+    
+    /**
+   * This method is used to search the stations of a certain region
+   * and hence adding each station into an array depending on the region
+   * <p>
+   * An exception is catched when the website cannot be found.
+   * @param region is used to determine what region the stations are from
+   * @param url is where JSON is used to retreive each data
+   * @return stationsArray is an array filled with the stations of the region
+   */
     public String[] searchStationArray(String region, String url) {
         ArrayList<String> stationsStrings = new ArrayList<String>();
         String[] stationsArray;
@@ -286,7 +314,10 @@ public class Model {
         }
         return null;
     }
-
+    
+    /**
+   * Used to add a user into the system.
+   */
     public void addUser(String userName) {
         // Add user to Users Arraylist
         User newUser = new User();
@@ -344,7 +375,14 @@ public class Model {
         currentUser.addFavorite(new WeatherStation(stationName, url));
     }
 
-    //function to get all datas from a station page
+    
+    /**
+   * This method is used to retreive every data from the stations.
+   * This is for putting all the data received into a table using JSON.
+   * @param stationName is used to determine what station all the data is coming from.
+   * @return weatherObjects returns each object created from all the data received.
+   * @see ArrayList
+   */
     public ArrayList<WeatherObject> getTable(String stationName) {
         ArrayList<WeatherObject> weatherObjects = new ArrayList<WeatherObject>();
         String todaydate;
@@ -483,7 +521,13 @@ public class Model {
 
     }
 
-    //function to be called in GraphWindow in order to include the temperature history in the graph
+    /**
+   * This method is used to create a graph for the temperatures received
+   * from the station
+   * @param stationName is used to determine what station all the data is coming from.
+   * @return returnValue returns all the temperature values in order to create the GUI for graph.
+   * @see HashMap
+   */
     public HashMap<String,String> checkHistory(String stationName)
     {
         WeatherStation station = currentUser.findWeatherStation(stationName);
