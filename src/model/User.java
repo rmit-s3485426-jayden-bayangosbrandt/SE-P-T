@@ -12,10 +12,21 @@ public class User extends Observable {
     ArrayList<WeatherStation> favorites = new ArrayList<>();
     ArrayList<JFrame> openWindows = new ArrayList<>();
 
+    /**
+   * This method is the set the username for the user.
+   * @param newUsername is the username the user has entered.
+   */
     public void setUsername(String newUsername) {
         username = newUsername;
     }
 
+    /**
+   * This method is for adding the stations to the user's 
+   * favourite list.
+   * @param newFavorite is the station that the user has entered and
+   * wishes to add to the list
+   * @see WeatherStation
+   */
     public void addFavorite(WeatherStation newFavorite)
     {
         favorites.add(newFavorite);
