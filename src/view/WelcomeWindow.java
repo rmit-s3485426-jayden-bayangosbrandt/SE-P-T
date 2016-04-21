@@ -39,7 +39,7 @@ public class WelcomeWindow extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    private JPanel getWelcomePanel(){
+    public JPanel getWelcomePanel(){
         JPanel welcomePanel = new JPanel();
         welcomePanel.setLayout(new BoxLayout(welcomePanel, BoxLayout.X_AXIS));
         welcomePanel.add(Box.createHorizontalGlue());

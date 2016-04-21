@@ -32,6 +32,7 @@ public class Model {
     private User currentUser;
     private ArrayList<ChartWindow> chartWindows= new ArrayList<ChartWindow>();
     private ArrayList<GraphWindow> graphWindows= new ArrayList<GraphWindow>();
+    int indicator = 0;
 
     public static Model getInstance() {
         return ourInstance;
@@ -56,8 +57,40 @@ public class Model {
 //        currentUser.setOpenWindows(windows);
 //    }
 
+    public boolean checkWindow(String station){
+        ArrayList<JFrame> windows = currentUser.getOpenWindows();
+        String regex = station;
+        regex = regex.concat(".*");
+        String compare;
+        for(JFrame window : windows){
+            if(window instanceof ChartWindow)
+                compare = ( (ChartWindow) window).getTitleValue();
+            else
+                compare = ( (GraphWindow) window).getTitleValue();
+            if(Pattern.matches(regex,compare))
+                return true;
+        }
+        return false;
+    }
+
+
+
     public void addOpenWindow(JFrame frame) {
-        currentUser.getOpenWindows().add(frame);
+        if(currentUser.getOpenWindows().size() < 2)
+            currentUser.getOpenWindows().add(frame);
+        int indicator =0;
+        for(JFrame window: currentUser.getOpenWindows()){
+            if(window instanceof ChartWindow)
+                if(frame instanceof ChartWindow)
+                    if(!((ChartWindow) window).getTitleValue().equals(((ChartWindow) frame).getTitleValue()))
+                        indicator++;
+            if(window instanceof GraphWindow)
+                if(frame instanceof GraphWindow)
+                    if(!((GraphWindow) window).getTitleValue().equals(((GraphWindow) frame).getTitleValue()))
+                        indicator++;
+        }
+        if(indicator>0)
+            currentUser.getOpenWindows().add(frame);
     }
 
     //function to keep track opened chartwindows
@@ -97,15 +130,16 @@ public class Model {
         for(ChartWindow chart: chartWindows)
         {
             chart.updateTable();
-            chart.relaunch();
+            if(chart.getOpen())
+                chart.relaunch();
         }
         //updating data in all graphWindow of user
         for(GraphWindow graph: graphWindows)
         {
             graph.updateGraph();
-            graph.relaunch();
+            if(graph.getOpen())
+                graph.relaunch();
         }
-
     }
 
 
@@ -344,7 +378,7 @@ public class Model {
             }
         }
 
-//        System.out.println("CurrentUser is: " + currentUser.getUsername());
+//        System.out.println("CurrentUser is: "     + currentUser.getUsername());
 
     }
 

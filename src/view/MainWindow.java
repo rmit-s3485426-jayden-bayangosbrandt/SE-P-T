@@ -58,10 +58,10 @@ public class MainWindow extends JFrame {
 
     private void relaunch(){
         ArrayList<JFrame> windows = model.getCurrent().getOpenWindows();
-        for(JFrame window : windows){
-            Relaunch frame = (Relaunch) window;
-            frame.relaunch();
-        }
+//        for(JFrame window : windows){
+//            Relaunch frame = (Relaunch) window;
+//            frame.relaunch();
+//        }
     }
 
     private JPanel getNorthPanel(){
