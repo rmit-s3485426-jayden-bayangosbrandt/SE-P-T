@@ -18,10 +18,17 @@ public class WeatherStation {
 
     private Model model = Model.getInstance();
 
+
+    /**
+   * This method constructs a weather station object for the staion.
+   * @param name is the weather station that is passed through
+   * @param stationUrl is the station's URL in order to see all the data
+   */
     public WeatherStation(String name, String stationUrl) {
         this.name = name;
         this.stationUrl = stationUrl;
     }
+
 
     public void searchRegionArray(String query){
 
