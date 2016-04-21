@@ -16,9 +16,9 @@ public class MainWindow extends JFrame {
     private JLabel lblName = new JLabel(model.getCurrent().getUsername());
     private MainWindowListener actionListener;
 //    private JTextField search = new JTextField("Search weather stations");
-    private String[] areaDataset = new String[]{"1", "2", "3"};
-    private String[] regionDataset = new String[]{"1", "2", "3"};
-    private String[] stationDataset = new String[]{"1", "2", "3"};
+    private String[] areaDataset = new String[]{};
+    private String[] regionDataset = new String[]{};
+    private String[] stationDataset = new String[]{};
 //    private String[] faveDataset = new String[]{"1", "2", "3"};
     private FavouritePanel favePanel = new FavouritePanel(this);
     private JComboBox area;
