@@ -24,7 +24,5 @@ public class AreaListener implements ActionListener {
         System.out.println(value);
         model.changeRegionUrl(value);
         model.setRegionEnabled(true);
-//    model.searchRegionWeatherStation(value);
-//    System.out.println(value);
     }
 }

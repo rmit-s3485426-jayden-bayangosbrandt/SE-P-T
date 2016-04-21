@@ -1,7 +1,6 @@
 package controller;
 
 import model.Model;
-import view.Relaunch;
 
 import javax.swing.*;
 import java.awt.event.WindowEvent;

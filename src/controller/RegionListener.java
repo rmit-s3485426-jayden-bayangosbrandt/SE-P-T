@@ -23,8 +23,6 @@ public class RegionListener implements ActionListener {
         String value = (String) comboBox.getSelectedItem();
         model.changeStation(value);
         model.setStationEnabled(true);
-        // model.searchRegionWeatherStation(value);
-        // System.out.println("Region selected");
     }
 
 

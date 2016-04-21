@@ -2,10 +2,8 @@ package controller;
 
 import model.Model;
 import model.WeatherObject;
-import model.WeatherStation;
 import view.ChartWindow;
 import view.GraphWindow;
-import view.MainWindow;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -33,7 +31,6 @@ public class FavouriteListener implements ListSelectionListener {
             System.out.println("Selected index: " + list.getSelectedIndex());
 
             // Feed to chart object
-//            model.getCurrent().getFavourite(list.getSelectedIndex());
             new ChartWindow(list.getSelectedValue().toString() );
             new GraphWindow(list.getSelectedValue().toString());
             model.getMainWindow().reposition();
