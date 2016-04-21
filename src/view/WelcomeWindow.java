@@ -53,6 +53,7 @@ public class WelcomeWindow extends JFrame {
         newUser.setMaximumSize(new Dimension(300, 30));
         newUser.setPreferredSize(new Dimension(300, 30));
 
+        // Empty Text field when clicked on
         newUser.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e){
@@ -85,6 +86,7 @@ public class WelcomeWindow extends JFrame {
         searchUsers.setMaximumSize(new Dimension(300, 30));
         searchUsers.setPreferredSize(new Dimension(300, 30));
 
+        // Empty Text field when clicked on
         searchUsers.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e){
