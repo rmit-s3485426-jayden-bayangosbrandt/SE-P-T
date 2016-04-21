@@ -24,13 +24,16 @@ public class GoListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        // While the Current User for the session is not set
         if(model.getCurrent() != null) {
+
             String user = (String) usersField.getSelectedValue();
-            //model.addUser(user);
+//            model.addUser(user);
             model.setCurrentUser(user);
 //            model.setEnter(true);
             model.closeWelcome();
 
+            // Create Main window
             MainWindow window = new MainWindow();
             model.setMainWindow(window);
             model.setArea();
