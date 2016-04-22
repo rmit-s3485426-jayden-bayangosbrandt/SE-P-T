@@ -121,7 +121,13 @@ public class WelcomeWindow extends JFrame {
         return existingPanel;
     }
 
-    // String user list
+    /**
+     * this method retrieves all the users and their usernames
+     * and returns them to be used to add them to the box
+     * @param users is an arraylist of existing users in our system
+     * @return locallist returns the list of usernames for every user
+     * in our system
+     */
     public String[] stringUsers( ArrayList<User> users) {
 
         String[] localList = new String[users.size()];

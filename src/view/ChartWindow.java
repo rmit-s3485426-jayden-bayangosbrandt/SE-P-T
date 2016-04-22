@@ -49,6 +49,7 @@ public class ChartWindow extends JFrame implements Relaunch {
             }
         };
 
+        model.addOpenWindow(this);
         launch();
 
     }
@@ -62,7 +63,6 @@ public class ChartWindow extends JFrame implements Relaunch {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         model.addChartWindow(this);
         addWindowListener(actionListener);
-        model.addOpenWindow(this);
         setVisible(true);
         setLocationRelativeTo(null);
         setTitle(title);

@@ -140,13 +140,23 @@ public class MainWindow extends JFrame {
     public void reposition(){
         this.setLocation(0, getY());
     }
-    
+
+    /**
+     * This method changes the drop down menu into the areas that is
+     * present in the website
+     * @param strings is an array of areas in the website
+     */
     public void setAreaDataset(String[] strings){
         this.areaDataset = strings;
         DefaultComboBoxModel defaultComboBoxModel = new DefaultComboBoxModel(strings);
         area.setModel(defaultComboBoxModel);
     }
 
+    /**
+     * This method changes the region drop down menu
+     * into that which contains all the regions inside a certain area
+     * @param strings is the array of regions in the selected area
+     */
     public void setRegionDataset(String[] strings){
         this.regionDataset = strings;
         DefaultComboBoxModel defaultComboBoxModel = new DefaultComboBoxModel(strings);

@@ -136,6 +136,8 @@ public class GraphWindow extends JFrame implements Relaunch {
 
         this.station = station;
 
+        model.addOpenWindow(this);
+
 
         launch();
 
@@ -156,7 +158,6 @@ public class GraphWindow extends JFrame implements Relaunch {
         setContentPane(graphWindow);
         addWindowListener(new DataWindowListener(this));
         model.addGraphWindow(this);
-        model.addOpenWindow(this);
         setSize(new Dimension(900, 350));
         setTitle(station);
         setVisible(true);

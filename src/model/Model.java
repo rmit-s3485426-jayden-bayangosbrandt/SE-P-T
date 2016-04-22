@@ -50,7 +50,13 @@ public class Model {
     }
 
 
-
+    /**
+     * This method checks to see whether or not there is already
+     * a window open for the certain station that the user is
+     * pulling up
+     * @param station is the station name in a region
+     * @return boolean to check if a window exists or not
+     */
     public boolean checkWindow(String station){
         ArrayList<JFrame> windows = currentUser.getOpenWindows();
         String regex = station;
@@ -68,7 +74,11 @@ public class Model {
     }
 
 
-
+    /**
+     * A method that adds a window for a station's information.
+     * That is, it adds a chart window and a table window.
+     * @param frame a jframe for the window
+     */
     public void addOpenWindow(JFrame frame) {
         if(currentUser.getOpenWindows().size() < 2)
             currentUser.getOpenWindows().add(frame);
@@ -88,10 +98,30 @@ public class Model {
     }
 
     //function to keep track opened chartwindows
-    public void addChartWindow(ChartWindow chartWindow) {chartWindows.add(chartWindow);}
+    public void addChartWindow(ChartWindow chartWindow) {
+        boolean check = false;
+        if(chartWindows.size()==0)
+            check = true;
+        for(ChartWindow chart : chartWindows){
+            if(!chart.getTitleValue().equals(chartWindow.getTitleValue()))
+                check = true;
+        }
+        if(check)
+            chartWindows.add(chartWindow);
+    }
 
     //function to keep track opened graphwindows
-    public void addGraphWindow(GraphWindow graphWindow) {graphWindows.add(graphWindow);}
+    public void addGraphWindow(GraphWindow graphWindow) {
+        boolean check = false;
+        if(graphWindows.size()==0)
+            check = true;
+        for(GraphWindow graph : graphWindows){
+            if(!graph.getTitleValue().equals(graphWindow.getTitleValue()))
+                check = true;
+        }
+        if(check)
+            graphWindows.add(graphWindow);
+    }
 
     public void removeOpenWindow(JFrame frame) {
         currentUser.getOpenWindows().remove(frame);
@@ -586,7 +616,8 @@ public class Model {
         Set set = histories.entrySet();
         Iterator iterate = set.iterator();
         while(iterate.hasNext()){
-            Map.Entry history = (Map.Entry)iterate.next();
+            Map.Entry history =
+                    (Map.Entry)iterate.next();
             if(Pattern.matches(".*-9",history.getKey().toString()))
             {
                 day = history.getKey().toString();
