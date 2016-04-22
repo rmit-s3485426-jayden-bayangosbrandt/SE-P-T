@@ -59,14 +59,13 @@ public class ChartWindow extends JFrame implements Relaunch {
         JScrollPane scrollPane = new JScrollPane(table);
         getContentPane().add(scrollPane);
         setSize(table.getPreferredSize().width, 300);
-        this.title = title + " Weather Table";
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         model.addChartWindow(this);
         addWindowListener(actionListener);
         model.addOpenWindow(this);
         setVisible(true);
         setLocationRelativeTo(null);
-        setTitle(title.replace(" Weather Table", "") + " Weather Table");
+        setTitle(title);
         if(location!=null)
             setLocation(location);
         else

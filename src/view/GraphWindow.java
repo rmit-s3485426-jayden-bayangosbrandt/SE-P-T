@@ -134,7 +134,7 @@ public class GraphWindow extends JFrame implements Relaunch {
 
         graphWindow.add(cp);
 
-        this.station = station + " Weather Table";
+        this.station = station;
 
 
         launch();
@@ -158,7 +158,7 @@ public class GraphWindow extends JFrame implements Relaunch {
         model.addGraphWindow(this);
         model.addOpenWindow(this);
         setSize(new Dimension(900, 350));
-        setTitle(station.replace(" Temperature Graph", "") + " Temperature Graph");
+        setTitle(station);
         setVisible(true);
         setLocationRelativeTo(null);
         if(location!=null)
@@ -168,8 +168,8 @@ public class GraphWindow extends JFrame implements Relaunch {
     }
 
     public void updateGraph(){
-        station = station.replace(" Temperature Graph", "");
-        station = station.replace(" Weather Table", "");
+        station = station;
+        station = station;
         String regex9 = ".*09:00am";
         String regex3 = ".*03:00pm";
 
