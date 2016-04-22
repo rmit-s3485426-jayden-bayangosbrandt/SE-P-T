@@ -1,5 +1,6 @@
 package view;
 
+import controller.ChartGraphListener;
 import controller.DataWindowListener;
 import model.Model;
 import org.jfree.chart.ChartFactory;
@@ -25,8 +26,33 @@ public class GraphWindow extends JFrame implements Relaunch {
     private String station;
     JFreeChart chart;
     JPanel graphWindow = new JPanel();
+    private Point location;
+    private ChartGraphListener actionListener = new ChartGraphListener(this);
+    private boolean opened;
+
+    public GraphWindow(String station, int x, int y){
+        this.station = station;
+        location = new Point(x,y);
+    }
+
+    public String getTitleValue(){return station;};
+
+
+    public Point getLocationValue(){return location;}
+
+    public void setLocationValue(int x, int y){
+        location = new Point(x,y);
+    }
+
+    public void setOpen(boolean value){
+        opened = value;
+    }
+
+    public boolean getOpen(){return opened; }
 
     public GraphWindow(String station){
+
+        addWindowListener(actionListener);
 
         this.station = station;
         this.setTitle(station);
@@ -71,7 +97,8 @@ public class GraphWindow extends JFrame implements Relaunch {
                 Integer day = Integer.parseInt(temp.getKey().toString().replace("/09:00am", ""));
                 Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
                         Calendar.getInstance().get(Calendar.YEAR) );
-
+                if(temp.getValue().toString().equals("-"))
+                    continue;
                 morning.addOrUpdate(now,
                         Double.parseDouble(temp.getValue().toString()));
                 //adding possibly new temperature data to history
@@ -83,7 +110,8 @@ public class GraphWindow extends JFrame implements Relaunch {
                 Integer day = Integer.parseInt(temp.getKey().toString().replace("/03:00pm", ""));
                 Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH)  + 1,
                         Calendar.getInstance().get(Calendar.YEAR) );
-
+                if(temp.getValue().toString().equals("-"))
+                    continue;
                 evening.addOrUpdate(now,
                         Double.parseDouble(temp.getValue().toString()));
                 //adding possibly new temperature data to history
@@ -105,10 +133,10 @@ public class GraphWindow extends JFrame implements Relaunch {
 
 
         graphWindow.add(cp);
-        setTitle(station + " Temperature Graph");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setContentPane(graphWindow);
-        model.addGraphWindow(this);
+
+        this.station = station + " Weather Table";
+
+
         launch();
 
     }
@@ -124,15 +152,24 @@ public class GraphWindow extends JFrame implements Relaunch {
     }
 
     private void launch(){
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setContentPane(graphWindow);
         addWindowListener(new DataWindowListener(this));
+        model.addGraphWindow(this);
         model.addOpenWindow(this);
         setSize(new Dimension(900, 350));
+        setTitle(station.replace(" Temperature Graph", "") + " Temperature Graph");
         setVisible(true);
         setLocationRelativeTo(null);
-        setLocation(getX()+200, 350);
+        if(location!=null)
+            setLocation(location);
+        else
+            setLocation(getX() + 200, 350);
     }
 
     public void updateGraph(){
+        station = station.replace(" Temperature Graph", "");
+        station = station.replace(" Weather Table", "");
         String regex9 = ".*09:00am";
         String regex3 = ".*03:00pm";
 
@@ -184,7 +221,7 @@ public class GraphWindow extends JFrame implements Relaunch {
                 Integer day = Integer.parseInt(temp.getKey().toString().replace("/03:00pm", ""));
                 Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
                         Calendar.getInstance().get(Calendar.YEAR) );
-
+                System.out.println(temp.getValue().toString());
                 evening.addOrUpdate(now,
                         Double.parseDouble(temp.getValue().toString()));
                 //adding possibly new temperature data to history
@@ -204,7 +241,6 @@ public class GraphWindow extends JFrame implements Relaunch {
             }
         };
 
-        graphWindow.remove(0);
         graphWindow.add(cp);
 
     }

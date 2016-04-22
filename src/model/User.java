@@ -1,17 +1,32 @@
 package model;
 
+import view.ChartWindow;
+import view.GraphWindow;
+
 import javax.swing.*;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class User extends Observable {
     String username;
     ArrayList<WeatherStation> favorites = new ArrayList<>();
     ArrayList<JFrame> openWindows = new ArrayList<>();
 
+    /**
+   * This method is the set the username for the user.
+   * @param newUsername is the username the user has entered.
+   */
     public void setUsername(String newUsername) {
         username = newUsername;
     }
 
+    /**
+   * This method is for adding the stations to the user's 
+   * favourite list.
+   * @param newFavorite is the station that the user has entered and
+   * wishes to add to the list
+   * @see WeatherStation
+   */
     public void addFavorite(WeatherStation newFavorite)
     {
         favorites.add(newFavorite);
@@ -53,9 +68,28 @@ public class User extends Observable {
         return openWindows;
     }
 
+    public ArrayList<JFrame> findWindowsSet(String search) {
+        ArrayList<JFrame> returnValue = new ArrayList<JFrame>();
+        String regex = search;
+        regex = regex.concat(".*");
+        for(JFrame window : openWindows){
+            if(window instanceof ChartWindow){
+                if(Pattern.matches(regex,((ChartWindow) window).getTitleValue()))
+                    returnValue.add(window);
+            }
+            if(window instanceof GraphWindow){
+                if(Pattern.matches(regex,((GraphWindow) window).getTitleValue()))
+                    returnValue.add(window);
+            }
+        }
+        return returnValue;
+    }
+
     public void setOpenWindows(ArrayList<JFrame> openWindows) {
         this.openWindows = openWindows;
     }
+
+    public void addOpenWindow(JFrame window) {this.openWindows.add(window);}
 
     //function to find a specific weatherStation object within the arraylist of a user
     public WeatherStation findWeatherStation(String stationName){
