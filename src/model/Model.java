@@ -228,9 +228,20 @@ public class Model {
         fullUrl = fullUrl.concat(url);
         Elements regionsTable;
         Element regionTable;
+        boolean urlWorks = false;
+        int urlTest = 10;
+        Document doc = null;
+
         try {
             //connecting to the website and getting html using jsoup
-            Document doc = Jsoup.connect(fullUrl).get();
+            while(!urlWorks && urlTest > 0) {
+                doc = Jsoup.connect(fullUrl).get();
+                urlTest--;
+
+                if(doc != null){
+                    urlWorks = true;
+                }
+            }
             //if url matches pattern ".*all.*", the area is included in state - all observations
             //therefore we take the value differently
             if (Pattern.matches(".*all.*", url)) {
