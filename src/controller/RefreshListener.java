@@ -14,6 +14,12 @@ public class RefreshListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        model.refresh();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                model.refresh();
+            }
+        }).start();
+//        model.refresh();
     }
 }

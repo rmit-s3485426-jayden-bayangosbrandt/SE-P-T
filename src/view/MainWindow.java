@@ -6,7 +6,6 @@ import model.Model;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Observer;
 
 
 public class MainWindow extends JFrame {
@@ -15,16 +14,13 @@ public class MainWindow extends JFrame {
 
     private JLabel lblName = new JLabel(model.getCurrent().getUsername());
     private MainWindowListener actionListener;
-//    private JTextField search = new JTextField("Search weather stations");
-    private String[] areaDataset = new String[]{"1", "2", "3"};
-    private String[] regionDataset = new String[]{"1", "2", "3"};
-    private String[] stationDataset = new String[]{"1", "2", "3"};
-//    private String[] faveDataset = new String[]{"1", "2", "3"};
+    private String[] areaDataset = new String[]{};
+    private String[] regionDataset = new String[]{};
+    private String[] stationDataset = new String[]{};
     private FavouritePanel favePanel = new FavouritePanel(this);
     private JComboBox area;
     private JComboBox region;
     private JComboBox station;
-//    private JList faveList = new JList(model.getCurrent().getFavouriteList());
     private JButton btnFavourite;
     private JButton btnRefresh;
 
@@ -58,35 +54,21 @@ public class MainWindow extends JFrame {
 
     private void relaunch(){
         ArrayList<JFrame> windows = model.getCurrent().getOpenWindows();
-        for(JFrame window : windows){
-            Relaunch frame = (Relaunch) window;
-            frame.relaunch();
-        }
+//        for(JFrame window : windows){
+//            Relaunch frame = (Relaunch) window;
+//            frame.relaunch();
+//        }
     }
 
     private JPanel getNorthPanel(){
         JPanel north = new JPanel();
         north.setLayout(new BoxLayout(north, BoxLayout.X_AXIS));
         JPanel namePanel = new JPanel();
-//        JPanel favePanel = new JPanel();
 
         namePanel.setLayout(new BoxLayout(namePanel, BoxLayout.X_AXIS));
         namePanel.add(Box.createHorizontalGlue());
         namePanel.add(lblName);
         namePanel.add(Box.createHorizontalGlue());
-
-//        favePanel.setLayout(new BoxLayout(favePanel, BoxLayout.Y_AXIS));
-        // Setup favourite list component
-//        faveList = new JList(faveDataset);
-//        faveList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-//        faveList.setLayoutOrientation(JList.VERTICAL);
-//        faveList.addListSelectionListener(new FavouriteListener(faveList, this));
-//        list.setVisibleRowCount(3);
-//        JScrollPane scrollPane = new JScrollPane(faveList);
-//        scrollPane.setPreferredSize(new Dimension(10, 10));
-        // Add component to panel
-//        favePanel.add(new JLabel("Favourites"));
-//        favePanel.add(scrollPane, 1);
 
         north.add(namePanel, 0);
         north.add(Box.createHorizontalGlue(), 1);
@@ -135,15 +117,10 @@ public class MainWindow extends JFrame {
         station.setEnabled(false);
         station.addActionListener(new StationListener(station));
 
-//        stationSelection.add(new JLabel("Please select a weather station"));
         stationSelection.add(panelStationLabel);
         stationSelection.add(panelArea);
         stationSelection.add(panelRegion);
         stationSelection.add(panelStation);
-//        stationSearch.setLayout(new BoxLayout(stationSearch, BoxLayout.Y_AXIS));
-//        stationSearch.add(new JLabel("Or search for a specific station"), 0);
-//        stationSearch.add(search, 1);
-//        stationSearch.add(Box.createVerticalStrut(100));
         center.add(stationSelection);
         JPanel addFavourite = new JPanel();
         addFavourite.setLayout(new BoxLayout(addFavourite, BoxLayout.X_AXIS));
@@ -160,20 +137,26 @@ public class MainWindow extends JFrame {
         return center;
     }
 
-    public JLabel getLblName() {
-        return lblName;
-    }
-
     public void reposition(){
         this.setLocation(0, getY());
     }
-    
+
+    /**
+     * This method changes the drop down menu into the areas that is
+     * present in the website
+     * @param strings is an array of areas in the website
+     */
     public void setAreaDataset(String[] strings){
         this.areaDataset = strings;
         DefaultComboBoxModel defaultComboBoxModel = new DefaultComboBoxModel(strings);
         area.setModel(defaultComboBoxModel);
     }
 
+    /**
+     * This method changes the region drop down menu
+     * into that which contains all the regions inside a certain area
+     * @param strings is the array of regions in the selected area
+     */
     public void setRegionDataset(String[] strings){
         this.regionDataset = strings;
         DefaultComboBoxModel defaultComboBoxModel = new DefaultComboBoxModel(strings);
@@ -186,42 +169,9 @@ public class MainWindow extends JFrame {
         station.setModel(defaultComboBoxModel);
     }
 
-//    public void setFavouriteDataset(String[] strings){
-//        this.faveDataset = strings;
-//
-////        DefaultListSelectionModel defaultListSelectionModel = new DefaultListSelectionModel(strings);
-//    }
 
     public void setLblName(String name){
         lblName.setText("Hi, "+name);
-    }
-
-    public boolean isAreaSelected(){
-        if(area.getSelectedIndex() == 0){
-            return false;
-        }
-
-        return true;
-    }
-
-    public boolean isRegionSelected(){
-        if(region.getSelectedIndex() == 0){
-            return false;
-        }
-
-        return true;
-    }
-
-    public String getRegionSelected(){
-        return (String) region.getSelectedItem();
-    }
-
-    public boolean isStationSelected(){
-        if(station.getSelectedIndex() == 0){
-            return false;
-        }
-
-        return true;
     }
 
     public String getStationSelected(){
@@ -235,12 +185,5 @@ public class MainWindow extends JFrame {
     public void setRegionEnabled(boolean enabled){
         region.setEnabled(enabled);
     }
-
-    public Observer getFavouriteOberver(){
-        return favePanel;
-    }
-
-
-
 
 }

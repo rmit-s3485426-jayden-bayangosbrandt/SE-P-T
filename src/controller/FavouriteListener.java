@@ -2,10 +2,8 @@ package controller;
 
 import model.Model;
 import model.WeatherObject;
-import model.WeatherStation;
 import view.ChartWindow;
 import view.GraphWindow;
-import view.MainWindow;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -34,8 +32,23 @@ public class FavouriteListener implements ListSelectionListener {
 
             // Feed to chart object
 //            model.getCurrent().getFavourite(list.getSelectedIndex());
-            new ChartWindow(list.getSelectedValue().toString() );
-            new GraphWindow(list.getSelectedValue().toString());
+            if(model.checkWindow(list.getSelectedValue().toString())) {
+                for(JFrame window: model.getCurrent().findWindowsSet(list.getSelectedValue().toString())){
+                    if(window instanceof ChartWindow){
+                        ((ChartWindow) window).updateTable();
+                        ((ChartWindow) window).relaunch();
+                    }
+                    if(window instanceof GraphWindow){
+                        ((GraphWindow) window).updateGraph();
+                        ((GraphWindow) window).relaunch();
+                    }
+                }
+            }
+            else{
+                new ChartWindow(list.getSelectedValue().toString());
+                new GraphWindow(list.getSelectedValue().toString());
+            }
+
             model.getMainWindow().reposition();
 
             // Ensure event isn't fired for clearing selection

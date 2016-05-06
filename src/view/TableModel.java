@@ -3,7 +3,6 @@ package view;
 import model.WeatherObject;
 
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 
 public class TableModel extends AbstractTableModel {
@@ -34,6 +33,14 @@ public class TableModel extends AbstractTableModel {
         return columnNames[column];
     }
 
+
+    /**
+     * this method gets all the different attributes inside a station
+     * that was selected by the user
+     * @param rowIndex the row number of the table
+     * @param columnIndex the coloumn number of the table
+     * @return value returns the selected attribute that is found
+     */
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Object value = "??";

@@ -1,7 +1,6 @@
 package controller;
 
 import model.Model;
-import model.WeatherStation;
 import view.MainWindow;
 
 import javax.swing.*;
@@ -64,7 +63,6 @@ public class RegisterListener implements ActionListener {
 
             model.addUser(user);
             model.setCurrentUser(user);
-//            model.setEnter(true);
             model.closeWelcome();
 
             MainWindow window = new MainWindow();

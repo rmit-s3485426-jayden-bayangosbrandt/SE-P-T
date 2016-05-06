@@ -1,7 +1,5 @@
 package model;
 
-
-
 import controller.JSONFileWrite;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
@@ -17,8 +15,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.*;
-import java.text.SimpleDateFormat;
-
 
 public class Model {
 
@@ -32,6 +28,7 @@ public class Model {
     private User currentUser;
     private ArrayList<ChartWindow> chartWindows= new ArrayList<ChartWindow>();
     private ArrayList<GraphWindow> graphWindows= new ArrayList<GraphWindow>();
+    int indicator = 0;
 
     public static Model getInstance() {
         return ourInstance;
@@ -52,19 +49,79 @@ public class Model {
         return mainWindow;
     }
 
-//    public void saveWindow(){
-//        currentUser.setOpenWindows(windows);
-//    }
 
+    /**
+     * This method checks to see whether or not there is already
+     * a window open for the certain station that the user is
+     * pulling up
+     * @param station is the station name in a region
+     * @return boolean to check if a window exists or not
+     */
+    public boolean checkWindow(String station){
+        ArrayList<JFrame> windows = currentUser.getOpenWindows();
+        String regex = station;
+        regex = regex.concat(".*");
+        String compare;
+        for(JFrame window : windows){
+            if(window instanceof ChartWindow)
+                compare = ( (ChartWindow) window).getTitleValue();
+            else
+                compare = ( (GraphWindow) window).getTitleValue();
+            if(Pattern.matches(regex,compare))
+                return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * A method that adds a window for a station's information.
+     * That is, it adds a chart window and a table window.
+     * @param frame a jframe for the window
+     */
     public void addOpenWindow(JFrame frame) {
-        currentUser.getOpenWindows().add(frame);
+        if(currentUser.getOpenWindows().size() < 2)
+            currentUser.getOpenWindows().add(frame);
+        int indicator =0;
+        for(JFrame window: currentUser.getOpenWindows()){
+            if(window instanceof ChartWindow)
+                if(frame instanceof ChartWindow)
+                    if(!((ChartWindow) window).getTitleValue().equals(((ChartWindow) frame).getTitleValue()))
+                        indicator++;
+            if(window instanceof GraphWindow)
+                if(frame instanceof GraphWindow)
+                    if(!((GraphWindow) window).getTitleValue().equals(((GraphWindow) frame).getTitleValue()))
+                        indicator++;
+        }
+        if(indicator>0)
+            currentUser.getOpenWindows().add(frame);
     }
 
     //function to keep track opened chartwindows
-    public void addChartWindow(ChartWindow chartWindow) {chartWindows.add(chartWindow);}
+    public void addChartWindow(ChartWindow chartWindow) {
+        boolean check = false;
+        if(chartWindows.size()==0)
+            check = true;
+        for(ChartWindow chart : chartWindows){
+            if(!chart.getTitleValue().equals(chartWindow.getTitleValue()))
+                check = true;
+        }
+        if(check)
+            chartWindows.add(chartWindow);
+    }
 
     //function to keep track opened graphwindows
-    public void addGraphWindow(GraphWindow graphWindow) {graphWindows.add(graphWindow);}
+    public void addGraphWindow(GraphWindow graphWindow) {
+        boolean check = false;
+        if(graphWindows.size()==0)
+            check = true;
+        for(GraphWindow graph : graphWindows){
+            if(!graph.getTitleValue().equals(graphWindow.getTitleValue()))
+                check = true;
+        }
+        if(check)
+            graphWindows.add(graphWindow);
+    }
 
     public void removeOpenWindow(JFrame frame) {
         currentUser.getOpenWindows().remove(frame);
@@ -86,6 +143,10 @@ public class Model {
         mainWindow.setStationDataset(strings);
     }
 
+    /**
+   * Allows the user to refresh the window to add a station
+   * to favourites.
+   */
     public void refresh(){
         //resetting area combobox
         setArea();
@@ -97,15 +158,16 @@ public class Model {
         for(ChartWindow chart: chartWindows)
         {
             chart.updateTable();
-            chart.relaunch();
+            if(chart.getOpen())
+                chart.relaunch();
         }
         //updating data in all graphWindow of user
         for(GraphWindow graph: graphWindows)
         {
             graph.updateGraph();
-            graph.relaunch();
+            if(graph.getOpen())
+                graph.relaunch();
         }
-
     }
 
 
@@ -113,29 +175,8 @@ public class Model {
         mainWindow.setLblName(name);
     }
 
-//    public boolean isAreaSelected(){
-//        return mainWindow.isAreaSelected();
-//    }
-//
-//    public boolean isRegionSelected(){
-//        return mainWindow.isRegionSelected();
-//    }
-//
-//    public boolean isStationSelected(){
-//        return mainWindow.isStationSelected();
-//    }
-
-//    public void searchRegionWeatherStation(String query){
-//
-//    }
-
     public void closeWelcome() {
         welcomeWindow.closeWindow();
-    }
-
-    public void searchStationWeatherStation(String query) {
-        // Uncomment when implemented
-//        weatherStation.searchStationArray(query);
     }
 
     public void setStationEnabled(boolean enabled) {
@@ -147,18 +188,6 @@ public class Model {
         // Set the state of region combobox
         mainWindow.setRegionEnabled(enabled);
     }
-
-//    public String getStationSelected(){
-//        return mainWindow.getStationSelected();
-//    }
-
-//    public String getRegionSelected(){
-//        return mainWindow.getRegionSelected();
-//    }
-
-//    public String getAreaSelected(){
-//        return mainWindow.getAreaSelected();
-//    }
 
     //function to change the value of regionUrl
     public void changeRegionUrl(String area) {
@@ -175,7 +204,11 @@ public class Model {
         changeStationDataset(searchStationArray(region, regionUrl));
     }
 
-    //function to get all areas available
+    /**
+   * This method sets the area that the user picks, done so by
+   * going through the areas in Australia until there is an area
+   * that matches the selected area.
+   */
     public void setArea() {
         try {
             String[] areas;
@@ -205,7 +238,18 @@ public class Model {
 
     }
 
-    //function to get all regions of one area
+    /**
+   * This method is used to search the regions in a certain area
+   * and hence adding each region into an array depending on the area.
+   * <p>
+   * JSON is used to retreive said data, through the url given and a loop
+   * in order to check whether or not there are more regions inside the area.
+   * <p>
+   * An exception is catched when the website cannot be found.
+   * @param area is used to determine which area the regions are from
+   * @param url is where JSON is used to retreive each data
+   * @return regionsArray returns an array with all the regions inside
+   */
     public String[] searchRegionArray(String area, String url) {
         ArrayList<String> regions = new ArrayList<String>();
         String[] regionsArray;
@@ -214,9 +258,20 @@ public class Model {
         fullUrl = fullUrl.concat(url);
         Elements regionsTable;
         Element regionTable;
+        boolean urlWorks = false;
+        int urlTest = 10;
+        Document doc = null;
+
         try {
             //connecting to the website and getting html using jsoup
-            Document doc = Jsoup.connect(fullUrl).get();
+            while(!urlWorks && urlTest > 0) {
+                doc = Jsoup.connect(fullUrl).get();
+                urlTest--;
+
+                if(doc != null){
+                    urlWorks = true;
+                }
+            }
             //if url matches pattern ".*all.*", the area is included in state - all observations
             //therefore we take the value differently
             if (Pattern.matches(".*all.*", url)) {
@@ -248,7 +303,16 @@ public class Model {
 
     }
 
-    //function to get all stations of one region
+    
+    /**
+   * This method is used to search the stations of a certain region
+   * and hence adding each station into an array depending on the region
+   * <p>
+   * An exception is catched when the website cannot be found.
+   * @param region is used to determine what region the stations are from
+   * @param url is where JSON is used to retreive each data
+   * @return stationsArray is an array filled with the stations of the region
+   */
     public String[] searchStationArray(String region, String url) {
         ArrayList<String> stationsStrings = new ArrayList<String>();
         String[] stationsArray;
@@ -327,7 +391,10 @@ public class Model {
         }
         return null;
     }
-
+    
+    /**
+   * Used to add a user into the system.
+   */
     public void addUser(String userName) {
         // Add user to Users Arraylist
         User newUser = new User();
@@ -344,7 +411,7 @@ public class Model {
             }
         }
 
-//        System.out.println("CurrentUser is: " + currentUser.getUsername());
+//        System.out.println("CurrentUser is: "     + currentUser.getUsername());
 
     }
 
@@ -365,11 +432,6 @@ public class Model {
 
         JSONFileWrite readFile = new JSONFileWrite();
         users = readFile.loadFile();
-//        addUser("Yung");
-//        addUser("Jayden");
-//        addUser("Alex");
-//        addUser("Aaron");
-
     }
 
     public String getStationUrl() {
@@ -390,7 +452,14 @@ public class Model {
         currentUser.addFavorite(new WeatherStation(stationName, url));
     }
 
-    //function to get all datas from a station page
+    
+    /**
+   * This method is used to retreive every data from the stations.
+   * This is for putting all the data received into a table using JSON.
+   * @param stationName is used to determine what station all the data is coming from.
+   * @return weatherObjects returns each object created from all the data received.
+   * @see ArrayList
+   */
     public ArrayList<WeatherObject> getTable(String stationName) {
         ArrayList<WeatherObject> weatherObjects = new ArrayList<WeatherObject>();
         String todaydate;
@@ -529,7 +598,13 @@ public class Model {
 
     }
 
-    //function to be called in GraphWindow in order to include the temperature history in the graph
+    /**
+   * This method is used to create a graph for the temperatures received
+   * from the station
+   * @param stationName is used to determine what station all the data is coming from.
+   * @return returnValue returns all the temperature values in order to create the GUI for graph.
+   * @see HashMap
+   */
     public HashMap<String,String> checkHistory(String stationName)
     {
         WeatherStation station = currentUser.findWeatherStation(stationName);
@@ -541,7 +616,8 @@ public class Model {
         Set set = histories.entrySet();
         Iterator iterate = set.iterator();
         while(iterate.hasNext()){
-            Map.Entry history = (Map.Entry)iterate.next();
+            Map.Entry history =
+                    (Map.Entry)iterate.next();
             if(Pattern.matches(".*-9",history.getKey().toString()))
             {
                 day = history.getKey().toString();

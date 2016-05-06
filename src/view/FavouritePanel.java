@@ -18,6 +18,12 @@ public class FavouritePanel extends JPanel implements Observer {
     private JFrame frame;
     private JScrollPane scrollPane;
 
+
+    /**
+     * this method adds the favourite panel inside the window
+     * which the user goes to to select a station to favourite
+     * @param frame a frame made for the GUI
+     */
     public FavouritePanel(JFrame frame){
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         faveList = new JList(getListModel(model.getCurrent().getFavorites()));
@@ -41,6 +47,12 @@ public class FavouritePanel extends JPanel implements Observer {
 
     }
 
+    /**
+     * this method adds all the favourited stations into the favourite box
+     * @param faves an arraylist which contains all the stations that have
+     *              already been favourited by the user
+     * @return listModel returns all the stations that are favourited
+     */
     private DefaultListModel getListModel(ArrayList<WeatherStation> faves){
         DefaultListModel<String> listModel = new DefaultListModel<>();
         for(WeatherStation w : faves){
