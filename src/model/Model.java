@@ -41,6 +41,9 @@ public class Model {
     private ArrayList<GraphWindow> graphWindows= new ArrayList<GraphWindow>();
     int indicator = 0;
     Logger theLogger = Logger.getLogger(Model.class.getName());
+    private String forcastSource;
+
+
 
     public static Model getInstance() {
         return ourInstance;
@@ -489,9 +492,9 @@ public class Model {
         currentUser.addFavorite(new WeatherStation(stationName, url));
     }
 
-    
+    //Bom
     /**
-   * This method is used to retreive every data from the stations.
+   * This method is used to retrieve every data from the stations.
    * This is for putting all the data received into a table using JSON.
    * @param stationName is used to determine what station all the data is coming from.
    * @return weatherObjects returns each object created from all the data received.
@@ -583,6 +586,7 @@ public class Model {
         return weatherObjects;
     }
 
+    // Bom
     //function to get only the temperature datas from stationpage
     //return value HashMap<String,String> where the key is date, and value is the temperature
     public HashMap<String,String> getTemp(String station) {
@@ -817,4 +821,14 @@ public class Model {
         return returnValue;
     }
 
+    // Whether forcast source is
+    // ForecastIO or
+    // OpenWeatherMap
+    public String getForcastSource() {
+        return forcastSource;
+    }
+
+    public void setForcastSource(String forcastSource) {
+        this.forcastSource = forcastSource;
+    }
 }
