@@ -41,6 +41,7 @@ public class ChartWindow extends JFrame implements Relaunch {
     public boolean getOpen(){return opened; }
 
     public ChartWindow(String title) throws HeadlessException {
+
         this.title = title;
 
         tableModel = new TableModel(model.getTable(title));

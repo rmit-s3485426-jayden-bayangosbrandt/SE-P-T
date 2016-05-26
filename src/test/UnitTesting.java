@@ -24,11 +24,11 @@ public class UnitTesting {
     ForecastIO forecast = new ForecastIO("ea126d89b1151afbe571ea42d6be7ff8");
 
     @Test
-    public void NswRegionsTrue(){
+    public void NswRegionsTrue() throws IOException{
         assertEquals(NswRegions, model.searchRegionArray("New South Wales", "/nsw/observations/nswall.shtml"));
     }
     @Test
-    public void NswRegionsFalse(){
+    public void NswRegionsFalse() throws IOException{
         assertNotSame(NswRegions, model.searchRegionArray("New South Wales", "/nsw/observations/nswall.shtml"));
     }
     @Test
@@ -52,16 +52,16 @@ public class UnitTesting {
     }
 
     @Test
-    public void getForecastSuccess()
-    {
-        assertTrue(forecast.getForecast("-33.9172","151.0336"));
-    }
-
-    @Test
     public void testForecast()
     {
         assertNotNull(model.getForecastData("Northern Rivers"));
     }
+
+//    @Test
+//    public void testFindElement()
+//    {
+//        assertEquals("http://www.bom.gov.au/catalogue/data-feeds.shtml", findElement("http://www.bom.gov.au/catalogue/data-feeds.shtml", "area"));
+//    }
 //    @Test
 //    public void wrongAPI()
 //    {

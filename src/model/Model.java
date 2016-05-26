@@ -203,16 +203,22 @@ public class Model {
 
     //function to change the value of regionUrl
     public void changeRegionUrl(String area) {
-        String id;
-        Element foundArea = findElement("http://www.bom.gov.au/catalogue/data-feeds.shtml", area);
-        regionUrl = foundArea.attr("href");
-        changeRegionDataset(searchRegionArray(foundArea.text(), regionUrl));
-        regionUrl = "http://www.bom.gov.au".concat(regionUrl);
+        try
+        {
+            Element foundArea = findElement("http://www.bom.gov.au/catalogue/data-feeds.shtml", area);
+            regionUrl = foundArea.attr("href");
+            changeRegionDataset(searchRegionArray(foundArea.text(), regionUrl));
+            regionUrl = "http://www.bom.gov.au".concat(regionUrl);
+        }
+        catch(IOException o)
+        {
+            JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
+            theLogger.log(Level.FINE,"The url " + regionUrl + "does not exist" );
+        }
     }
 
     //function to change station combobox value according to the region
     public void changeStation(String region) {
-        String id;
         try{
             changeStationDataset(searchStationArray(region, regionUrl));
         }
@@ -223,6 +229,7 @@ public class Model {
         }
 
     }
+
 
     /**
    * This method sets the area that the user picks, done so by
@@ -274,7 +281,7 @@ public class Model {
    * @param url is where JSON is used to retreive each data
    * @return regionsArray returns an array with all the regions inside
    */
-    public String[] searchRegionArray(String area, String url) {
+    public String[] searchRegionArray(String area, String url) throws IOException {
         ArrayList<String> regions = new ArrayList<String>();
         String[] regionsArray;
         //setting up the url for retrieving html page according to area
@@ -286,7 +293,7 @@ public class Model {
         int urlTest = 10;
         Document doc = null;
 
-        try {
+//        try {
             //connecting to the website and getting html using jsoup
             while(!urlWorks && urlTest > 0) {
                 doc = Jsoup.connect(fullUrl).get();
@@ -317,11 +324,11 @@ public class Model {
             }
 
 
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
-            theLogger.log(Level.FINE,"The url " + fullUrl + "does not exist" );
-
-        }
+//        } catch (IOException e) {
+//            JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
+//            theLogger.log(Level.FINE,"The url " + fullUrl + "does not exist" );
+//
+//        }
         //converting arraylist to array of string and returning the value
         regionsArray = new String[regions.size()];
         regions.toArray(regionsArray);
@@ -401,8 +408,8 @@ public class Model {
     }
 
     //function to find a specific station
-    public Element findElement(String link, String item) {
-        try {
+    public Element findElement(String link, String item) throws IOException{
+//        try {
             //connecting to the website and getting html using jsoup
             Document docArea = Jsoup.connect(link).get();
 
@@ -415,10 +422,10 @@ public class Model {
                     return data;
             }
 
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
-            theLogger.log(Level.FINE,"The url " + link + "does not exist" );
-        }
+//        } catch (IOException e) {
+//            JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
+//            theLogger.log(Level.FINE,"The url " + link + "does not exist" );
+//        }
         return null;
     }
     
@@ -476,7 +483,7 @@ public class Model {
         this.stationUrl = stationUrl;
     }
 
-    public void addCurrentFavorite(String stationName) {
+    public void addCurrentFavorite(String stationName) throws IOException {
         String url = findElement(regionUrl, stationName).attr("href");
         url = "http://www.bom.gov.au".concat(url);
         currentUser.addFavorite(new WeatherStation(stationName, url));
@@ -564,6 +571,7 @@ public class Model {
                         pressure2, rainSince9am));
 
             }
+            weatherObjects.addAll(getForecastData(stationName));
             theLogger.log(Level.INFO, "Table data obtained correctly");
 
         } catch (IOException e) {
@@ -571,7 +579,7 @@ public class Model {
             theLogger.log(Level.FINE,"The url " + url + "does not exist" );
         }
 
-        weatherObjects.addAll(getForecastData(stationName));
+
         return weatherObjects;
     }
 
@@ -701,10 +709,9 @@ public class Model {
     }
 
 
-    public ArrayList<WeatherObject> getForecastData(String station)
+    public ArrayList<WeatherObject> getForecastData(String station) throws IOException
     {
         ForecastIO forecast = new ForecastIO("8f8d061085f6aff231896bd712ff62f0");
-        try{
             //http://code.runnable.com/VRq-p4PM6chtbDGy/google-api-for-java
             station = station.replace(" ", "+");
 
@@ -792,14 +799,6 @@ public class Model {
 
             return forecasts;
 
-        }
-        catch (IOException e)
-        {
-            theLogger.log(Level.FINE,"Failed to get forecast data");
-        }
-
-
-        return null;
     }
 
 
