@@ -52,7 +52,7 @@ public class UnitTesting {
     }
 
     @Test
-    public void testForecast()
+    public void testForecast() throws IOException
     {
         assertNotNull(model.getForecastData("Northern Rivers"));
     }

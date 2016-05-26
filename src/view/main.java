@@ -1,4 +1,5 @@
 package view;
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,5 +25,5 @@ public class main {
     public static void main(String[] args) {
         new Window();
     }
-
+    
 }
