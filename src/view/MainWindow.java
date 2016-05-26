@@ -14,6 +14,7 @@ public class MainWindow extends JFrame {
 
     private JLabel lblName = new JLabel(model.getCurrent().getUsername());
     private MainWindowListener actionListener;
+    private SourceListener sourceListener;
     private String[] areaDataset = new String[]{};
     private String[] regionDataset = new String[]{};
     private String[] stationDataset = new String[]{};
@@ -122,19 +123,47 @@ public class MainWindow extends JFrame {
         stationSelection.add(panelRegion);
         stationSelection.add(panelStation);
         center.add(stationSelection);
-        JPanel addFavourite = new JPanel();
-        addFavourite.setLayout(new BoxLayout(addFavourite, BoxLayout.X_AXIS));
-        addFavourite.add(Box.createHorizontalGlue());
-        addFavourite.add(btnFavourite);
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
+        bottomPanel.add(Box.createHorizontalGlue());
+        bottomPanel.add(btnFavourite);
         btnRefresh = new JButton("Refresh");
         btnRefresh.addActionListener(new RefreshListener());
-        addFavourite.add(btnRefresh);
-        addFavourite.add(Box.createHorizontalGlue());
-        stationSelection.add(addFavourite);
-//        center.add(Box.createHorizontalStrut(100), 1);
-//        center.add(stationSearch, 2);
+        bottomPanel.add(btnRefresh);
+        bottomPanel.add(sourcePanel());
+        bottomPanel.add(Box.createHorizontalGlue());
+        stationSelection.add(bottomPanel);
 
         return center;
+    }
+
+    private JPanel sourcePanel() {
+        JPanel sourcePanel = new JPanel();
+        sourcePanel.setLayout(new BoxLayout(sourcePanel, BoxLayout.X_AXIS));
+
+        this.sourceListener = new SourceListener();
+
+        JRadioButton radForcastIO = new JRadioButton("ForcastIO");
+        radForcastIO.addItemListener(sourceListener);
+        JRadioButton radOpenWeather = new JRadioButton("OpenWeatherMap");
+        radOpenWeather.addItemListener(sourceListener);
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(radForcastIO);
+        group.add(radOpenWeather);
+
+        // Add radio buttons to panel
+        sourcePanel.add(radForcastIO);
+        sourcePanel.add(radOpenWeather);
+
+        // Set default selection
+        radForcastIO.setSelected(true);
+
+
+        return sourcePanel;
+
+
     }
 
     public void reposition(){

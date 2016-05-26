@@ -1,10 +1,13 @@
 package view;
 
 import controller.ChartGraphListener;
+import controller.ColumnCheckedListener;
 import controller.DataWindowListener;
 import model.Model;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.util.ArrayList;
@@ -18,6 +21,7 @@ public class ChartWindow extends JFrame implements Relaunch {
     private String title;
     private Point location;
     private boolean opened;
+    private ColumnCheckedListener checkedListener = new ColumnCheckedListener();
     private ChartGraphListener actionListener = new ChartGraphListener(this);
     private ArrayList<JCheckBox> checkBoxes = new ArrayList<>();
 
@@ -87,8 +91,7 @@ public class ChartWindow extends JFrame implements Relaunch {
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         for(int i = 0; i<columnCount; i++) {
             JCheckBox checkBox = new JCheckBox(table.getColumnName(i));
-//            TableColumn column = table.getColumnModel().getColumn(i);
-//            checkBox.setPreferredSize(new Dimension(column.getWidth(), checkBox.getHeight()));
+            checkBox.addItemListener(this.checkedListener);
             this.checkBoxes.add(checkBox);
             panel.add(checkBox);
         }
