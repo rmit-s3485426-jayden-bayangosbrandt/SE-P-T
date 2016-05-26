@@ -1,5 +1,9 @@
 package model;
 
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
+import com.github.dvdme.ForecastIOLib.ForecastIO;
 import controller.JSONFileWrite;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
@@ -10,6 +14,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import view.WelcomeWindow;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,6 +40,7 @@ public class Model {
     private ArrayList<ChartWindow> chartWindows= new ArrayList<ChartWindow>();
     private ArrayList<GraphWindow> graphWindows= new ArrayList<GraphWindow>();
     int indicator = 0;
+    Logger theLogger = Logger.getLogger(Model.class.getName());
 
     public static Model getInstance() {
         return ourInstance;
@@ -201,7 +213,15 @@ public class Model {
     //function to change station combobox value according to the region
     public void changeStation(String region) {
         String id;
-        changeStationDataset(searchStationArray(region, regionUrl));
+        try{
+            changeStationDataset(searchStationArray(region, regionUrl));
+        }
+        catch(IOException e)
+        {
+            JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
+            theLogger.log(Level.FINE,"The url " + regionUrl + "does not exist" );
+        }
+
     }
 
     /**
@@ -210,11 +230,13 @@ public class Model {
    * that matches the selected area.
    */
     public void setArea() {
+        String url ="";
         try {
             String[] areas;
             ArrayList<String> ArrayListAreas = new ArrayList<String>();
             //connecting to the website and getting html using jsoup
-            Document docArea = Jsoup.connect("http://www.bom.gov.au/catalogue/data-feeds.shtml").get();
+            url = "http://www.bom.gov.au/catalogue/data-feeds.shtml";
+            Document docArea = Jsoup.connect(url).get();
             //getting each table data that contains a link, which will be the areas name
             Elements table = docArea.getElementsByAttributeValue("width", "712");
             Elements tableData = table.select("tbody").select("a");
@@ -231,8 +253,10 @@ public class Model {
             ArrayListAreas.toArray(areas);
             //calling functions to change value of area combobox
             changeAreaDataset(areas);
+            theLogger.log(Level.INFO, "Area data obtained correctly");
         } catch (IOException e) {
             JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
+            theLogger.log(Level.FINE,"The url " + url + "does not exist" );
         }
 
 
@@ -292,13 +316,16 @@ public class Model {
                 regions.add(doc.getElementById(area).text());
             }
 
+
         } catch (IOException e) {
             JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
+            theLogger.log(Level.FINE,"The url " + fullUrl + "does not exist" );
 
         }
         //converting arraylist to array of string and returning the value
         regionsArray = new String[regions.size()];
         regions.toArray(regionsArray);
+        theLogger.log(Level.INFO, "Region data obtained correctly");
         return regionsArray;
 
     }
@@ -313,11 +340,11 @@ public class Model {
    * @param url is where JSON is used to retreive each data
    * @return stationsArray is an array filled with the stations of the region
    */
-    public String[] searchStationArray(String region, String url) {
+    public String[] searchStationArray(String region, String url) throws IOException {
         ArrayList<String> stationsStrings = new ArrayList<String>();
         String[] stationsArray;
         regionUrl = url;
-        try {
+//        try {
             //connecting to the website and getting html using jsoup
             Document doc = Jsoup.connect(url).get();
             //getting all station names from the page
@@ -361,13 +388,15 @@ public class Model {
             }
 
 
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
-
-        }
+//        } catch (IOException e) {
+//            JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
+//            theLogger.log(Level.FINE,"The url " + url + "does not exist" );
+//
+//        }
         //convert arraylist into an arrya of strings and return it
         stationsArray = new String[stationsStrings.size()];
         stationsStrings.toArray(stationsArray);
+        theLogger.log(Level.INFO, "Stations data obtained correctly");
         return stationsArray;
     }
 
@@ -388,6 +417,7 @@ public class Model {
 
         } catch (IOException e) {
             JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
+            theLogger.log(Level.FINE,"The url " + link + "does not exist" );
         }
         return null;
     }
@@ -534,10 +564,14 @@ public class Model {
                         pressure2, rainSince9am));
 
             }
+            theLogger.log(Level.INFO, "Table data obtained correctly");
 
         } catch (IOException e) {
             JOptionPane.showMessageDialog(new JTextField(), "ERROR WEBSITE NOT FOUND");
+            theLogger.log(Level.FINE,"The url " + url + "does not exist" );
         }
+
+        weatherObjects.addAll(getForecastData(stationName));
         return weatherObjects;
     }
 
@@ -582,7 +616,10 @@ public class Model {
                             //if keyDate is not skip, that means we're at the correct row, either 9am or 3pm temp
                             //store date as key, and temp as value
                             if(!keyDate.equals("skip"))
+                            {
                                 temps.put(keyDate,row.text());
+                                System.out.println("KeyDate: " + keyDate);
+                            }
                             break;
                         default:
                             break;
@@ -591,7 +628,12 @@ public class Model {
                 }
             }
 
+            temps.putAll(getTempForecast(getForecastData(station)));
+
+            theLogger.log(Level.INFO, "Temperature data obtained correctly");
+
         } catch (Exception e) {
+            theLogger.log(Level.FINE,"The url " + url + "does not exist" );
 
         }
         return temps;
@@ -633,6 +675,7 @@ public class Model {
                 returnValue.put(day, history.getValue().toString());
             }
         }
+        theLogger.log(Level.INFO, "History data obtained successfully");
 
         return returnValue;
 
@@ -655,6 +698,124 @@ public class Model {
         }
         station.addHistory(day, temp);
 
+    }
+
+
+    public ArrayList<WeatherObject> getForecastData(String station)
+    {
+        ForecastIO forecast = new ForecastIO("8f8d061085f6aff231896bd712ff62f0");
+        try{
+            //http://code.runnable.com/VRq-p4PM6chtbDGy/google-api-for-java
+            station = station.replace(" ", "+");
+
+            //retrieving latitude ang longitude value of a location using google maps api
+            URL url = new URL("https://maps.googleapis.com/maps/api/geocode/json?address="+ station +",+Australia&key=AIzaSyBNJsALP1cpeLBmv0SOYcBUxEugc4IG760");
+            System.out.println(url);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "text/xml");
+            OutputStream os = conn.getOutputStream();
+            os.flush();
+            System.out.println("HTTP code : "+ conn.getResponseCode());
+            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+            String output;
+            String all = "";
+            while ((output = br.readLine()) != null) {
+                System.out.println(output);
+                all += output;
+            }
+            theLogger.log(Level.INFO, "Data of a location successfully retrieved");
+
+            //extracting the latitude and longitude data from the json received
+            JsonObject locationArray = JsonObject.readFrom(all);
+            JsonValue fromLocationArray = locationArray.get("results");
+            System.out.println(fromLocationArray);
+            StringTokenizer token = new StringTokenizer(fromLocationArray.toString(), ":,]}{[\"");
+            String tokens="";
+            while(!tokens.equals("lat"))
+                tokens = token.nextToken();
+            String lat = token.nextToken();
+            token.nextToken();
+            String lon = token.nextToken();
+            System.out.println("Latitude: " +lat+ " Longitude" + lon);
+            System.out.println(lat);
+            System.out.println(lon);
+
+            //getting data from forecast.io with the latitude and longitude obtained
+            if(forecast.getForecast(lat,lon))
+                theLogger.log(Level.INFO, "Fetched forecast data correctly");
+            JsonObject daily = forecast.getDaily();
+            JsonValue data = daily.get("data");
+
+            JsonArray array = data.asArray();
+            JsonArray otherArray = JsonArray.readFrom(data.toString());
+            Calendar calendar = Calendar.getInstance();
+            ArrayList<WeatherObject> forecasts = new ArrayList<WeatherObject>();
+
+            //separating data from the json
+            for (JsonValue a: otherArray) {
+                JsonObject object = JsonObject.readFrom(a.toString());
+                System.out.println(object.get("time"));
+                calendar.setTimeInMillis(object.get("time").asInt() * 1000L);
+                System.out.println(calendar.getTime().toString());
+
+                //setting time for the forecast to retrieve hourly data
+                forecast.setTime(calendar.getTime().toString());
+
+                //for each time data received, retrieve hourly data and store as weatherObject, and add to arraylist
+                for(JsonValue b: forecast.getHourly().get("data").asArray())
+                {
+                    JsonObject weatherData = JsonObject.readFrom(b.toString());
+                    calendar.setTimeInMillis(weatherData.get("time").asInt() * 1000L);
+                    System.out.println("  " + weatherData.get("time"));
+                    String hour = ""+calendar.get(Calendar.HOUR_OF_DAY);
+                    String day = ""+calendar.get(Calendar.DAY_OF_MONTH);
+                    String dateTime = day + "/";
+                    if(Integer.parseInt(hour)<10)
+                        dateTime += "0";
+                    dateTime += hour + ":00";
+                    if(Integer.parseInt(hour)<12)
+                        dateTime +="am";
+                    else
+                        dateTime +="pm";
+                    System.out.println("  DateTime: " + dateTime);
+                    double windSpeedMPH = Double.parseDouble(weatherData.get("windSpeed").toString());
+                    double windSpeedKMH = windSpeedMPH * 1.60934;
+                    double windSpeedKnots = windSpeedMPH * 0.868976;
+                    forecasts.add(new WeatherObject(dateTime, weatherData.get("temperature").toString(), weatherData.get("apparentTemperature").toString(),
+                            "-","-","-","-", ""+windSpeedKMH, ""+windSpeedKnots,"-","-",weatherData.get("pressure").toString(),"-","-"));
+                }
+            }
+            //disconnect from google maps api
+            conn.disconnect();
+
+            return forecasts;
+
+        }
+        catch (IOException e)
+        {
+            theLogger.log(Level.FINE,"Failed to get forecast data");
+        }
+
+
+        return null;
+    }
+
+
+    public HashMap<String,String> getTempForecast(ArrayList<WeatherObject> forecasts)
+    {
+        String regex9 = ".*09:00am";
+        String regex3 = ".*15.00pm";
+        HashMap<String,String> returnValue = new HashMap<String,String>();
+
+        for(WeatherObject forecast: forecasts)
+            if(forecast.getDayTime().matches(regex9) || forecast.getDayTime().matches(regex3))
+                returnValue.put(forecast.getDayTime(), forecast.getTemp());
+
+        theLogger.log(Level.INFO, "Forecast temperature data obtained successfully");
+
+        return returnValue;
     }
 
 }

@@ -72,8 +72,8 @@ public class JSONFileWrite {
 
             for(JFrame window: windows){
                 JSONObject windowAttribute = new JSONObject();
-                windowAttribute.put("location-x", window.getLocation().getX());
-                windowAttribute.put("location-y", window.getLocation().getY());
+                windowAttribute.put("location-x", window.getLocation().x);
+                windowAttribute.put("location-y", window.getLocation().y);
                 windowAttribute.put("title",window.getTitle());
                 if(window instanceof ChartWindow){
                     windowAttribute.put("type", "chart");
@@ -112,6 +112,8 @@ public class JSONFileWrite {
             //reading the line from file
             BufferedReader reader = new BufferedReader(new FileReader("file1.txt"));
             String usersJSON = reader.readLine();
+            if(usersJSON == null)
+                return users;
 
             //parsing line into a JSON object
             JSONParser parser = new JSONParser();
