@@ -486,10 +486,17 @@ public class Model {
         this.stationUrl = stationUrl;
     }
 
-    public void addCurrentFavorite(String stationName) throws IOException {
-        String url = findElement(regionUrl, stationName).attr("href");
-        url = "http://www.bom.gov.au".concat(url);
-        currentUser.addFavorite(new WeatherStation(stationName, url));
+    public void addCurrentFavorite(String stationName)  {
+        try{
+            String url = findElement(regionUrl, stationName).attr("href");
+            url = "http://www.bom.gov.au".concat(url);
+            currentUser.addFavorite(new WeatherStation(stationName, url));
+        }
+        catch(IOException e)
+        {
+            theLogger.log(Level.FINE,"Failed to get data");
+        }
+
     }
 
     //Bom
