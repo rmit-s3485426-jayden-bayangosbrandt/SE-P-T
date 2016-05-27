@@ -168,6 +168,11 @@ public class GraphWindow extends JFrame implements Relaunch {
             setLocation(getX() + 200, 350);
     }
 
+
+    /**
+     * this method updates the graph of the weatherstation so that it shows all the history and
+     * necessary info we want it to show
+     */
     public void updateGraph(){
         station = station;
         station = station;

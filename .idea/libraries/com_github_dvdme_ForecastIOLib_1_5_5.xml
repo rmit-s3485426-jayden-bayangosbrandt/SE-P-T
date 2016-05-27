@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="com.github.dvdme:ForecastIOLib:1.5.5" type="repository">
+    <properties maven-id="com.github.dvdme:ForecastIOLib:1.5.5" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/ForecastIOLib-1.5.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/minimal-json-0.9.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

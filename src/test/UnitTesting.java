@@ -2,6 +2,8 @@ package test;
 
 import java.io.IOException;
 import java.util.*;
+
+import model.AbstractForecastFactory;
 import org.junit.*;
 import static org.junit.Assert.*;
 import model.Model;
@@ -20,15 +22,16 @@ public class UnitTesting {
             "Lismore Airport", "Murwillumbah", "Yamba"};
     //Alex i don't remember what the website is, please put it in
     Model model = Model.getInstance();
+    AbstractForecastFactory abstractForecast = AbstractForecastFactory.getInstance();
     WelcomeWindow welcome = new WelcomeWindow();
     ForecastIO forecast = new ForecastIO("ea126d89b1151afbe571ea42d6be7ff8");
 
     @Test
-    public void NswRegionsTrue(){
+    public void NswRegionsTrue() throws IOException{
         assertEquals(NswRegions, model.searchRegionArray("New South Wales", "/nsw/observations/nswall.shtml"));
     }
     @Test
-    public void NswRegionsFalse(){
+    public void NswRegionsFalse() throws IOException{
         assertNotSame(NswRegions, model.searchRegionArray("New South Wales", "/nsw/observations/nswall.shtml"));
     }
     @Test
@@ -52,16 +55,16 @@ public class UnitTesting {
     }
 
     @Test
-    public void getForecastSuccess()
+    public void testForecast() throws IOException
     {
-        assertTrue(forecast.getForecast("-33.9172","151.0336"));
+        assertNotNull(abstractForecast.getForecastData("Northern Rivers"));
     }
 
-    @Test
-    public void testForecast()
-    {
-        assertNotNull(model.getForecastData("Northern Rivers"));
-    }
+//    @Test
+//    public void testFindElement()
+//    {
+//        assertEquals("http://www.bom.gov.au/catalogue/data-feeds.shtml", findElement("http://www.bom.gov.au/catalogue/data-feeds.shtml", "area"));
+//    }
 //    @Test
 //    public void wrongAPI()
 //    {
