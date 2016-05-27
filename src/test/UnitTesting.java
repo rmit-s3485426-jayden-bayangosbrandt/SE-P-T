@@ -2,6 +2,8 @@ package test;
 
 import java.io.IOException;
 import java.util.*;
+
+import model.AbstractForecastFactory;
 import org.junit.*;
 import static org.junit.Assert.*;
 import model.Model;
@@ -20,6 +22,7 @@ public class UnitTesting {
             "Lismore Airport", "Murwillumbah", "Yamba"};
     //Alex i don't remember what the website is, please put it in
     Model model = Model.getInstance();
+    AbstractForecastFactory abstractForecast = AbstractForecastFactory.getInstance();
     WelcomeWindow welcome = new WelcomeWindow();
     ForecastIO forecast = new ForecastIO("ea126d89b1151afbe571ea42d6be7ff8");
 
@@ -54,7 +57,7 @@ public class UnitTesting {
     @Test
     public void testForecast() throws IOException
     {
-        assertNotNull(model.getForecastData("Northern Rivers"));
+        assertNotNull(abstractForecast.getForecastData("Northern Rivers"));
     }
 
 //    @Test
