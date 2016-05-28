@@ -2,6 +2,8 @@ package view;
 
 import controller.ChartGraphListener;
 import controller.DataWindowListener;
+import controller.ZoomInListener;
+import controller.ZoomOutListener;
 import model.Model;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -156,14 +158,16 @@ public class GraphWindow extends JFrame implements Relaunch {
     private void launch(){
 
         // Zoom in and out check boxes
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        JPanel zoomPanel = new JPanel();
+        zoomPanel.setLayout(new BoxLayout(zoomPanel, BoxLayout.Y_AXIS));
         JCheckBox zoomIn = new JCheckBox("Zoom In");
         JCheckBox zoomOut = new JCheckBox("Zoom Out");
-        panel.add(zoomIn);
-        panel.add(zoomOut);
+        zoomPanel.add(zoomIn);
+        zoomIn.addItemListener(new ZoomInListener());
+        zoomPanel.add(zoomOut);
+        zoomIn.addItemListener(new ZoomOutListener());
+        graphWindow.add(zoomPanel);
 
-        graphWindow.add(panel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setContentPane(graphWindow);
         addWindowListener(new DataWindowListener(this));
