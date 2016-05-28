@@ -1,6 +1,6 @@
 package model;
 
-import controller.JSONFileWrite;
+import controller.handler.JSONFileWrite;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import view.ChartWindow;

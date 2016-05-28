@@ -154,6 +154,16 @@ public class GraphWindow extends JFrame implements Relaunch {
     }
 
     private void launch(){
+
+        // Zoom in and out check boxes
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        JCheckBox zoomIn = new JCheckBox("Zoom In");
+        JCheckBox zoomOut = new JCheckBox("Zoom Out");
+        panel.add(zoomIn);
+        panel.add(zoomOut);
+
+        graphWindow.add(panel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setContentPane(graphWindow);
         addWindowListener(new DataWindowListener(this));
