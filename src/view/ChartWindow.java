@@ -53,13 +53,50 @@ public class ChartWindow extends JFrame implements Relaunch {
 
         this.title = title;
 
-        tableModel = new TableModel(model.getTable(title));
+        int currentDate = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        int rowStart = 0;
+        int tempRowVar = 0;
+
+        LOGGER.info("currentDate is: " + currentDate);
+        tableModel = new TableModel(model.getTable(title.replace(" Weather Table","")));
         table = new JTable(tableModel){
             @Override
             public Class<?> getColumnClass(int column) {
                 return getValueAt(0, column).getClass();
             }
         };
+
+        for( int j = 0; j < table.getRowCount(); j++, tempRowVar = j){
+
+
+            String date = table.getValueAt(j,0).toString().substring(0,2);
+            if( date.contains("/")){
+                date = table.getValueAt(j,0).toString().substring(0,1);
+            }
+            Integer day = Integer.parseInt(date);
+
+            //LOGGER.info("tempRowVar is: " + tempRowVar);
+            if(day > currentDate){
+                rowStart = j;
+                break;
+            }
+        }
+
+        final int m = rowStart;
+
+        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
+        {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+            {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                c.setBackground(row >= m ? Color.red: Color.GREEN);
+                c.setForeground(row >= m ? Color.WHITE: Color.BLACK);
+                return c;
+            }
+        });
+
+        table.setFont(new Font("Arial", Font.BOLD, 12));
 
         model.addOpenWindow(this);
         launch();
@@ -108,11 +145,7 @@ public class ChartWindow extends JFrame implements Relaunch {
     //function when user presses refresh, getting the data again
     public void updateTable(){
 
-        int currentDate = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        int rowStart = 0;
-        int tempRowVar = 0;
 
-        LOGGER.info("currentDate is: " + currentDate);
         tableModel = new TableModel(model.getTable(title.replace(" Weather Table","")));
         table = new JTable(tableModel){
             @Override
@@ -121,37 +154,6 @@ public class ChartWindow extends JFrame implements Relaunch {
             }
         };
 
-        for( int j = 0; j < table.getRowCount(); j++, tempRowVar = j){
-
-
-            String date = table.getValueAt(j,0).toString().substring(0,2);
-            if( date.contains("/")){
-                date = table.getValueAt(j,0).toString().substring(0,1);
-            }
-            Integer day = Integer.parseInt(date);
-
-            //LOGGER.info("tempRowVar is: " + tempRowVar);
-            if(day > currentDate){
-                rowStart = j;
-                break;
-            }
-        }
-
-        final int m = rowStart;
-
-        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
-        {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-            {
-                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                c.setBackground(row >= m ? Color.red: Color.GREEN);
-                c.setForeground(row >= m ? Color.WHITE: Color.BLACK);
-                return c;
-            }
-        });
-
-        table.setFont(new Font("Arial", Font.BOLD, 12));
         table.setPreferredScrollableViewportSize(table.getPreferredSize());
         JScrollPane scrollPane = new JScrollPane(table);
         getContentPane().add(scrollPane);
