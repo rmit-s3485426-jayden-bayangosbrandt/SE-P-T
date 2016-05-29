@@ -130,7 +130,7 @@ public class ChartWindow extends JFrame implements Relaunch {
             }
             Integer day = Integer.parseInt(date);
 
-            LOGGER.info("tempRowVar is: " + tempRowVar);
+            //LOGGER.info("tempRowVar is: " + tempRowVar);
             if(day > currentDate){
                 rowStart = j;
                 break;
