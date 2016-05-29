@@ -61,6 +61,8 @@ public class GraphWindow extends JFrame implements Relaunch {
 
         String regex9 = ".*09:00am";
         String regex3 = ".*03:00pm";
+        String regex15 = ".*15:00pm";
+        int tempDay = 0;
 
         //getting data from the website & from temperature history
         HashMap<String,String> temps = model.getTemp(station);
@@ -78,6 +80,7 @@ public class GraphWindow extends JFrame implements Relaunch {
                 Integer day = Integer.parseInt(temp.getKey().toString().replace("/09:00am", ""));
                 Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
                         Calendar.getInstance().get(Calendar.YEAR) );
+                tempDay = day;
                 morning.add(now,Double.parseDouble(temp.getValue().toString()));
             }
             //when the data is a 3pm temperature data, it's added to evening plot
@@ -86,6 +89,14 @@ public class GraphWindow extends JFrame implements Relaunch {
                 Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
                         Calendar.getInstance().get(Calendar.YEAR) );
                 evening.add(now,Double.parseDouble(temp.getValue().toString()));
+                tempDay = day;
+            }
+            if(temp.getKey().toString().matches(regex15)){
+                Integer day = Integer.parseInt(temp.getKey().toString().replace("/15:00pm", ""));
+                Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
+                        Calendar.getInstance().get(Calendar.YEAR) );
+                evening.add(now,Double.parseDouble(temp.getValue().toString()));
+                tempDay = day;
             }
         }
 
@@ -110,6 +121,18 @@ public class GraphWindow extends JFrame implements Relaunch {
             //when the data is a 3pm temperature data, it's either added or updated to evening plot
             if(temp.getKey().toString().matches(regex3)) {
                 Integer day = Integer.parseInt(temp.getKey().toString().replace("/03:00pm", ""));
+                Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH)  + 1,
+                        Calendar.getInstance().get(Calendar.YEAR) );
+                if(temp.getValue().toString().equals("-"))
+                    continue;
+                evening.addOrUpdate(now,
+                        Double.parseDouble(temp.getValue().toString()));
+                //adding possibly new temperature data to history
+                model.addHistory(day.toString(), "3", temp.getValue().toString(), station);
+
+            }
+            if(temp.getKey().toString().matches(regex15)) {
+                Integer day = Integer.parseInt(temp.getKey().toString().replace("/15:00pm", ""));
                 Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH)  + 1,
                         Calendar.getInstance().get(Calendar.YEAR) );
                 if(temp.getValue().toString().equals("-"))
@@ -176,10 +199,7 @@ public class GraphWindow extends JFrame implements Relaunch {
         setTitle(station);
         setVisible(true);
         setLocationRelativeTo(null);
-        if(location!=null)
-            setLocation(location);
-        else
-            setLocation(getX() + 200, 350);
+        setLocation(getX() + 200, 350);
     }
 
 
@@ -192,6 +212,7 @@ public class GraphWindow extends JFrame implements Relaunch {
         station = station;
         String regex9 = ".*09:00am";
         String regex3 = ".*03:00pm";
+        String regex15 = ".*15:00pm";
 
         //getting data from the website & from temperature history
         HashMap<String,String> temps = model.getTemp(station);
@@ -213,6 +234,12 @@ public class GraphWindow extends JFrame implements Relaunch {
             //when the data is a 3pm temperature data, it's either added or updated to evening plot
             if(temp.getKey().toString().matches(regex3)){
                 Integer day = Integer.parseInt(temp.getKey().toString().replace("/03:00pm", ""));
+                Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
+                        Calendar.getInstance().get(Calendar.YEAR) );
+                evening.addOrUpdate(now,Double.parseDouble(temp.getValue().toString()));
+            }
+            if(temp.getKey().toString().matches(regex15)){
+                Integer day = Integer.parseInt(temp.getKey().toString().replace("/15:00pm", ""));
                 Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
                         Calendar.getInstance().get(Calendar.YEAR) );
                 evening.addOrUpdate(now,Double.parseDouble(temp.getValue().toString()));
@@ -239,6 +266,18 @@ public class GraphWindow extends JFrame implements Relaunch {
             if(temp.getKey().toString().matches(regex3)) {
 
                 Integer day = Integer.parseInt(temp.getKey().toString().replace("/03:00pm", ""));
+                Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
+                        Calendar.getInstance().get(Calendar.YEAR) );
+                System.out.println(temp.getValue().toString());
+                evening.addOrUpdate(now,
+                        Double.parseDouble(temp.getValue().toString()));
+                //adding possibly new temperature data to history
+                model.addHistory(day.toString(), "3", temp.getValue().toString(), station);
+
+            }
+            if(temp.getKey().toString().matches(regex15)) {
+
+                Integer day = Integer.parseInt(temp.getKey().toString().replace("/15:00pm", ""));
                 Day now = new Day(day, Calendar.getInstance().get(Calendar.MONTH) + 1,
                         Calendar.getInstance().get(Calendar.YEAR) );
                 System.out.println(temp.getValue().toString());
