@@ -165,7 +165,7 @@ public class GraphWindow extends JFrame implements Relaunch {
         zoomPanel.add(zoomIn);
         zoomIn.addActionListener(new ZoomInListener());
         zoomPanel.add(zoomOut);
-        zoomIn.addActionListener(new ZoomOutListener());
+        zoomOut.addActionListener(new ZoomOutListener());
         graphWindow.add(zoomPanel);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
