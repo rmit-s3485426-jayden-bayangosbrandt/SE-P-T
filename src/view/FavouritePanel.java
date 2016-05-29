@@ -14,8 +14,6 @@ public class FavouritePanel extends JPanel implements Observer {
 
     private Model model = Model.getInstance();
     private JList<String> faveList;
-    private String[] faveDataset = new String[]{"1", "2", "3"};
-    private JFrame frame;
     private JScrollPane scrollPane;
 
 
@@ -33,6 +31,7 @@ public class FavouritePanel extends JPanel implements Observer {
 
         scrollPane = new JScrollPane(faveList);
         scrollPane.setPreferredSize(new Dimension(10, 10));
+        setPreferredSize(new Dimension(100, 200));
 
         // Add component to panel
         add(new JLabel("Favourites"));

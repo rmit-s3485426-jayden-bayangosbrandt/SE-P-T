@@ -12,7 +12,7 @@ public class MainWindow extends JFrame {
 
     private Model model = Model.getInstance();
 
-    private JLabel lblName = new JLabel(model.getCurrent().getUsername());
+    private JLabel lblName = new JLabel();
     private MainWindowListener actionListener;
     private SourceListener sourceListener;
     private String[] areaDataset = new String[]{};
@@ -28,13 +28,16 @@ public class MainWindow extends JFrame {
     public MainWindow() throws HeadlessException {
         this.setLayout(new BorderLayout());
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-
+//        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        // WHY DID YOU DO THIS
+        mainPanel.setLayout(new BorderLayout());
         this.setContentPane(mainPanel);
         mainPanel.add(getNorthPanel(), BorderLayout.NORTH);
         mainPanel.add(getCenterPanel(), BorderLayout.CENTER);
-        this.setSize(new Dimension(500, 500));
+        mainPanel.add(favePanel, BorderLayout.LINE_END);
+//        mainPanel.setSize(new Dimension(700, 200));
         this.setResizable(true);
+        this.pack();
         this.setVisible(true);
 
         // Allow favourite panel to observe user changes
@@ -46,9 +49,9 @@ public class MainWindow extends JFrame {
         this.setLocationRelativeTo(null);
 
         // Check if open windows present in user
-        if(model.getCurrent().getOpenWindows().size() > 0){
-            relaunch();
-        }
+//        if(model.getCurrent().getOpenWindows().size() > 0){
+//            relaunch();
+//        }
 
 
     }
@@ -68,12 +71,12 @@ public class MainWindow extends JFrame {
 
         namePanel.setLayout(new BoxLayout(namePanel, BoxLayout.X_AXIS));
         namePanel.add(Box.createHorizontalGlue());
+        lblName.setText("Welcome, "+model.getCurrent().getUsername()+"!");
         namePanel.add(lblName);
         namePanel.add(Box.createHorizontalGlue());
 
         north.add(namePanel, 0);
-        north.add(Box.createHorizontalGlue(), 1);
-        north.add(favePanel, 2);
+        north.setPreferredSize(new Dimension(north.getWidth(), 30));
 
 
 
@@ -86,34 +89,42 @@ public class MainWindow extends JFrame {
         JPanel stationSelection = new JPanel();
 
         area = new JComboBox(areaDataset);
+        area.setPreferredSize(new Dimension(area.getWidth(), 15));
         region = new JComboBox(regionDataset);
+        region.setPreferredSize(new Dimension(region.getWidth(), 15));
         station = new JComboBox(stationDataset);
+        station.setPreferredSize(new Dimension(station.getWidth(), 15));
         btnFavourite = new JButton("Add to Favourites");
         btnFavourite.addActionListener(new AddFavouriteListener(this));
         stationSelection.setLayout(new BoxLayout(stationSelection, BoxLayout.Y_AXIS));
 
         JPanel panelStationLabel = new JPanel();
         panelStationLabel.setLayout(new BoxLayout(panelStationLabel, BoxLayout.X_AXIS));
-        panelStationLabel.add(Box.createHorizontalGlue());
         panelStationLabel.add(new JLabel("Please select a weather station"));
         panelStationLabel.add(Box.createHorizontalGlue());
 
         JPanel panelArea = new JPanel();
         panelArea.setLayout(new BoxLayout(panelArea, BoxLayout.X_AXIS));
-        panelArea.add(new JLabel("Area: "));
+        JLabel lblArea = new JLabel("Area: ");
+        lblArea.setPreferredSize(new Dimension(120, lblArea.getHeight()));
+        panelArea.add(lblArea);
         panelArea.add(area);
         area.addActionListener(new AreaListener(area));
 
         JPanel panelRegion = new JPanel();
         panelRegion.setLayout(new BoxLayout(panelRegion, BoxLayout.X_AXIS));
-        panelRegion.add(new JLabel("Region: "));
+        JLabel lblRegion = new JLabel("Region: ");
+        lblRegion.setPreferredSize(new Dimension(120, lblRegion.getHeight()));
+        panelRegion.add(lblRegion);
         panelRegion.add(region);
         region.setEnabled(false);
         region.addActionListener(new RegionListener(region));
 
         JPanel panelStation = new JPanel();
         panelStation.setLayout(new BoxLayout(panelStation, BoxLayout.X_AXIS));
-        panelStation.add(new JLabel("Station: "));
+        JLabel lblStation = new JLabel("Station: ");
+        lblStation.setPreferredSize(new Dimension(120, lblStation.getHeight()));
+        panelStation.add(lblStation);
         panelStation.add(station);
         station.setEnabled(false);
         station.addActionListener(new StationListener(station));
@@ -124,6 +135,17 @@ public class MainWindow extends JFrame {
         stationSelection.add(panelStation);
         center.add(stationSelection);
 
+        JPanel forecastPanel = new JPanel();
+        forecastPanel.setLayout(new BoxLayout(forecastPanel, BoxLayout.X_AXIS));
+        JLabel lblSource = new JLabel("Forecast source: ");
+        lblSource.setPreferredSize(new Dimension(120, lblSource.getHeight()));
+        forecastPanel.add(lblSource);
+        forecastPanel.add(Box.createHorizontalGlue());
+        forecastPanel.add(sourcePanel());
+        forecastPanel.add(Box.createHorizontalGlue());
+        stationSelection.add(forecastPanel);
+
+
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
         bottomPanel.add(Box.createHorizontalGlue());
@@ -131,9 +153,10 @@ public class MainWindow extends JFrame {
         btnRefresh = new JButton("Refresh");
         btnRefresh.addActionListener(new RefreshListener());
         bottomPanel.add(btnRefresh);
-        bottomPanel.add(sourcePanel());
         bottomPanel.add(Box.createHorizontalGlue());
         stationSelection.add(bottomPanel);
+
+
 
         return center;
     }
@@ -155,6 +178,7 @@ public class MainWindow extends JFrame {
 
         // Add radio buttons to panel
         sourcePanel.add(radForcastIO);
+        sourcePanel.add(Box.createHorizontalGlue());
         sourcePanel.add(radOpenWeather);
 
         // Set default selection
