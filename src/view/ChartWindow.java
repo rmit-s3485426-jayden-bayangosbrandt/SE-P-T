@@ -76,7 +76,7 @@ public class ChartWindow extends JFrame implements Relaunch {
             Integer day = Integer.parseInt(date);
 
             //LOGGER.info("tempRowVar is: " + tempRowVar);
-            if(day > currentDate){
+            if((day > currentDate && (day - currentDate > 5)) || (day == 1 ) ){
                 rowStart = j;
                 break;
             }
@@ -169,7 +169,7 @@ public class ChartWindow extends JFrame implements Relaunch {
             Integer day = Integer.parseInt(date);
 
             //LOGGER.info("tempRowVar is: " + tempRowVar);
-            if(day > currentDate){
+            if((day > currentDate && (day - currentDate > 5)) || (day == 1 ) ){
                 rowStart = j;
                 break;
             }
